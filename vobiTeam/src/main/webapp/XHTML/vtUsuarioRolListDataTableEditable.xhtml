@@ -1,0 +1,197 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	</h:head>
+
+	<h:body>
+	    <ui:composition template="/WEB-INF/facelets/template.xhtml">	
+		 
+		 	<ui:define name="body">	
+				<f:view>
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>               
+					<p:dialog modal="true" widgetVar="statusDialog" header="Loading"  draggable="false" closable="false">  
+   						<p:graphicImage value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />   
+					</p:dialog>
+					
+					
+					<!-- Expired session -->
+					<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+					<p:dialog modal="true" widgetVar="sessionTimeOutDialog" header="Expired session"  draggable="false" closable="false">  
+	   					<h:outputText value="The session is finished" />
+	                 	<input id="confirmBackToLogin" 
+	                 		type="button" 
+	                 		value="Sign in"
+	                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />   
+					</p:dialog>
+		 
+		 <h:form id="form">
+			
+			 
+			<p:panel id="msgProjectClientesTitle" header="VtUsuarioRolData">
+					<p:messages id="msg" />
+				<p:dataTable id ="tabla" value="#{vtUsuarioRolView.data}" var="vtUsuarioRol"
+					paginator="true" rows="5"  editable="true" >
+					 
+					 <p:ajax event ="rowEdit" update=":form:msg,:form:tabla" listener="#{vtUsuarioRolView.rowEventListener}" />
+					
+															<p:column filterBy="#{vtUsuarioRol.usroCodigo}" sortBy="#{vtUsuarioRol.usroCodigo}" headerText="usroCodigo">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{vtUsuarioRol.usroCodigo}"/>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{vtUsuarioRol.usroCodigo}"/>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+                    										
+											
+						<p:column filterBy="#{vtUsuarioRol.activo}" sortBy="#{vtUsuarioRol.activo}" 
+							headerText="activo">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.activo}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtUsuarioRol.activo}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtUsuarioRol.usuCreador}" sortBy="#{vtUsuarioRol.usuCreador}" 
+							headerText="usuCreador">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.usuCreador}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtUsuarioRol.usuCreador}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtUsuarioRol.usuModificador}" sortBy="#{vtUsuarioRol.usuModificador}" 
+							headerText="usuModificador">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.usuModificador}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtUsuarioRol.usuModificador}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtUsuarioRol.rolCodigo_VtRol}" sortBy="#{vtUsuarioRol.rolCodigo_VtRol}" 
+							headerText="rolCodigo_VtRol">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.rolCodigo_VtRol}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtUsuarioRol.rolCodigo_VtRol}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtUsuarioRol.usuaCodigo_VtUsuario}" sortBy="#{vtUsuarioRol.usuaCodigo_VtUsuario}" 
+							headerText="usuaCodigo_VtUsuario">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.usuaCodigo_VtUsuario}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtUsuarioRol.usuaCodigo_VtUsuario}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+										
+										   						 
+						 <p:column filterBy="#{vtUsuarioRol.fechaCreacion}" sortBy="#{vtUsuarioRol.fechaCreacion}" 
+							headerText="fechaCreacion">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.fechaCreacion}">
+									  <f:convertDateTime  pattern="dd/MM/yyyy"/>
+									</h:outputText>		
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:calendar value="#{vtUsuarioRol.fechaCreacion}" showOn="button" pattern="dd/MM/yyyy" navigator="true" >
+									  <f:convertDateTime  pattern="dd/MM/yyyy" timeZone="#{vtUsuarioRolView.timeZone}" />	
+								    </p:calendar>		
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+					   						 
+						 <p:column filterBy="#{vtUsuarioRol.fechaModificacion}" sortBy="#{vtUsuarioRol.fechaModificacion}" 
+							headerText="fechaModificacion">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtUsuarioRol.fechaModificacion}">
+									  <f:convertDateTime  pattern="dd/MM/yyyy"/>
+									</h:outputText>		
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:calendar value="#{vtUsuarioRol.fechaModificacion}" showOn="button" pattern="dd/MM/yyyy" navigator="true" >
+									  <f:convertDateTime  pattern="dd/MM/yyyy" timeZone="#{vtUsuarioRolView.timeZone}" />	
+								    </p:calendar>		
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+					   											
+					<p:column headerText="Options" >
+						<p:rowEditor id="row"/>
+						<p:tooltip for="row" value="Edit" showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="btnDelete" value="Delete" showEffect="fade" hideEffect="fade" />
+						<p:commandButton id="btnDelete" actionListener="#{vtUsuarioRolView.actionDeleteDataTableEditable}" title="Delete" onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}" icon="ui-icon-trash" update=":form:msg,:form:tabla" >
+							<f:attribute name="selectedVtUsuarioRol" value="#{vtUsuarioRol}" />  
+						</p:commandButton>
+						
+					</p:column>	
+				
+				</p:dataTable>	
+					
+				
+			</p:panel>
+				
+	   </h:form>
+		 </f:view>
+			</ui:define>		
+		</ui:composition>	
+	
+	</h:body>	
+	
+</html>	

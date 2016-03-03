@@ -1,0 +1,172 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	</h:head>
+
+	<h:body>
+		  <ui:composition template="/WEB-INF/facelets/template.xhtml">	
+		 
+		 	<ui:define name="body">	
+				<f:view>
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>               
+					<p:dialog modal="true" widgetVar="statusDialog" header="Loading"  draggable="false" closable="false">  
+   						<p:graphicImage value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />   
+					</p:dialog>
+					
+					<!-- Expired session -->
+					<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+					<p:dialog modal="true" widgetVar="sessionTimeOutDialog" header="Expired session"  draggable="false" closable="false">  
+	   					<h:outputText value="The session is finished" />
+	                 	<input id="confirmBackToLogin" 
+	                 		type="button" 
+	                 		value="Sign in"
+	                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />   
+					</p:dialog>
+					
+		  			<h:form id="frm">								  		
+						
+						<p:panel id="panelDataTableVtUsuarioArtefacto" header="VtUsuarioArtefactoData">
+							<p:growl id="men"/>				
+							<p:dataTable value="#{vtUsuarioArtefactoView.data}" var="vtUsuarioArtefacto"
+								paginator="true" rows="5">
+																										<p:column filterBy="#{vtUsuarioArtefacto.usuartCodigo}" sortBy="#{vtUsuarioArtefacto.usuartCodigo}" >
+										 <f:facet name="header">
+										<h:outputText value="usuartCodigo"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.usuartCodigo}"/>
+										 </p:column>
+			                    																									
+										<p:column filterBy="#{vtUsuarioArtefacto.activo}" sortBy="#{vtUsuarioArtefacto.activo}" >
+										 <f:facet name="header">
+										<h:outputText value="Activo"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.activo}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.fechaCreacion}" sortBy="#{vtUsuarioArtefacto.fechaCreacion}" >
+										 <f:facet name="header">
+										<h:outputText value="FechaCreacion"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.fechaCreacion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.fechaModificacion}" sortBy="#{vtUsuarioArtefacto.fechaModificacion}" >
+										 <f:facet name="header">
+										<h:outputText value="FechaModificacion"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.fechaModificacion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.usuCreador}" sortBy="#{vtUsuarioArtefacto.usuCreador}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuCreador"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.usuCreador}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.usuModificador}" sortBy="#{vtUsuarioArtefacto.usuModificador}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuModificador"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.usuModificador}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.arteCodigo_VtArtefacto}" sortBy="#{vtUsuarioArtefacto.arteCodigo_VtArtefacto}" >
+										 <f:facet name="header">
+										<h:outputText value="ArteCodigo_VtArtefacto"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.arteCodigo_VtArtefacto}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.inteCodigo_VtInteres}" sortBy="#{vtUsuarioArtefacto.inteCodigo_VtInteres}" >
+										 <f:facet name="header">
+										<h:outputText value="InteCodigo_VtInteres"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.inteCodigo_VtInteres}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtUsuarioArtefacto.usuaCodigo_VtUsuario}" sortBy="#{vtUsuarioArtefacto.usuaCodigo_VtUsuario}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuaCodigo_VtUsuario"/>
+										</f:facet>
+										 <h:outputText value="#{vtUsuarioArtefacto.usuaCodigo_VtUsuario}"/>
+										</p:column>   
+			                    			                    
+								<p:column headerText="Options">
+									<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+										update=":dialogVtUsuarioArtefacto"
+										actionListener="#{vtUsuarioArtefactoView.action_edit}">
+										<f:attribute name="selectedVtUsuarioArtefacto" value="#{vtUsuarioArtefacto}" />
+									</p:commandButton>
+									<p:commandButton id="btnDelete"									
+										title="Delete" actionListener="#{vtUsuarioArtefactoView.action_delete_datatable}"
+										onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}"
+										icon="ui-icon-trash" update="@form">
+										<f:attribute name="selectedVtUsuarioArtefacto" value="#{vtUsuarioArtefacto}" />
+									</p:commandButton>
+								</p:column>									                    
+							</p:dataTable>	
+						</p:panel>
+						<p:panel id="panelBoton">
+							<div align="center">
+								<p:commandButton id="btnNew" value="New"
+									action="#{vtUsuarioArtefactoView.action_new()}" update=":dialogVtUsuarioArtefacto" />
+							</div>
+						</p:panel>						
+		   			</h:form>
+					<p:dialog id="dialogVtUsuarioArtefacto" appendTo="@(body)" draggable="true"
+						closable="false" visible="#{vtUsuarioArtefactoView.showDialog}" resizable="false"
+						modal="true" width="500">
+						<h:form id="formDialog">
+							<p:messages id="msg" />
+							<p:panel id="panelVtUsuarioArtefacto" header="VtUsuarioArtefacto">							
+							    <h:panelGrid columns="2" id="panelGrid" >
+																		 <h:outputText id="msgUsuartCodigo" value="UsuartCodigo"/>
+									 <p:inputText id="txtUsuartCodigo" binding="#{vtUsuarioArtefactoView.txtUsuartCodigo}">
+									 <p:ajax update=":dialogVtUsuarioArtefacto" listener="#{vtUsuarioArtefactoView.listener_txtId}"/>
+									 </p:inputText>	
+																											
+																		<h:outputText id="msgActivo" value=" Activo"/>
+									<p:inputText id="txtActivo" disabled="true" binding="#{vtUsuarioArtefactoView.txtActivo}"/>
+																		<h:outputText id="msgUsuCreador" value=" UsuCreador"/>
+									<p:inputText id="txtUsuCreador" disabled="true" binding="#{vtUsuarioArtefactoView.txtUsuCreador}"/>
+																		<h:outputText id="msgUsuModificador" value=" UsuModificador"/>
+									<p:inputText id="txtUsuModificador" disabled="true" binding="#{vtUsuarioArtefactoView.txtUsuModificador}"/>
+																		<h:outputText id="msgArteCodigo_VtArtefacto" value=" ArteCodigo_VtArtefacto"/>
+									<p:inputText id="txtArteCodigo_VtArtefacto" disabled="true" binding="#{vtUsuarioArtefactoView.txtArteCodigo_VtArtefacto}"/>
+																		<h:outputText id="msgInteCodigo_VtInteres" value=" InteCodigo_VtInteres"/>
+									<p:inputText id="txtInteCodigo_VtInteres" disabled="true" binding="#{vtUsuarioArtefactoView.txtInteCodigo_VtInteres}"/>
+																		<h:outputText id="msgUsuaCodigo_VtUsuario" value=" UsuaCodigo_VtUsuario"/>
+									<p:inputText id="txtUsuaCodigo_VtUsuario" disabled="true" binding="#{vtUsuarioArtefactoView.txtUsuaCodigo_VtUsuario}"/>
+																		
+																													<h:outputText id="msgFechaCreacion" value=" FechaCreacion"/>
+																				<p:calendar showOn="button" navigator="true" locale="en" 
+										binding="#{vtUsuarioArtefactoView.txtFechaCreacion}" >
+										<p:ajax event="dateSelect" listener="#{vtUsuarioArtefactoView.listener_txtFechaCreacion}" />
+										</p:calendar>
+																				<h:outputText id="msgFechaModificacion" value=" FechaModificacion"/>
+																				<p:calendar showOn="button" navigator="true" locale="en" 
+										binding="#{vtUsuarioArtefactoView.txtFechaModificacion}" >
+										<p:ajax event="dateSelect" listener="#{vtUsuarioArtefactoView.listener_txtFechaModificacion}" />
+										</p:calendar>
+																										    </h:panelGrid>
+							</p:panel>						   
+							<p:panel id="panelBotones">
+								<div align="center">					
+									<p:commandButton id="btnSave" binding="#{vtUsuarioArtefactoView.btnSave}" value="Save" action="#{vtUsuarioArtefactoView.action_save()}" update=":dialogVtUsuarioArtefacto :frm:panelDataTableVtUsuarioArtefacto" />
+									<p:commandButton id="btnClear" value="Clear" action="#{vtUsuarioArtefactoView.action_clear()}" update=":dialogVtUsuarioArtefacto" />
+									<p:commandButton id="btnExit" value="Exit" action="#{vtUsuarioArtefactoView.action_closeDialog()}" update=":dialogVtUsuarioArtefacto" />
+								</div>
+							</p:panel>					
+						</h:form>
+					</p:dialog>
+				</f:view>
+			</ui:define>		
+		</ui:composition>	
+	</h:body>	
+</html>	

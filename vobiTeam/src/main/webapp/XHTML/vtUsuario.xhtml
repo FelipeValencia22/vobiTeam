@@ -1,0 +1,80 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	</h:head>		
+	
+	<h:body>
+		<ui:composition template="/WEB-INF/facelets/template.xhtml">	
+		<ui:define name="body">	
+		<f:view>
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>               
+			<p:dialog modal="true" widgetVar="statusDialog" header="Loading"  draggable="false" closable="false">  
+   				<p:graphicImage value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />   
+			</p:dialog>
+			
+			<!-- Expired session -->
+					<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+					<p:dialog modal="true" widgetVar="sessionTimeOutDialog" header="Expired session"  draggable="false" closable="false">  
+	   					<h:outputText value="The session is finished" />
+	                 	<input id="confirmBackToLogin" 
+	                 		type="button" 
+	                 		value="Sign in"
+	                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />   
+					</p:dialog>
+			
+			
+			<h:form id="formDialog">
+				<p:messages id="msg" />
+				<p:growl id="men"/>
+					<p:panel id="panelVtUsuario" header="VtUsuario">							
+						<h:panelGrid columns="2" id="panelGrid" >
+												 	<h:outputText id="msgUsuaCodigo" value="UsuaCodigo"/>
+						 	<p:inputText id="txtUsuaCodigo" binding="#{vtUsuarioView.txtUsuaCodigo}">
+						 		<p:ajax update="panelVtUsuario,msg,panelBotones" listener="#{vtUsuarioView.listener_txtId}"/>
+						 	</p:inputText>	
+																		
+													<h:outputText id="msgActivo" value=" Activo"/>
+							<p:inputText id="txtActivo" disabled="true" binding="#{vtUsuarioView.txtActivo}"/>
+													<h:outputText id="msgClave" value=" Clave"/>
+							<p:inputText id="txtClave" disabled="true" binding="#{vtUsuarioView.txtClave}"/>
+													<h:outputText id="msgLogin" value=" Login"/>
+							<p:inputText id="txtLogin" disabled="true" binding="#{vtUsuarioView.txtLogin}"/>
+													<h:outputText id="msgNombre" value=" Nombre"/>
+							<p:inputText id="txtNombre" disabled="true" binding="#{vtUsuarioView.txtNombre}"/>
+													<h:outputText id="msgUsuCreador" value=" UsuCreador"/>
+							<p:inputText id="txtUsuCreador" disabled="true" binding="#{vtUsuarioView.txtUsuCreador}"/>
+													<h:outputText id="msgUsuModificador" value=" UsuModificador"/>
+							<p:inputText id="txtUsuModificador" disabled="true" binding="#{vtUsuarioView.txtUsuModificador}"/>
+													<h:outputText id="msgEmprCodigo_VtEmpresa" value=" EmprCodigo_VtEmpresa"/>
+							<p:inputText id="txtEmprCodigo_VtEmpresa" disabled="true" binding="#{vtUsuarioView.txtEmprCodigo_VtEmpresa}"/>
+												
+																				<h:outputText id="msgFechaCreacion" value=" FechaCreacion"/>
+														<p:calendar showOn="button" navigator="true" locale="en" 
+							binding="#{vtUsuarioView.txtFechaCreacion}" >
+								<p:ajax event="dateSelect" listener="#{vtUsuarioView.listener_txtFechaCreacion}"  />
+							</p:calendar>
+														<h:outputText id="msgFechaModificacion" value=" FechaModificacion"/>
+														<p:calendar showOn="button" navigator="true" locale="en" 
+							binding="#{vtUsuarioView.txtFechaModificacion}" >
+								<p:ajax event="dateSelect" listener="#{vtUsuarioView.listener_txtFechaModificacion}"  />
+							</p:calendar>
+																	   </h:panelGrid>
+				</p:panel>
+	   			<p:panel id="panelBotones">
+					<div align="center">					
+						<p:commandButton id="btnSave" binding="#{vtUsuarioView.btnSave}" disabled="true" value="Save" action="#{vtUsuarioView.action_save()}" update="panelVtUsuario,msg,panelBotones" />
+						<p:commandButton id="btnDelete" binding="#{vtUsuarioView.btnDelete}" disabled="true" value="Delete" action="#{vtUsuarioView.action_delete_master()}" onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}" update="panelVtUsuario,msg,panelBotones" />
+						<p:commandButton id="btnClear" value="Clear" action="#{vtUsuarioView.action_clear()}" update="panelVtUsuario,msg,panelBotones" />
+					</div>
+				</p:panel>			
+			</h:form>
+		</f:view>
+			</ui:define>		
+		</ui:composition>	
+	</h:body>	
+</html>	

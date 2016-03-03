@@ -1,0 +1,208 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	</h:head>
+
+	<h:body>
+		  <ui:composition template="/WEB-INF/facelets/template.xhtml">	
+		 
+		 	<ui:define name="body">	
+				<f:view>
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>               
+					<p:dialog modal="true" widgetVar="statusDialog" header="Loading"  draggable="false" closable="false">  
+   						<p:graphicImage value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />   
+					</p:dialog>
+					
+					<!-- Expired session -->
+					<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+					<p:dialog modal="true" widgetVar="sessionTimeOutDialog" header="Expired session"  draggable="false" closable="false">  
+	   					<h:outputText value="The session is finished" />
+	                 	<input id="confirmBackToLogin" 
+	                 		type="button" 
+	                 		value="Sign in"
+	                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />   
+					</p:dialog>
+					
+		  			<h:form id="frm">								  		
+						
+						<p:panel id="panelDataTableVtHistoriaArtefacto" header="VtHistoriaArtefactoData">
+							<p:growl id="men"/>				
+							<p:dataTable value="#{vtHistoriaArtefactoView.data}" var="vtHistoriaArtefacto"
+								paginator="true" rows="5">
+																										<p:column filterBy="#{vtHistoriaArtefacto.historiaCodigo}" sortBy="#{vtHistoriaArtefacto.historiaCodigo}" >
+										 <f:facet name="header">
+										<h:outputText value="historiaCodigo"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.historiaCodigo}"/>
+										 </p:column>
+			                    																									
+										<p:column filterBy="#{vtHistoriaArtefacto.descripcion}" sortBy="#{vtHistoriaArtefacto.descripcion}" >
+										 <f:facet name="header">
+										<h:outputText value="Descripcion"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.descripcion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.esfuerzoEstimado}" sortBy="#{vtHistoriaArtefacto.esfuerzoEstimado}" >
+										 <f:facet name="header">
+										<h:outputText value="EsfuerzoEstimado"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.esfuerzoEstimado}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.esfuerzoReal}" sortBy="#{vtHistoriaArtefacto.esfuerzoReal}" >
+										 <f:facet name="header">
+										<h:outputText value="EsfuerzoReal"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.esfuerzoReal}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.esfuerzoRestante}" sortBy="#{vtHistoriaArtefacto.esfuerzoRestante}" >
+										 <f:facet name="header">
+										<h:outputText value="EsfuerzoRestante"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.esfuerzoRestante}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.fechaCreacion}" sortBy="#{vtHistoriaArtefacto.fechaCreacion}" >
+										 <f:facet name="header">
+										<h:outputText value="FechaCreacion"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.fechaCreacion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.fechaModificacion}" sortBy="#{vtHistoriaArtefacto.fechaModificacion}" >
+										 <f:facet name="header">
+										<h:outputText value="FechaModificacion"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.fechaModificacion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.origen}" sortBy="#{vtHistoriaArtefacto.origen}" >
+										 <f:facet name="header">
+										<h:outputText value="Origen"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.origen}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.puntos}" sortBy="#{vtHistoriaArtefacto.puntos}" >
+										 <f:facet name="header">
+										<h:outputText value="Puntos"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.puntos}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.titulo}" sortBy="#{vtHistoriaArtefacto.titulo}" >
+										 <f:facet name="header">
+										<h:outputText value="Titulo"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.titulo}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.usuCreador}" sortBy="#{vtHistoriaArtefacto.usuCreador}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuCreador"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.usuCreador}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.usuModificador}" sortBy="#{vtHistoriaArtefacto.usuModificador}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuModificador"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.usuModificador}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtHistoriaArtefacto.arteCodigo_VtArtefacto}" sortBy="#{vtHistoriaArtefacto.arteCodigo_VtArtefacto}" >
+										 <f:facet name="header">
+										<h:outputText value="ArteCodigo_VtArtefacto"/>
+										</f:facet>
+										 <h:outputText value="#{vtHistoriaArtefacto.arteCodigo_VtArtefacto}"/>
+										</p:column>   
+			                    			                    
+								<p:column headerText="Options">
+									<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+										update=":dialogVtHistoriaArtefacto"
+										actionListener="#{vtHistoriaArtefactoView.action_edit}">
+										<f:attribute name="selectedVtHistoriaArtefacto" value="#{vtHistoriaArtefacto}" />
+									</p:commandButton>
+									<p:commandButton id="btnDelete"									
+										title="Delete" actionListener="#{vtHistoriaArtefactoView.action_delete_datatable}"
+										onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}"
+										icon="ui-icon-trash" update="@form">
+										<f:attribute name="selectedVtHistoriaArtefacto" value="#{vtHistoriaArtefacto}" />
+									</p:commandButton>
+								</p:column>									                    
+							</p:dataTable>	
+						</p:panel>
+						<p:panel id="panelBoton">
+							<div align="center">
+								<p:commandButton id="btnNew" value="New"
+									action="#{vtHistoriaArtefactoView.action_new()}" update=":dialogVtHistoriaArtefacto" />
+							</div>
+						</p:panel>						
+		   			</h:form>
+					<p:dialog id="dialogVtHistoriaArtefacto" appendTo="@(body)" draggable="true"
+						closable="false" visible="#{vtHistoriaArtefactoView.showDialog}" resizable="false"
+						modal="true" width="500">
+						<h:form id="formDialog">
+							<p:messages id="msg" />
+							<p:panel id="panelVtHistoriaArtefacto" header="VtHistoriaArtefacto">							
+							    <h:panelGrid columns="2" id="panelGrid" >
+																		 <h:outputText id="msgHistoriaCodigo" value="HistoriaCodigo"/>
+									 <p:inputText id="txtHistoriaCodigo" binding="#{vtHistoriaArtefactoView.txtHistoriaCodigo}">
+									 <p:ajax update=":dialogVtHistoriaArtefacto" listener="#{vtHistoriaArtefactoView.listener_txtId}"/>
+									 </p:inputText>	
+																											
+																		<h:outputText id="msgDescripcion" value=" Descripcion"/>
+									<p:inputText id="txtDescripcion" disabled="true" binding="#{vtHistoriaArtefactoView.txtDescripcion}"/>
+																		<h:outputText id="msgEsfuerzoEstimado" value=" EsfuerzoEstimado"/>
+									<p:inputText id="txtEsfuerzoEstimado" disabled="true" binding="#{vtHistoriaArtefactoView.txtEsfuerzoEstimado}"/>
+																		<h:outputText id="msgEsfuerzoReal" value=" EsfuerzoReal"/>
+									<p:inputText id="txtEsfuerzoReal" disabled="true" binding="#{vtHistoriaArtefactoView.txtEsfuerzoReal}"/>
+																		<h:outputText id="msgEsfuerzoRestante" value=" EsfuerzoRestante"/>
+									<p:inputText id="txtEsfuerzoRestante" disabled="true" binding="#{vtHistoriaArtefactoView.txtEsfuerzoRestante}"/>
+																		<h:outputText id="msgOrigen" value=" Origen"/>
+									<p:inputText id="txtOrigen" disabled="true" binding="#{vtHistoriaArtefactoView.txtOrigen}"/>
+																		<h:outputText id="msgPuntos" value=" Puntos"/>
+									<p:inputText id="txtPuntos" disabled="true" binding="#{vtHistoriaArtefactoView.txtPuntos}"/>
+																		<h:outputText id="msgTitulo" value=" Titulo"/>
+									<p:inputText id="txtTitulo" disabled="true" binding="#{vtHistoriaArtefactoView.txtTitulo}"/>
+																		<h:outputText id="msgUsuCreador" value=" UsuCreador"/>
+									<p:inputText id="txtUsuCreador" disabled="true" binding="#{vtHistoriaArtefactoView.txtUsuCreador}"/>
+																		<h:outputText id="msgUsuModificador" value=" UsuModificador"/>
+									<p:inputText id="txtUsuModificador" disabled="true" binding="#{vtHistoriaArtefactoView.txtUsuModificador}"/>
+																		<h:outputText id="msgArteCodigo_VtArtefacto" value=" ArteCodigo_VtArtefacto"/>
+									<p:inputText id="txtArteCodigo_VtArtefacto" disabled="true" binding="#{vtHistoriaArtefactoView.txtArteCodigo_VtArtefacto}"/>
+																		
+																													<h:outputText id="msgFechaCreacion" value=" FechaCreacion"/>
+																				<p:calendar showOn="button" navigator="true" locale="en" 
+										binding="#{vtHistoriaArtefactoView.txtFechaCreacion}" >
+										<p:ajax event="dateSelect" listener="#{vtHistoriaArtefactoView.listener_txtFechaCreacion}" />
+										</p:calendar>
+																				<h:outputText id="msgFechaModificacion" value=" FechaModificacion"/>
+																				<p:calendar showOn="button" navigator="true" locale="en" 
+										binding="#{vtHistoriaArtefactoView.txtFechaModificacion}" >
+										<p:ajax event="dateSelect" listener="#{vtHistoriaArtefactoView.listener_txtFechaModificacion}" />
+										</p:calendar>
+																										    </h:panelGrid>
+							</p:panel>						   
+							<p:panel id="panelBotones">
+								<div align="center">					
+									<p:commandButton id="btnSave" binding="#{vtHistoriaArtefactoView.btnSave}" value="Save" action="#{vtHistoriaArtefactoView.action_save()}" update=":dialogVtHistoriaArtefacto :frm:panelDataTableVtHistoriaArtefacto" />
+									<p:commandButton id="btnClear" value="Clear" action="#{vtHistoriaArtefactoView.action_clear()}" update=":dialogVtHistoriaArtefacto" />
+									<p:commandButton id="btnExit" value="Exit" action="#{vtHistoriaArtefactoView.action_closeDialog()}" update=":dialogVtHistoriaArtefacto" />
+								</div>
+							</p:panel>					
+						</h:form>
+					</p:dialog>
+				</f:view>
+			</ui:define>		
+		</ui:composition>	
+	</h:body>	
+</html>	

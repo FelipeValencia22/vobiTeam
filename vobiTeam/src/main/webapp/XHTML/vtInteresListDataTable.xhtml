@@ -1,0 +1,154 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	</h:head>
+
+	<h:body>
+		  <ui:composition template="/WEB-INF/facelets/template.xhtml">	
+		 
+		 	<ui:define name="body">	
+				<f:view>
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>               
+					<p:dialog modal="true" widgetVar="statusDialog" header="Loading"  draggable="false" closable="false">  
+   						<p:graphicImage value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />   
+					</p:dialog>
+					
+					<!-- Expired session -->
+					<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+					<p:dialog modal="true" widgetVar="sessionTimeOutDialog" header="Expired session"  draggable="false" closable="false">  
+	   					<h:outputText value="The session is finished" />
+	                 	<input id="confirmBackToLogin" 
+	                 		type="button" 
+	                 		value="Sign in"
+	                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />   
+					</p:dialog>
+					
+		  			<h:form id="frm">								  		
+						
+						<p:panel id="panelDataTableVtInteres" header="VtInteresData">
+							<p:growl id="men"/>				
+							<p:dataTable value="#{vtInteresView.data}" var="vtInteres"
+								paginator="true" rows="5">
+																										<p:column filterBy="#{vtInteres.inteCodigo}" sortBy="#{vtInteres.inteCodigo}" >
+										 <f:facet name="header">
+										<h:outputText value="inteCodigo"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.inteCodigo}"/>
+										 </p:column>
+			                    																									
+										<p:column filterBy="#{vtInteres.activo}" sortBy="#{vtInteres.activo}" >
+										 <f:facet name="header">
+										<h:outputText value="Activo"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.activo}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtInteres.fechaCreacion}" sortBy="#{vtInteres.fechaCreacion}" >
+										 <f:facet name="header">
+										<h:outputText value="FechaCreacion"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.fechaCreacion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtInteres.fechaModificacion}" sortBy="#{vtInteres.fechaModificacion}" >
+										 <f:facet name="header">
+										<h:outputText value="FechaModificacion"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.fechaModificacion}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtInteres.nombre}" sortBy="#{vtInteres.nombre}" >
+										 <f:facet name="header">
+										<h:outputText value="Nombre"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.nombre}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtInteres.usuCreador}" sortBy="#{vtInteres.usuCreador}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuCreador"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.usuCreador}"/>
+										</p:column>   
+			                    									
+										<p:column filterBy="#{vtInteres.usuModificador}" sortBy="#{vtInteres.usuModificador}" >
+										 <f:facet name="header">
+										<h:outputText value="UsuModificador"/>
+										</f:facet>
+										 <h:outputText value="#{vtInteres.usuModificador}"/>
+										</p:column>   
+			                    			                    
+								<p:column headerText="Options">
+									<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+										update=":dialogVtInteres"
+										actionListener="#{vtInteresView.action_edit}">
+										<f:attribute name="selectedVtInteres" value="#{vtInteres}" />
+									</p:commandButton>
+									<p:commandButton id="btnDelete"									
+										title="Delete" actionListener="#{vtInteresView.action_delete_datatable}"
+										onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}"
+										icon="ui-icon-trash" update="@form">
+										<f:attribute name="selectedVtInteres" value="#{vtInteres}" />
+									</p:commandButton>
+								</p:column>									                    
+							</p:dataTable>	
+						</p:panel>
+						<p:panel id="panelBoton">
+							<div align="center">
+								<p:commandButton id="btnNew" value="New"
+									action="#{vtInteresView.action_new()}" update=":dialogVtInteres" />
+							</div>
+						</p:panel>						
+		   			</h:form>
+					<p:dialog id="dialogVtInteres" appendTo="@(body)" draggable="true"
+						closable="false" visible="#{vtInteresView.showDialog}" resizable="false"
+						modal="true" width="500">
+						<h:form id="formDialog">
+							<p:messages id="msg" />
+							<p:panel id="panelVtInteres" header="VtInteres">							
+							    <h:panelGrid columns="2" id="panelGrid" >
+																		 <h:outputText id="msgInteCodigo" value="InteCodigo"/>
+									 <p:inputText id="txtInteCodigo" binding="#{vtInteresView.txtInteCodigo}">
+									 <p:ajax update=":dialogVtInteres" listener="#{vtInteresView.listener_txtId}"/>
+									 </p:inputText>	
+																											
+																		<h:outputText id="msgActivo" value=" Activo"/>
+									<p:inputText id="txtActivo" disabled="true" binding="#{vtInteresView.txtActivo}"/>
+																		<h:outputText id="msgNombre" value=" Nombre"/>
+									<p:inputText id="txtNombre" disabled="true" binding="#{vtInteresView.txtNombre}"/>
+																		<h:outputText id="msgUsuCreador" value=" UsuCreador"/>
+									<p:inputText id="txtUsuCreador" disabled="true" binding="#{vtInteresView.txtUsuCreador}"/>
+																		<h:outputText id="msgUsuModificador" value=" UsuModificador"/>
+									<p:inputText id="txtUsuModificador" disabled="true" binding="#{vtInteresView.txtUsuModificador}"/>
+																		
+																													<h:outputText id="msgFechaCreacion" value=" FechaCreacion"/>
+																				<p:calendar showOn="button" navigator="true" locale="en" 
+										binding="#{vtInteresView.txtFechaCreacion}" >
+										<p:ajax event="dateSelect" listener="#{vtInteresView.listener_txtFechaCreacion}" />
+										</p:calendar>
+																				<h:outputText id="msgFechaModificacion" value=" FechaModificacion"/>
+																				<p:calendar showOn="button" navigator="true" locale="en" 
+										binding="#{vtInteresView.txtFechaModificacion}" >
+										<p:ajax event="dateSelect" listener="#{vtInteresView.listener_txtFechaModificacion}" />
+										</p:calendar>
+																										    </h:panelGrid>
+							</p:panel>						   
+							<p:panel id="panelBotones">
+								<div align="center">					
+									<p:commandButton id="btnSave" binding="#{vtInteresView.btnSave}" value="Save" action="#{vtInteresView.action_save()}" update=":dialogVtInteres :frm:panelDataTableVtInteres" />
+									<p:commandButton id="btnClear" value="Clear" action="#{vtInteresView.action_clear()}" update=":dialogVtInteres" />
+									<p:commandButton id="btnExit" value="Exit" action="#{vtInteresView.action_closeDialog()}" update=":dialogVtInteres" />
+								</div>
+							</p:panel>					
+						</h:form>
+					</p:dialog>
+				</f:view>
+			</ui:define>		
+		</ui:composition>	
+	</h:body>	
+</html>	

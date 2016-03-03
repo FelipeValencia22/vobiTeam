@@ -1,0 +1,213 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	</h:head>
+
+	<h:body>
+	    <ui:composition template="/WEB-INF/facelets/template.xhtml">	
+		 
+		 	<ui:define name="body">	
+				<f:view>
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>               
+					<p:dialog modal="true" widgetVar="statusDialog" header="Loading"  draggable="false" closable="false">  
+   						<p:graphicImage value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />   
+					</p:dialog>
+					
+					
+					<!-- Expired session -->
+					<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="#{session.maxInactiveInterval * 1000}" />
+					<p:dialog modal="true" widgetVar="sessionTimeOutDialog" header="Expired session"  draggable="false" closable="false">  
+	   					<h:outputText value="The session is finished" />
+	                 	<input id="confirmBackToLogin" 
+	                 		type="button" 
+	                 		value="Sign in"
+	                    	onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />   
+					</p:dialog>
+		 
+		 <h:form id="form">
+			
+			 
+			<p:panel id="msgProjectClientesTitle" header="VtArchivoData">
+					<p:messages id="msg" />
+				<p:dataTable id ="tabla" value="#{vtArchivoView.data}" var="vtArchivo"
+					paginator="true" rows="5"  editable="true" >
+					 
+					 <p:ajax event ="rowEdit" update=":form:msg,:form:tabla" listener="#{vtArchivoView.rowEventListener}" />
+					
+															<p:column filterBy="#{vtArchivo.archCodigo}" sortBy="#{vtArchivo.archCodigo}" headerText="archCodigo">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{vtArchivo.archCodigo}"/>
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{vtArchivo.archCodigo}"/>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+                    										
+											
+						<p:column filterBy="#{vtArchivo.activo}" sortBy="#{vtArchivo.activo}" 
+							headerText="activo">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.activo}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtArchivo.activo}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtArchivo.archivo}" sortBy="#{vtArchivo.archivo}" 
+							headerText="archivo">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.archivo}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtArchivo.archivo}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtArchivo.nombre}" sortBy="#{vtArchivo.nombre}" 
+							headerText="nombre">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.nombre}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtArchivo.nombre}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtArchivo.usuCreador}" sortBy="#{vtArchivo.usuCreador}" 
+							headerText="usuCreador">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.usuCreador}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtArchivo.usuCreador}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtArchivo.usuModificador}" sortBy="#{vtArchivo.usuModificador}" 
+							headerText="usuModificador">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.usuModificador}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtArchivo.usuModificador}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+											
+						<p:column filterBy="#{vtArchivo.arteCodigo_VtArtefacto}" sortBy="#{vtArchivo.arteCodigo_VtArtefacto}" 
+							headerText="arteCodigo_VtArtefacto">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.arteCodigo_VtArtefacto}"/>
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:inputText value="#{vtArchivo.arteCodigo_VtArtefacto}"/>
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+										
+										   						 
+						 <p:column filterBy="#{vtArchivo.fechaCreacion}" sortBy="#{vtArchivo.fechaCreacion}" 
+							headerText="fechaCreacion">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.fechaCreacion}">
+									  <f:convertDateTime  pattern="dd/MM/yyyy"/>
+									</h:outputText>		
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:calendar value="#{vtArchivo.fechaCreacion}" showOn="button" pattern="dd/MM/yyyy" navigator="true" >
+									  <f:convertDateTime  pattern="dd/MM/yyyy" timeZone="#{vtArchivoView.timeZone}" />	
+								    </p:calendar>		
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+					   						 
+						 <p:column filterBy="#{vtArchivo.fechaModificacion}" sortBy="#{vtArchivo.fechaModificacion}" 
+							headerText="fechaModificacion">
+							
+								<p:cellEditor>
+								
+								<f:facet name="output">
+									<h:outputText value="#{vtArchivo.fechaModificacion}">
+									  <f:convertDateTime  pattern="dd/MM/yyyy"/>
+									</h:outputText>		
+								</f:facet>
+							
+								<f:facet name="input">
+									<p:calendar value="#{vtArchivo.fechaModificacion}" showOn="button" pattern="dd/MM/yyyy" navigator="true" >
+									  <f:convertDateTime  pattern="dd/MM/yyyy" timeZone="#{vtArchivoView.timeZone}" />	
+								    </p:calendar>		
+								</f:facet>
+								</p:cellEditor>	
+							</p:column>
+						
+					   											
+					<p:column headerText="Options" >
+						<p:rowEditor id="row"/>
+						<p:tooltip for="row" value="Edit" showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="btnDelete" value="Delete" showEffect="fade" hideEffect="fade" />
+						<p:commandButton id="btnDelete" actionListener="#{vtArchivoView.actionDeleteDataTableEditable}" title="Delete" onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}" icon="ui-icon-trash" update=":form:msg,:form:tabla" >
+							<f:attribute name="selectedVtArchivo" value="#{vtArchivo}" />  
+						</p:commandButton>
+						
+					</p:column>	
+				
+				</p:dataTable>	
+					
+				
+			</p:panel>
+				
+	   </h:form>
+		 </f:view>
+			</ui:define>		
+		</ui:composition>	
+	
+	</h:body>	
+	
+</html>	
