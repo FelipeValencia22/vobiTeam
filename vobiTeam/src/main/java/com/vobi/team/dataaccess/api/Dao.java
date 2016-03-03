@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import java.util.List;
 
+import com.vobi.team.modelo.VtEmpresa;
+import com.vobi.team.modelo.VtUsuario;
+
 
 /**
  *
@@ -294,4 +297,13 @@ public interface Dao<T, PK extends Serializable> {
      * @return
      */
     public List<T> findByCriteria(String whereCondition);
+    
+    
+    // TODO: CONSULTAS //
+    
+    public VtUsuario consultarLogin(String login);
+    
+    public VtEmpresa consultarEmpresaPorId(String identificacion);
+    
+    public VtUsuario consultarUsuarioPorCodigo(Long usuaCodigo);
 }

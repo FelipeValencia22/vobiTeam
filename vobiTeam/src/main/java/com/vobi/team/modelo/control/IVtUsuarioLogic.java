@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 /**
-* @author Zathura Code Generator http://zathuracode.org/
+* @author Zathura Code Generator http://zathuracode.org
 * www.zathuracode.org
 *
 */
@@ -53,4 +53,8 @@ public interface IVtUsuarioLogic {
     public Long findTotalNumberVtUsuario() throws Exception;
 
     public List<VtUsuarioDTO> getDataVtUsuario() throws Exception;
+       
+    public VtUsuario consultarLogin(String login);
+    
+    public VtUsuario consultarUsuarioPorCodigo(Long usua_codigo);
 }

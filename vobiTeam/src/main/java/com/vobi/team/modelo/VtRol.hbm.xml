@@ -6,7 +6,7 @@
     <class name="com.vobi.team.modelo.VtRol" table="vt_rol" schema="public" optimistic-lock="version">
         <id name="rolCodigo" type="java.lang.Long">
             <column name="rol_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="rolNombre" type="java.lang.String">
             <column name="rol_nombre" not-null="true" />

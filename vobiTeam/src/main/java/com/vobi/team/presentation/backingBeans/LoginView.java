@@ -63,6 +63,6 @@ public class LoginView {
             return "/login.xhtml";
         }
 
-        return "/dashboard.xhtml";
+        return "/XHTML/initialMenu.xhtml";
     }
 }

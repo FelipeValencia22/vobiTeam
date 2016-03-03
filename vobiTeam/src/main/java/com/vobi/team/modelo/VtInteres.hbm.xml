@@ -7,7 +7,7 @@
         <comment>SOLICITANTE VERIFICADOR APROBADOR DESARROLLADOR</comment>
         <id name="inteCodigo" type="java.lang.Long">
             <column name="inte_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="nombre" type="java.lang.String">
             <column name="nombre" not-null="true" />

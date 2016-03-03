@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
+import com.vobi.team.modelo.VtEmpresa;
+import com.vobi.team.modelo.VtUsuario;
+
 import java.io.Serializable;
 
 import java.lang.reflect.ParameterizedType;
@@ -618,4 +621,30 @@ public class HibernateDaoImpl<T, PK extends Serializable> implements Dao<T, PK> 
             throw re;
         }
     }
+
+    
+    // TODO:CONSULTAS //
+	@Override
+	public VtUsuario consultarLogin(String login) {
+		Query query=getSession().getNamedQuery("consultarUsuarioPorLogin");
+		query.setParameter("login", login);
+		VtUsuario usuarioLogin= (VtUsuario) query.uniqueResult();
+		return usuarioLogin;
+	}
+
+	@Override
+	public VtEmpresa consultarEmpresaPorId(String identificacion) {
+		Query query=getSession().getNamedQuery("consultarEmpresaPorId");
+		query.setParameter("identificacion", identificacion);
+		VtEmpresa empresaId= (VtEmpresa) query.uniqueResult();
+		return empresaId;
+	}
+
+	@Override
+	public VtUsuario consultarUsuarioPorCodigo(Long usuaCodigo) {
+		Query query=getSession().getNamedQuery("consultarUsuarioPorID");
+		query.setParameter("usuaCodigo", usuaCodigo);
+		VtUsuario usuarioCodigo= (VtUsuario) query.uniqueResult();
+		return usuarioCodigo;
+	}
 }

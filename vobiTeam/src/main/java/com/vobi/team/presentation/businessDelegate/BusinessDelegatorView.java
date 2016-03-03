@@ -64,6 +64,7 @@ import com.vobi.team.modelo.dto.VtTipoArtefactoDTO;
 import com.vobi.team.modelo.dto.VtUsuarioArtefactoDTO;
 import com.vobi.team.modelo.dto.VtUsuarioDTO;
 import com.vobi.team.modelo.dto.VtUsuarioRolDTO;
+
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 
 import org.slf4j.Logger;
@@ -121,7 +122,7 @@ import java.util.Set;
 * Finally, it should be noted that this pattern could be used to reduce coupling between other tiers, not simply the presentation and the
 * business tiers.
 *
-* @author Zathura Code Generator http://zathuracode.org/
+* @author Zathura Code Generator http://zathuracode.org
 * www.zathuracode.org
 *
 */
@@ -995,4 +996,19 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
         throws Exception {
         return vtUsuarioRolLogic.getDataVtUsuarioRol();
     }
+
+	@Override
+	public VtUsuario consultarLogin(String login) {
+		return vtUsuarioLogic.consultarLogin(login);
+	}
+
+	@Override
+	public VtEmpresa consultarEmpresaPorId(String identificacion) { 
+		return vtEmpresaLogic.consultarEmpresaPorId(identificacion);
+	}
+
+	@Override
+	public VtUsuario consultarUsuarioPorCodigo(Long usuacodigo) {
+		return vtUsuarioLogic.consultarUsuarioPorCodigo(usuacodigo);
+	}
 }

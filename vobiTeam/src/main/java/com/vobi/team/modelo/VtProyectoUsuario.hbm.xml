@@ -6,7 +6,7 @@
     <class name="com.vobi.team.modelo.VtProyectoUsuario" table="vt_proyecto_usuario" schema="public" optimistic-lock="version">
         <id name="prusCodigo" type="java.lang.Long">
             <column name="prus_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <many-to-one name="vtProyecto" class="com.vobi.team.modelo.VtProyecto" fetch="select">
             <column name="proy_codigo" not-null="true" />

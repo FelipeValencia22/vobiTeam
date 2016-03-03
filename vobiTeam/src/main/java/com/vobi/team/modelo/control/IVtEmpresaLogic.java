@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 /**
-* @author Zathura Code Generator http://zathuracode.org/
+* @author Zathura Code Generator http://zathuracode.org
 * www.zathuracode.org
 *
 */
@@ -53,4 +53,6 @@ public interface IVtEmpresaLogic {
     public Long findTotalNumberVtEmpresa() throws Exception;
 
     public List<VtEmpresaDTO> getDataVtEmpresa() throws Exception;
+    
+    public VtEmpresa consultarEmpresaPorId(String identificacion);
 }

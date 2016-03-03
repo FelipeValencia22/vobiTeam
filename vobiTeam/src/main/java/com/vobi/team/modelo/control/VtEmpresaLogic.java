@@ -1,9 +1,12 @@
 package com.vobi.team.modelo.control;
 
 import com.vobi.team.dataaccess.dao.*;
+
 import com.vobi.team.exceptions.*;
+
 import com.vobi.team.modelo.*;
 import com.vobi.team.modelo.dto.VtEmpresaDTO;
+
 import com.vobi.team.utilities.Utilities;
 
 import org.slf4j.Logger;
@@ -27,7 +30,7 @@ import java.util.Set;
 
 
 /**
-* @author Zathura Code Generator http://zathuracode.org/
+* @author Zathura Code Generator http://zathuracode.org
 * www.zathuracode.org
 *
 */
@@ -80,53 +83,28 @@ public class VtEmpresaLogic implements IVtEmpresaLogic {
         log.debug("saving VtEmpresa instance");
 
         try {
-            if (entity.getActivo() == null) {
-                throw new ZMessManager().new EmptyFieldException("activo");
+            if (entity == null) {
+                throw new Exception("La entidad es nula");
             }
+            
+            if(entity.getIdentificacion().toString().equals("") || entity.getIdentificacion().toString().isEmpty()){
+            	throw new Exception("La identificación es obligatoria");
+            }
+            
+            if (entity.getNombre().toString().equals("") || entity.getNombre().toString().isEmpty()) {
+                throw new Exception("El nombre es obligatorio");
+            }
+            
+            VtEmpresa vtEmpresa= new VtEmpresa();
+            vtEmpresa.setActivo(entity.getActivo());
+            Date fechaCreacion = new Date();
+    		vtEmpresa.setFechaCreacion(fechaCreacion);
+    		vtEmpresa.setIdentificacion(entity.getIdentificacion());
+    		vtEmpresa.setNombre(entity.getNombre());
+    		vtEmpresa.setUsuCreador(entity.getUsuCreador());
+    		
+   
 
-            if ((entity.getActivo() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 1) == false)) {
-                throw new ZMessManager().new NotValidFormatException("activo");
-            }
-
-            if (entity.getEmprCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("emprCodigo");
-            }
-
-            if (entity.getFechaCreacion() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "fechaCreacion");
-            }
-
-            if (entity.getIdentificacion() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "identificacion");
-            }
-
-            if ((entity.getIdentificacion() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(
-                        entity.getIdentificacion(), 255) == false)) {
-                throw new ZMessManager().new NotValidFormatException(
-                    "identificacion");
-            }
-
-            if (entity.getNombre() == null) {
-                throw new ZMessManager().new EmptyFieldException("nombre");
-            }
-
-            if ((entity.getNombre() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getNombre(),
-                        255) == false)) {
-                throw new ZMessManager().new NotValidFormatException("nombre");
-            }
-
-            if (entity.getUsuCreador() == null) {
-                throw new ZMessManager().new EmptyFieldException("usuCreador");
-            }
-
-            if (getVtEmpresa(entity.getEmprCodigo()) != null) {
-                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
-            }
 
             vtEmpresaDAO.save(entity);
 
@@ -487,4 +465,9 @@ public class VtEmpresaLogic implements IVtEmpresaLogic {
 
         return list;
     }
+
+    @Transactional(readOnly = true)
+	public VtEmpresa consultarEmpresaPorId(String identificacion) {
+		return vtEmpresaDAO.consultarEmpresaPorId(identificacion);
+	}
 }

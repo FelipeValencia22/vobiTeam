@@ -7,7 +7,7 @@
         <comment>MUY ALTA ALTA MEDIA BAJA MUY BAJA</comment>
         <id name="prioCodigo" type="java.lang.Long">
             <column name="prio_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="nombre" type="java.lang.String">
             <column name="nombre" not-null="true" />

@@ -79,7 +79,7 @@ import java.util.Set;
 
 
 /**
-* @author Zathura Code Generator http://zathuracode.org/
+* @author Zathura Code Generator http://zathuracode.org
 * www.zathuracode.org
 *
 */
@@ -469,4 +469,10 @@ public interface IBusinessDelegatorView {
 
     public List<VtUsuarioRolDTO> getDataVtUsuarioRol()
         throws Exception;
+    
+    public VtUsuario consultarLogin(String login);
+    
+    public VtEmpresa consultarEmpresaPorId(String login);
+    
+    public VtUsuario consultarUsuarioPorCodigo(Long usuacodigo);
 }

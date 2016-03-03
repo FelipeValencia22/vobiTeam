@@ -29,6 +29,7 @@ public class VtUsuarioDTO implements Serializable {
     private Long usuModificador;
     private Long usuaCodigo;
     private Long emprCodigo_VtEmpresa;
+    private String nombre_VtEmpresa;
 
     public String getActivo() {
         return activo;
@@ -109,4 +110,15 @@ public class VtUsuarioDTO implements Serializable {
     public void setEmprCodigo_VtEmpresa(Long emprCodigo_VtEmpresa) {
         this.emprCodigo_VtEmpresa = emprCodigo_VtEmpresa;
     }
+
+	public String getNombre_VtEmpresa() {
+		return nombre_VtEmpresa;
+	}
+
+	public void setNombre_VtEmpresa(String nombre_VtEmpresa) {
+		this.nombre_VtEmpresa = nombre_VtEmpresa;
+	}
+
+	
+    
 }

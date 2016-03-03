@@ -7,7 +7,7 @@
         <comment>Backlog</comment>
         <id name="pilaCodigo" type="java.lang.Long">
             <column name="pila_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <many-to-one name="vtProyecto" class="com.vobi.team.modelo.VtProyecto" fetch="select">
             <column name="proy_codigo" not-null="true" />

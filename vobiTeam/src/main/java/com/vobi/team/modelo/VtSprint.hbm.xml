@@ -6,7 +6,7 @@
     <class name="com.vobi.team.modelo.VtSprint" table="vt_sprint" schema="public" optimistic-lock="version">
         <id name="spriCodigo" type="java.lang.Long">
             <column name="spri_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <many-to-one name="vtPilaProducto" class="com.vobi.team.modelo.VtPilaProducto" fetch="select">
             <column name="pila_codigo" not-null="true" />

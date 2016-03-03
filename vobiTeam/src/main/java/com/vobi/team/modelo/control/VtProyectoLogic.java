@@ -1,9 +1,12 @@
 package com.vobi.team.modelo.control;
 
 import com.vobi.team.dataaccess.dao.*;
+
 import com.vobi.team.exceptions.*;
+
 import com.vobi.team.modelo.*;
 import com.vobi.team.modelo.dto.VtProyectoDTO;
+
 import com.vobi.team.utilities.Utilities;
 
 import org.slf4j.Logger;
@@ -27,7 +30,7 @@ import java.util.Set;
 
 
 /**
-* @author Zathura Code Generator http://zathuracode.org/
+* @author Zathura Code Generator http://zathuracode.org
 * www.zathuracode.org
 *
 */
@@ -87,73 +90,57 @@ public class VtProyectoLogic implements IVtProyectoLogic {
         log.debug("saving VtProyecto instance");
 
         try {
-            if (entity.getVtEmpresa() == null) {
-                throw new ZMessManager().new ForeignException("vtEmpresa");
+            if(entity == null) {
+            	throw new Exception("La entidad es nula");
             }
-
-            if (entity.getActivo() == null) {
-                throw new ZMessManager().new EmptyFieldException("activo");
+            
+            if(entity.getActivo().equals("-1") || entity.getActivo().equals("") ) {
+            	throw new Exception("Seleccione la empresa");
             }
-
-            if ((entity.getActivo() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 1) == false)) {
-                throw new ZMessManager().new NotValidFormatException("activo");
+            
+            if(entity.getDescripcion().equals("") || entity.getDescripcion().isEmpty() ) {
+            	throw new Exception("La descripcion es obligatoria");
             }
-
-            if (entity.getDescripcion() == null) {
-                throw new ZMessManager().new EmptyFieldException("descripcion");
+            
+            if(entity.getFechaCreacion().toString().equals("") || entity.getFechaCreacion().toString().isEmpty()){
+            	throw new Exception("Fecha incorrecta");
             }
-
-            if ((entity.getDescripcion() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(
-                        entity.getDescripcion(), 255) == false)) {
-                throw new ZMessManager().new NotValidFormatException(
-                    "descripcion");
+            
+            if(entity.getNombre().toString().equals("") || entity.getNombre().toString().isEmpty()){
+            	throw new Exception("El nombre es obligatorio");
             }
-
-            if (entity.getFechaCreacion() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "fechaCreacion");
+            
+            if(entity.getPublico().equals("-1") || entity.getPublico().toString().equals("") ) {
+            	throw new Exception("Seleccione la privacidad del proyecto");
             }
-
-            if (entity.getNombre() == null) {
-                throw new ZMessManager().new EmptyFieldException("nombre");
+            
+            if(entity.getVtEmpresa().equals("-1") || entity.getVtEmpresa().toString().equals("") ) {
+            	throw new Exception("Seleccione la Empresa");
             }
+            
+            VtProyecto vtProyecto= new VtProyecto();
+            
+            vtProyecto.setActivo(entity.getActivo());
+            vtProyecto.setDescripcion(entity.getDescripcion());
+            vtProyecto.setFechaCreacion(entity.getFechaCreacion());
+            vtProyecto.setNombre(entity.getNombre());
+            vtProyecto.setPublico(entity.getPublico());
+            vtProyecto.setVtEmpresa(entity.getVtEmpresa());
+            vtProyecto.setUsuCreador(1L);
 
-            if ((entity.getNombre() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getNombre(),
-                        255) == false)) {
-                throw new ZMessManager().new NotValidFormatException("nombre");
-            }
+           
 
-            if (entity.getProyCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("proyCodigo");
-            }
-
-            if (entity.getPublico() == null) {
-                throw new ZMessManager().new EmptyFieldException("publico");
-            }
-
-            if ((entity.getPublico() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(
-                        entity.getPublico(), 1) == false)) {
-                throw new ZMessManager().new NotValidFormatException("publico");
-            }
-
-            if (entity.getUsuCreador() == null) {
-                throw new ZMessManager().new EmptyFieldException("usuCreador");
-            }
-
-            if (entity.getVtEmpresa().getEmprCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "emprCodigo_VtEmpresa");
-            }
-
-            if (getVtProyecto(entity.getProyCodigo()) != null) {
-                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
-            }
-
-            vtProyectoDAO.save(entity);
+            vtProyectoDAO.save(vtProyecto);
+            
+            VtPilaProducto vtPilaProducto= new VtPilaProducto();
+            vtPilaProducto.setActivo("S");
+            vtPilaProducto.setDescripcion("Pila de Producto. Proyecto: "+vtProyecto.getNombre());
+            vtPilaProducto.setFechaCreacion(vtProyecto.getFechaCreacion());
+            vtPilaProducto.setNombre("Pila de producto");
+            vtPilaProducto.setUsuCreador(1L);
+            vtPilaProducto.setVtProyecto(vtProyecto);
+            
+            vtPilaProductoDAO.save(vtPilaProducto);
 
             log.debug("save VtProyecto successful");
         } catch (Exception e) {
@@ -253,9 +240,9 @@ public class VtProyectoLogic implements IVtProyectoLogic {
                 throw new ZMessManager().new NotValidFormatException("nombre");
             }
 
-            if (entity.getProyCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("proyCodigo");
-            }
+//            if (entity.getProyCodigo() == null) {
+//                throw new ZMessManager().new EmptyFieldException("proyCodigo");
+//            }
 
             if (entity.getPublico() == null) {
                 throw new ZMessManager().new EmptyFieldException("publico");

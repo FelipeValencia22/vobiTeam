@@ -7,7 +7,7 @@
         <comment>EN PROGESO DETENIDA REALIZADA RECHAZADA</comment>
         <id name="estaCodigo" type="java.lang.Long">
             <column name="esta_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="nombre" type="java.lang.String">
             <column name="nombre" not-null="true" />

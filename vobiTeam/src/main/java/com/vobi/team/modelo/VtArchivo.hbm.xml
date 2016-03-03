@@ -6,7 +6,7 @@
     <class name="com.vobi.team.modelo.VtArchivo" table="vt_archivo" schema="public" optimistic-lock="version">
         <id name="archCodigo" type="java.lang.Long">
             <column name="arch_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <many-to-one name="vtArtefacto" class="com.vobi.team.modelo.VtArtefacto" fetch="select">
             <column name="arte_codigo" not-null="true" />

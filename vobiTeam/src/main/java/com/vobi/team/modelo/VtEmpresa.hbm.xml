@@ -6,7 +6,7 @@
     <class name="com.vobi.team.modelo.VtEmpresa" table="vt_empresa" schema="public" optimistic-lock="version">
         <id name="emprCodigo" type="java.lang.Long">
             <column name="empr_codigo" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="identificacion" type="java.lang.String">
             <column name="identificacion" not-null="true" />

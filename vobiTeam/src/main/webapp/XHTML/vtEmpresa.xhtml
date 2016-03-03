@@ -25,43 +25,12 @@
 			<h:form id="formDialog">
 				<p:messages id="msg" />
 				<p:growl id="men"/>
-					<p:panel id="panelVtEmpresa" header="VtEmpresa">							
-						<h:panelGrid columns="2" id="panelGrid" >
-												 	<h:outputText id="msgEmprCodigo" value="EmprCodigo"/>
-						 	<p:inputText id="txtEmprCodigo" binding="#{vtEmpresaView.txtEmprCodigo}">
-						 		<p:ajax update="panelVtEmpresa,msg,panelBotones" listener="#{vtEmpresaView.listener_txtId}"/>
-						 	</p:inputText>	
-																		
-													<h:outputText id="msgActivo" value=" Activo"/>
-							<p:inputText id="txtActivo" disabled="true" binding="#{vtEmpresaView.txtActivo}"/>
-													<h:outputText id="msgIdentificacion" value=" Identificacion"/>
-							<p:inputText id="txtIdentificacion" disabled="true" binding="#{vtEmpresaView.txtIdentificacion}"/>
-													<h:outputText id="msgNombre" value=" Nombre"/>
-							<p:inputText id="txtNombre" disabled="true" binding="#{vtEmpresaView.txtNombre}"/>
-													<h:outputText id="msgUsuCreador" value=" UsuCreador"/>
-							<p:inputText id="txtUsuCreador" disabled="true" binding="#{vtEmpresaView.txtUsuCreador}"/>
-													<h:outputText id="msgUsuModificador" value=" UsuModificador"/>
-							<p:inputText id="txtUsuModificador" disabled="true" binding="#{vtEmpresaView.txtUsuModificador}"/>
-												
-																				<h:outputText id="msgFechaCreacion" value=" FechaCreacion"/>
-														<p:calendar showOn="button" navigator="true" locale="en" 
-							binding="#{vtEmpresaView.txtFechaCreacion}" >
-								<p:ajax event="dateSelect" listener="#{vtEmpresaView.listener_txtFechaCreacion}"  />
-							</p:calendar>
-														<h:outputText id="msgFechaModificacion" value=" FechaModificacion"/>
-														<p:calendar showOn="button" navigator="true" locale="en" 
-							binding="#{vtEmpresaView.txtFechaModificacion}" >
-								<p:ajax event="dateSelect" listener="#{vtEmpresaView.listener_txtFechaModificacion}"  />
-							</p:calendar>
-																	   </h:panelGrid>
+				<p:panel>
+					<h1>
+					HOLA MUNDO WEB
+					</h1>
 				</p:panel>
-	   			<p:panel id="panelBotones">
-					<div align="center">					
-						<p:commandButton id="btnSave" binding="#{vtEmpresaView.btnSave}" disabled="true" value="Save" action="#{vtEmpresaView.action_save()}" update="panelVtEmpresa,msg,panelBotones" />
-						<p:commandButton id="btnDelete" binding="#{vtEmpresaView.btnDelete}" disabled="true" value="Delete" action="#{vtEmpresaView.action_delete_master()}" onclick="if(!confirm('Do you really want to delete this Entry?')){return false;}" update="panelVtEmpresa,msg,panelBotones" />
-						<p:commandButton id="btnClear" value="Clear" action="#{vtEmpresaView.action_clear()}" update="panelVtEmpresa,msg,panelBotones" />
-					</div>
-				</p:panel>			
+							
 			</h:form>
 		
 		 </ui:define>
