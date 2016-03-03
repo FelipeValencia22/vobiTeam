@@ -111,10 +111,6 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 				throw new ZMessManager().new NotValidFormatException("nombre");
 			}
 
-			//if (entity.getPilaCodigo() == null) {
-			//	throw new ZMessManager().new EmptyFieldException("pilaCodigo");
-			//}
-
 			if (entity.getUsuCreador() == null) {
 				throw new ZMessManager().new EmptyFieldException("usuCreador");
 			}
@@ -133,9 +129,7 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 			vtPilaProducto.setUsuModificador(entity.getUsuModificador());
 			vtPilaProducto.setNombre(entity.getNombre());
 			vtPilaProducto.setActivo(entity.getActivo());
-			
-			VtProyecto vtProyecto = logicVtProyecto1.getVtProyecto(16L);
-			vtPilaProducto.setVtProyecto(vtProyecto);
+			vtPilaProducto.setVtProyecto(entity.getVtProyecto());
 			
 
 			vtPilaProductoDAO.save(vtPilaProducto);

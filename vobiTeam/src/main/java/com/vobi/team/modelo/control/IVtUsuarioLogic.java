@@ -53,6 +53,8 @@ public interface IVtUsuarioLogic {
     public Long findTotalNumberVtUsuario() throws Exception;
 
     public List<VtUsuarioDTO> getDataVtUsuario() throws Exception;
+    
+    public List<VtUsuarioDTO> getDataVtUsuarioInactivo() throws Exception;
        
     public VtUsuario consultarLogin(String login);
     

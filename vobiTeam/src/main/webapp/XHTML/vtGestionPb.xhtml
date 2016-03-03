@@ -24,10 +24,17 @@
 		</p:dialog>
 
 		<h:form id="formDialog">
-
+			<br></br>
 			<p:growl id="growl" />
-			<p:panel header="Crear pila de producto" id="pnlPilaProducto">
+			<p:panel id="pnlPilaProducto">
+				<h2>Crear ProductBacklog</h2>
 				<h:panelGrid columns="1">
+
+					<p:selectOneMenu id="somProyectos"
+						binding="#{vtPilaProductoView.somProyectos}">
+						<f:selectItem itemValue="-1" itemLabel="Proyecto" />
+						<f:selectItems value="#{vtPilaProductoView.losProyectosItems}" />
+					</p:selectOneMenu>
 
 					<p:inputText id="txtNombre" placeholder="Nombre"
 						binding="#{vtPilaProductoView.txtNombre}" />
@@ -41,14 +48,6 @@
 						binding="#{vtPilaProductoView.somActivo}">
 						<f:selectItem itemValue="-1" itemLabel="Activo" />
 						<f:selectItems value="#{vtPilaProductoView.esActivoItems}" />
-					</p:selectOneMenu>
-
-
-
-					<p:selectOneMenu id="somProyectos"
-						binding="#{vtPilaProductoView.somProyectos}">
-						<f:selectItem itemValue="-1" itemLabel="Proyecto" />
-						<f:selectItems value="#{vtPilaProductoView.losProyectosItems}" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>

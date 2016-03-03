@@ -415,6 +415,8 @@ public interface IBusinessDelegatorView {
     public Long findTotalNumberVtUsuario() throws Exception;
 
     public List<VtUsuarioDTO> getDataVtUsuario() throws Exception;
+    
+    public List<VtUsuarioDTO> getDataVtUsuarioInactivo() throws Exception;
 
     public List<VtUsuarioArtefacto> getVtUsuarioArtefacto()
         throws Exception;

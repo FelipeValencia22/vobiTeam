@@ -886,6 +886,10 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
     public List<VtUsuarioDTO> getDataVtUsuario() throws Exception {
         return vtUsuarioLogic.getDataVtUsuario();
     }
+    
+    public List<VtUsuarioDTO> getDataVtUsuarioInactivo() throws Exception {
+        return vtUsuarioLogic.getDataVtUsuarioInactivo();
+    }
 
     public List<VtUsuarioArtefacto> getVtUsuarioArtefacto()
         throws Exception {

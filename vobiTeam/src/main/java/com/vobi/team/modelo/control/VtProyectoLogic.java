@@ -284,23 +284,35 @@ public class VtProyectoLogic implements IVtProyectoLogic {
                 VtProyectoDTO vtProyectoDTO2 = new VtProyectoDTO();
 
                 vtProyectoDTO2.setProyCodigo(vtProyectoTmp.getProyCodigo());
+                
                 vtProyectoDTO2.setActivo((vtProyectoTmp.getActivo() != null)
                     ? vtProyectoTmp.getActivo() : null);
+                
                 vtProyectoDTO2.setDescripcion((vtProyectoTmp.getDescripcion() != null)
                     ? vtProyectoTmp.getDescripcion() : null);
+                
                 vtProyectoDTO2.setFechaCreacion(vtProyectoTmp.getFechaCreacion());
+                
                 vtProyectoDTO2.setFechaModificacion(vtProyectoTmp.getFechaModificacion());
+                
                 vtProyectoDTO2.setNombre((vtProyectoTmp.getNombre() != null)
                     ? vtProyectoTmp.getNombre() : null);
+                
                 vtProyectoDTO2.setPublico((vtProyectoTmp.getPublico() != null)
                     ? vtProyectoTmp.getPublico() : null);
+                
                 vtProyectoDTO2.setUsuCreador((vtProyectoTmp.getUsuCreador() != null)
                     ? vtProyectoTmp.getUsuCreador() : null);
+                
                 vtProyectoDTO2.setUsuModificador((vtProyectoTmp.getUsuModificador() != null)
                     ? vtProyectoTmp.getUsuModificador() : null);
+                
                 vtProyectoDTO2.setEmprCodigo_VtEmpresa((vtProyectoTmp.getVtEmpresa()
                                                                      .getEmprCodigo() != null)
                     ? vtProyectoTmp.getVtEmpresa().getEmprCodigo() : null);
+                
+                vtProyectoDTO2.setNombre_VtEmpresa(vtProyectoTmp.getVtEmpresa().getNombre());
+                
                 vtProyectoDTO.add(vtProyectoDTO2);
             }
 

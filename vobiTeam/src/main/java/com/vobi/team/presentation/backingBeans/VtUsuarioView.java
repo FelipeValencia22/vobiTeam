@@ -26,8 +26,6 @@ import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 
 import com.vobi.team.utilities.FacesUtils;
 
-import com.vobi.team.exceptions.ZMessManager;
-
 import com.vobi.team.modelo.dto.VtUsuarioDTO;
 
 @ManagedBean
@@ -56,7 +54,10 @@ public class VtUsuarioView implements Serializable{
 
 	private List<SelectItem> lasEmpresasItems;
 	private List<SelectItem> esActivoItems;
+	private List<SelectItem> esUsuarioActivo;
 	private List<VtUsuarioDTO> data;
+	private List<VtUsuarioDTO> dataI;
+	
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
 	private IBusinessDelegatorView businessDelegatorView;
@@ -67,6 +68,14 @@ public class VtUsuarioView implements Serializable{
 
 	public void setBusinessDelegatorView(IBusinessDelegatorView businessDelegatorView) {
 		this.businessDelegatorView = businessDelegatorView;
+	}
+	
+	public List<SelectItem> getEsUsuarioActivo() {
+		return esUsuarioActivo;
+	}
+
+	public void setEsUsuarioActivo(List<SelectItem> esUsuarioActivo) {
+		this.esUsuarioActivo = esUsuarioActivo;
 	}
 
 	public VtUsuarioView() {
@@ -239,6 +248,7 @@ public class VtUsuarioView implements Serializable{
 				vtUsuario.setFechaCreacion(fechaCreacion);
 				vtUsuario.setLogin(Login);
 				vtUsuario.setNombre(txtNombreC.getValue().toString().trim());
+				vtUsuario.setUsuCreador(99999L);
 
 				String empresaS=somEmpresas.getValue().toString().trim();
 				if(empresaS.isEmpty() || empresaS.equals("-1")){
@@ -252,8 +262,8 @@ public class VtUsuarioView implements Serializable{
 
 				try {
 					businessDelegatorView.saveVtUsuario(vtUsuario);
-					FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El usuario se guardo con exito"));
 					limpiar();
+					FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El usuario se guardo con exito"));
 				} catch (Exception e) {
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 				}
@@ -312,10 +322,10 @@ public class VtUsuarioView implements Serializable{
 
 	public String limpiar(){
 		log.info("Limpiando campos de texto");
+		txtLoginC.resetValue();
+		txtNombreC.resetValue();
 		txtClave.resetValue();
 		txtClaveR.resetValue();
-		txtNombre.resetValue();
-		txtLogin.resetValue();
 		somEmpresas.setValue("-1");
 
 		btnCrear.setDisabled(true);
@@ -411,6 +421,22 @@ public class VtUsuarioView implements Serializable{
 		return data;
 	}
 
+	public void setDataI(List<VtUsuarioDTO> dataI) {
+		this.dataI = dataI;
+	}
+	
+	public List<VtUsuarioDTO> getDataI() {
+		try {
+			if (dataI == null) {
+				dataI = businessDelegatorView.getDataVtUsuarioInactivo();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dataI;
+	}
+
 	public void setData(List<VtUsuarioDTO> data) {
 		this.data = data;
 	}
@@ -425,25 +451,14 @@ public class VtUsuarioView implements Serializable{
 
 	public String action_edit(ActionEvent evt) {
 		selectedVtUsuario = (VtUsuarioDTO) (evt.getComponent().getAttributes()
-				.get("selectedVtUsuario"));
-		txtActivo.setValue(selectedVtUsuario.getActivo());
-		txtActivo.setDisabled(false);
+				.get("selectedVtUsuario"));	
+		
 		txtClave.setValue(selectedVtUsuario.getClave());
 		txtClave.setDisabled(false);
 		txtLogin.setValue(selectedVtUsuario.getLogin());
 		txtLogin.setDisabled(false);
 		txtNombre.setValue(selectedVtUsuario.getNombre());
 		txtNombre.setDisabled(false);
-		/*txtUsuCreador.setValue(selectedVtUsuario.getUsuCreador());
-	        txtUsuCreador.setDisabled(false);
-	        txtUsuModificador.setValue(selectedVtUsuario.getUsuModificador());
-	        txtUsuModificador.setDisabled(false);
-	        txtEmprCodigo_VtEmpresa.setValue(selectedVtUsuario.getEmprCodigo_VtEmpresa());
-	        txtEmprCodigo_VtEmpresa.setDisabled(false);
-	        txtUsuaCodigo.setValue(selectedVtUsuario.getUsuaCodigo());
-	        txtUsuaCodigo.setDisabled(true);
-	        btnSave.setDisabled(false);
-		 */
 		setShowDialog(true);
 
 
@@ -505,12 +520,11 @@ public class VtUsuarioView implements Serializable{
 				Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
 				entity = businessDelegatorView.getVtUsuario(usuaCodigo);
 			} 
-
-			entity.setActivo(FacesUtils.checkString(txtActivo));
+			entity.setActivo(somActivo.getValue().toString());
 			entity.setLogin(FacesUtils.checkString(txtLogin));
 			entity.setNombre(FacesUtils.checkString(txtNombre));
 			businessDelegatorView.updateVtUsuario(entity);
-			FacesUtils.addInfoMessage(ZMessManager.ENTITY_SUCCESFULLYMODIFIED);
+			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
 		} catch (Exception e) {
 			data = null;
 			FacesUtils.addErrorMessage(e.getMessage());

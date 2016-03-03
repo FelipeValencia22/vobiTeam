@@ -26,8 +26,6 @@ import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 
 import com.vobi.team.utilities.FacesUtils;
 
-import com.vobi.team.exceptions.ZMessManager;
-
 import com.vobi.team.modelo.dto.VtProyectoDTO;
 
 @ManagedBean
@@ -39,10 +37,12 @@ public class VtProyectoView implements Serializable{
 	private static final Logger log = LoggerFactory.getLogger(VtProyectoView.class);
 
 	private InputText txtNombre;
+	private InputText txtNombreC;
 	private InputText txtActivo;
 	private InputText txtPublico;
 	private InputText txtEmpresa;
 	private InputTextarea txtDescripcion;
+	private InputTextarea txtDescripcionC;
 	private List<SelectItem> esPublicoItems;
 	private List<SelectItem> esActivoItems;
 	private List<SelectItem> lasEmpresasItems;
@@ -70,6 +70,22 @@ public class VtProyectoView implements Serializable{
 
 	public VtProyectoView() {
 		super();
+	}
+
+	public InputText getTxtNombreC() {
+		return txtNombreC;
+	}
+
+	public void setTxtNombreC(InputText txtNombreC) {
+		this.txtNombreC = txtNombreC;
+	}
+
+	public InputTextarea getTxtDescripcionC() {
+		return txtDescripcionC;
+	}
+
+	public void setTxtDescripcionC(InputTextarea txtDescripcionC) {
+		this.txtDescripcionC = txtDescripcionC;
 	}
 
 	public InputText getTxtNombre() {
@@ -183,7 +199,6 @@ public class VtProyectoView implements Serializable{
 		this.somEmpresas = somEmpresas;
 	}
 
-
 	public String getStringActivo() {
 		return stringActivo;
 	}
@@ -191,16 +206,42 @@ public class VtProyectoView implements Serializable{
 	public void setStringActivo(String stringActivo) {
 		this.stringActivo = stringActivo;
 	}
+	
+	public InputText getTxtActivo() {
+		return txtActivo;
+	}
 
+	public void setTxtActivo(InputText txtActivo) {
+		this.txtActivo = txtActivo;
+	}
+
+	public InputText getTxtPublico() {
+		return txtPublico;
+	}
+
+	public void setTxtPublico(InputText txtPublico) {
+		this.txtPublico = txtPublico;
+	}
+
+	public InputText getTxtEmpresa() {
+		return txtEmpresa;
+	}
+
+	public void setTxtEmpresa(InputText txtEmpresa) {
+		this.txtEmpresa = txtEmpresa;
+	}
+
+	/// CREAR PROYECTO Y LIMPIAR PANTALLA
+	
 	public String crearProyecto() throws Exception{
 		log.info("Creando proyecto");
 
 		VtProyecto vtProyecto= new VtProyecto();
 
-		vtProyecto.setDescripcion(txtDescripcion.getValue().toString().trim());
+		vtProyecto.setDescripcion(txtDescripcionC.getValue().toString().trim());
 		Date fechaCreacion = new Date();
 		vtProyecto.setFechaCreacion(fechaCreacion);
-		vtProyecto.setNombre(txtNombre.getValue().toString().trim());
+		vtProyecto.setNombre(txtNombreC.getValue().toString().trim());
 
 		String publico=somPublico.getValue().toString().trim();
 		if(publico.equals("Público")){
@@ -251,30 +292,7 @@ public class VtProyectoView implements Serializable{
 		return "";
 	}
 	
-	public InputText getTxtActivo() {
-		return txtActivo;
-	}
-
-	public void setTxtActivo(InputText txtActivo) {
-		this.txtActivo = txtActivo;
-	}
-
-	public InputText getTxtPublico() {
-		return txtPublico;
-	}
-
-	public void setTxtPublico(InputText txtPublico) {
-		this.txtPublico = txtPublico;
-	}
-
-	public InputText getTxtEmpresa() {
-		return txtEmpresa;
-	}
-
-	public void setTxtEmpresa(InputText txtEmpresa) {
-		this.txtEmpresa = txtEmpresa;
-	}
-
+	
 	/// tabla con registros editables
 
 	private VtProyecto entity;
@@ -348,9 +366,7 @@ public class VtProyectoView implements Serializable{
         txtNombre.setDisabled(false);
         txtPublico.setValue(selectedVtProyecto.getPublico());
         txtPublico.setDisabled(false);
-        txtEmpresa.setValue(selectedVtProyecto.getProyCodigo());
-        txtEmpresa.setDisabled(true);
-        //btnSave.setDisabled(false);
+        btnSave.setDisabled(false);
         setShowDialog(true);
 
         return "";
@@ -418,7 +434,7 @@ public class VtProyectoView implements Serializable{
             entity.setPublico(FacesUtils.checkString(txtPublico));
             //TODO: entity.setVtEmpresa((FacesUtils.checkLong(txtEmpresa));
             businessDelegatorView.updateVtProyecto(entity);
-            FacesUtils.addInfoMessage(ZMessManager.ENTITY_SUCCESFULLYMODIFIED);
+            FacesUtils.addInfoMessage("El proyecto ha sido modificado con exito");
         } catch (Exception e) {
             data = null;
             FacesUtils.addErrorMessage(e.getMessage());

@@ -137,7 +137,7 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 			if (!validateEmail(entity.getLogin().toString().trim())) {
 				throw new Exception("Correo incorrecto");
 			} 
- 
+
 			if(entity.getNombre().trim().equals("") || entity.getNombre().isEmpty()){
 				throw new Exception("El nombre es obligatorio");
 			}
@@ -148,8 +148,9 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 			vtUsuario.setClave(entity.getClave());
 			vtUsuario.setLogin(entity.getLogin());
 			vtUsuario.setNombre(entity.getNombre());
-			vtUsuario.setUsuCreador(1L);
-			vtUsuario.setUsuaCodigo(entity.getUsuaCodigo());
+			vtUsuario.setVtEmpresa(entity.getVtEmpresa());
+			vtUsuario.setUsuCreador(entity.getUsuCreador());
+
 
 
 
@@ -297,45 +298,105 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 		try {
 			List<VtUsuario> vtUsuario = vtUsuarioDAO.findAll();
 
-			List<VtUsuarioDTO> vtUsuarioDTO = new ArrayList<VtUsuarioDTO>();
+			List<VtUsuarioDTO> vtUsuarioDTOA = new ArrayList<VtUsuarioDTO>();
+
 
 			for (VtUsuario vtUsuarioTmp : vtUsuario) {
-				VtUsuarioDTO vtUsuarioDTO2 = new VtUsuarioDTO();
+				VtUsuarioDTO vtUsuarioDTOActivo = new VtUsuarioDTO();
 
-				vtUsuarioDTO2.setUsuaCodigo(vtUsuarioTmp.getUsuaCodigo());
-				
-				vtUsuarioDTO2.setActivo((vtUsuarioTmp.getActivo() != null)
-						? vtUsuarioTmp.getActivo() : null);
-				
-				vtUsuarioDTO2.setClave((vtUsuarioTmp.getClave() != null)
-						? vtUsuarioTmp.getClave() : null);
-				
-				vtUsuarioDTO2.setFechaCreacion(vtUsuarioTmp.getFechaCreacion());
-				
-				vtUsuarioDTO2.setFechaModificacion(vtUsuarioTmp.getFechaModificacion());
-				
-				vtUsuarioDTO2.setLogin((vtUsuarioTmp.getLogin() != null)
-						? vtUsuarioTmp.getLogin() : null);
-				
-				vtUsuarioDTO2.setNombre((vtUsuarioTmp.getNombre() != null)
-						? vtUsuarioTmp.getNombre() : null);
-				
-				vtUsuarioDTO2.setUsuCreador((vtUsuarioTmp.getUsuCreador() != null)
-						? vtUsuarioTmp.getUsuCreador() : null);
-				
-				vtUsuarioDTO2.setUsuModificador((vtUsuarioTmp.getUsuModificador() != null)
-						? vtUsuarioTmp.getUsuModificador() : null);
-				
-				vtUsuarioDTO2.setEmprCodigo_VtEmpresa((vtUsuarioTmp.getVtEmpresa()
-						.getEmprCodigo() != null)
-						? vtUsuarioTmp.getVtEmpresa().getEmprCodigo() : null);
-				vtUsuarioDTO.add(vtUsuarioDTO2);
-				
-				vtUsuarioDTO2.setNombre_VtEmpresa(vtUsuarioTmp.getVtEmpresa().getNombre());
+				if(vtUsuarioTmp.getActivo().toString().trim().equalsIgnoreCase("S")){
+					vtUsuarioDTOActivo.setUsuaCodigo(vtUsuarioTmp.getUsuaCodigo());
+
+					vtUsuarioDTOActivo.setActivo((vtUsuarioTmp.getActivo() != null)
+							? vtUsuarioTmp.getActivo() : null);
+
+					vtUsuarioDTOActivo.setClave((vtUsuarioTmp.getClave() != null)
+							? vtUsuarioTmp.getClave() : null);
+
+					vtUsuarioDTOActivo.setFechaCreacion(vtUsuarioTmp.getFechaCreacion());
+
+					vtUsuarioDTOActivo.setFechaModificacion(vtUsuarioTmp.getFechaModificacion());
+
+					vtUsuarioDTOActivo.setLogin((vtUsuarioTmp.getLogin() != null)
+							? vtUsuarioTmp.getLogin() : null);
+
+					vtUsuarioDTOActivo.setNombre((vtUsuarioTmp.getNombre() != null)
+							? vtUsuarioTmp.getNombre() : null);
+
+					vtUsuarioDTOActivo.setUsuCreador((vtUsuarioTmp.getUsuCreador() != null)
+							? vtUsuarioTmp.getUsuCreador() : null);
+
+					vtUsuarioDTOActivo.setUsuModificador((vtUsuarioTmp.getUsuModificador() != null)
+							? vtUsuarioTmp.getUsuModificador() : null);
+
+					vtUsuarioDTOActivo.setEmprCodigo_VtEmpresa((vtUsuarioTmp.getVtEmpresa()
+							.getEmprCodigo() != null)
+							? vtUsuarioTmp.getVtEmpresa().getEmprCodigo() : null);
+
+					vtUsuarioDTOActivo.setNombre_VtEmpresa(vtUsuarioTmp.getVtEmpresa().getNombre());
+
+					vtUsuarioDTOA.add(vtUsuarioDTOActivo);
+				}				
+
+
 			}
 
-			return vtUsuarioDTO;
+			return vtUsuarioDTOA;
 		} catch (Exception e) {
+			log.error(e.getMessage());
+			throw e;
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public List<VtUsuarioDTO> getDataVtUsuarioInactivo() throws Exception {
+		try {
+			List<VtUsuario> vtUsuario = vtUsuarioDAO.findAll();
+
+			List<VtUsuarioDTO> vtUsuarioDTOI = new ArrayList<VtUsuarioDTO>();
+
+			for (VtUsuario vtUsuarioTmp : vtUsuario) {
+				VtUsuarioDTO vtUsuarioDTOInactivo = new VtUsuarioDTO();
+
+				if(vtUsuarioTmp.getActivo().toString().trim().equalsIgnoreCase("N")){
+
+					vtUsuarioDTOInactivo.setUsuaCodigo(vtUsuarioTmp.getUsuaCodigo());
+
+					vtUsuarioDTOInactivo.setActivo((vtUsuarioTmp.getActivo() != null)
+							? vtUsuarioTmp.getActivo() : null);
+
+					vtUsuarioDTOInactivo.setClave((vtUsuarioTmp.getClave() != null)
+							? vtUsuarioTmp.getClave() : null);
+
+					vtUsuarioDTOInactivo.setFechaCreacion(vtUsuarioTmp.getFechaCreacion());
+
+					vtUsuarioDTOInactivo.setFechaModificacion(vtUsuarioTmp.getFechaModificacion());
+
+					vtUsuarioDTOInactivo.setLogin((vtUsuarioTmp.getLogin() != null)
+							? vtUsuarioTmp.getLogin() : null);
+
+					vtUsuarioDTOInactivo.setNombre((vtUsuarioTmp.getNombre() != null)
+							? vtUsuarioTmp.getNombre() : null);
+
+					vtUsuarioDTOInactivo.setUsuCreador((vtUsuarioTmp.getUsuCreador() != null)
+							? vtUsuarioTmp.getUsuCreador() : null);
+
+					vtUsuarioDTOInactivo.setUsuModificador((vtUsuarioTmp.getUsuModificador() != null)
+							? vtUsuarioTmp.getUsuModificador() : null);
+
+					vtUsuarioDTOInactivo.setEmprCodigo_VtEmpresa((vtUsuarioTmp.getVtEmpresa()
+							.getEmprCodigo() != null)
+							? vtUsuarioTmp.getVtEmpresa().getEmprCodigo() : null);
+
+					vtUsuarioDTOInactivo.setNombre_VtEmpresa(vtUsuarioTmp.getVtEmpresa().getNombre());
+
+					vtUsuarioDTOI.add(vtUsuarioDTOInactivo);
+				}
+			}
+
+			return vtUsuarioDTOI;
+		} catch (Exception e) {
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -564,4 +625,6 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 	public VtUsuario consultarUsuarioPorCodigo(Long usua_codigo) {
 		return vtUsuarioDAO.consultarUsuarioPorCodigo(usua_codigo);
 	}
+
+
 }

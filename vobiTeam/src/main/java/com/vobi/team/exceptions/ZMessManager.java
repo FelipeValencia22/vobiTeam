@@ -16,7 +16,7 @@ public class ZMessManager extends RuntimeException {
 	public final static String ALL = "All ";
 	public final static String ENTCHILD = "related tables(childs)";
 	public final static String FOREIGNDATA = "foreign classes data: ";
-	public static String ENTITY_SUCCESFULLYSAVED = "Entity succesfully saved";
+	public static String ENTITY_SUCCESFULLYSAVED = "La entidad ha sigo guar";
 	public static String ENTITY_SUCCESFULLYDELETED = "Entity succesfully deleted";
 	public static String ENTITY_SUCCESFULLYMODIFIED = "Entity succesfully modified";
 	public static String ENTITY_WITHSAMEKEY = "Another Entity with the same key was found";

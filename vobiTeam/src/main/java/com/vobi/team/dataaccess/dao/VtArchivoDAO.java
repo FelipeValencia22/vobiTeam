@@ -28,7 +28,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-
+ 
 /**
  * A data access object (DAO) providing persistence and search support for
  * VtArchivo entities. Transaction control of the save(), update() and
