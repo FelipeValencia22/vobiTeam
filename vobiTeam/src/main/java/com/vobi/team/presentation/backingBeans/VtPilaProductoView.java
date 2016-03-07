@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.component.commandbutton.CommandButton;
@@ -26,6 +27,8 @@ import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 import com.vobi.team.utilities.FacesUtils;
 
+import com.vobi.team.modelo.dto.VtPilaProductoDTO;
+
 @ManagedBean 
 @ViewScoped
 public class VtPilaProductoView implements Serializable {
@@ -34,7 +37,7 @@ public class VtPilaProductoView implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(VtEmpresaView.class);
 
-	private List<SelectItem> lasEmpresasItems;
+
 
 	private SelectOneMenu somEmpresas;
 	private SelectOneMenu somActivo;
@@ -43,13 +46,23 @@ public class VtPilaProductoView implements Serializable {
 	private CommandButton btnCrear;
 	private CommandButton btnModificar;
 	private CommandButton btnLimpiar;
+	private CommandButton btnFiltrar;
+	private CommandButton btnGuardar;
 
 	String stringActivo;
+
+	String stringFiltrado;
 
 	private InputText txtNombre;
 	private InputTextarea txtDescripcion;
 	private List<SelectItem> esActivoItems;
 	private List<SelectItem> losProyectosItems;
+	private List<SelectItem> lasEmpresasItems;
+
+	private List<VtPilaProductoDTO> data;
+	private List<VtPilaProductoDTO> dataFiltro;
+	private VtPilaProductoDTO selectedVtPilaProducto;
+	private boolean showDialog;
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
 	private IBusinessDelegatorView businessDelegatorView;
@@ -189,6 +202,72 @@ public class VtPilaProductoView implements Serializable {
 		this.somEmpresas = somEmpresas;
 	}
 
+	public CommandButton getBtnFiltrar() {
+		return btnFiltrar;
+	}
+
+	public void setBtnFiltrar(CommandButton btnFiltrar) {
+		this.btnFiltrar = btnFiltrar;
+	}
+
+	public String getStringFiltrado() {
+		return stringFiltrado;
+	}
+
+	public void setStringFiltrado(String stringFiltrado) {
+		this.stringFiltrado = stringFiltrado;
+	}
+
+	public VtPilaProductoDTO getSelectedVtPilaProducto() {
+		return selectedVtPilaProducto;
+	}
+
+	public void setSelectedVtPilaProducto(VtPilaProductoDTO selectedVtPilaProducto) {
+		this.selectedVtPilaProducto = selectedVtPilaProducto;
+	}
+
+	public CommandButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(CommandButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
+	}
+
+	public boolean isShowDialog() {
+		return showDialog;
+	}
+
+	public void setShowDialog(boolean showDialog) {
+		this.showDialog = showDialog;
+	}
+
+	public List<VtPilaProductoDTO> getDataFiltro() {
+		return dataFiltro;
+	}
+
+	public void setDataFiltro(List<VtPilaProductoDTO> dataFiltro) {
+		this.dataFiltro = dataFiltro;
+	}
+
+	//TODO: Obtener DTO para el Filtro
+	public List<VtPilaProductoDTO> getData() {
+		try {
+			if (data == null) {
+				data = businessDelegatorView.getDataVtPilaProducto();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return data;
+	}
+
+	public void setData(List<VtPilaProductoDTO> vtPilaProductoDTO) {
+		this.data = vtPilaProductoDTO;
+	}
+
+	//TODO: Metodos
 	public String crearPilaProducto() throws Exception {
 		log.info("Creando la pila de producto");
 
@@ -209,7 +288,7 @@ public class VtPilaProductoView implements Serializable {
 		Long proyecto = Long.parseLong(proyectos);
 		VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(proyecto);
 		vtPilaProducto.setVtProyecto(vtProyecto);
-		
+
 		VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 		vtPilaProducto.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 
@@ -232,6 +311,42 @@ public class VtPilaProductoView implements Serializable {
 		somProyectos.setValue("-1");
 
 		btnCrear.setDisabled(true);
+		return "";
+	}
+
+	public String filtrarTabla(){
+		log.info("Aplicando filtro");
+		String nombre = somEmpresas.getValue().toString().trim();
+		log.info("Nombre empresa: "+nombre);
+
+
+
+		try {
+			dataFiltro=businessDelegatorView.getDataVtPilaProducto(nombre);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+		return "";
+
+	}
+
+	public String action_edit(ActionEvent evt) {
+		selectedVtPilaProducto = (VtPilaProductoDTO) (evt.getComponent()
+				.getAttributes()
+				.get("selectedVtPilaProducto"));
+
+		txtDescripcion.setValue(selectedVtPilaProducto.getDescripcion());
+		txtDescripcion.setDisabled(false);
+
+		txtNombre.setValue(selectedVtPilaProducto.getNombre());
+		txtNombre.setDisabled(false);
+
+		btnGuardar.setDisabled(false);
+		setShowDialog(true);
+
 		return "";
 	}
 

@@ -25,7 +25,7 @@
 
 		<h:form id="formDialog">
 
-			<p:growl id="growl" showDetail="true" sticky="true" />
+			<p:growl id="growl" sticky="true" />
 			<br></br>
 			<p:panel id="pnlUsuariosCrear">
 				<div align="left">
@@ -65,7 +65,7 @@
 					<p:commandButton id="btnCrearU" icon="ui-icon-plus" title="Crear"
 						binding="#{vtUsuarioView.btnCrearU}" disabled="true"
 						action="#{vtUsuarioView.crearUsuario}"
-						update="pnlUsuariosCrear  @([id$=panelDataTableVtUsuario])" />
+						update="growl" />
 
 
 					<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"

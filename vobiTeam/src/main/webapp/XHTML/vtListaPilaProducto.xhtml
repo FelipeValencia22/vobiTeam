@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" header="Loading"
+			draggable="false" closable="false">
+			<p:graphicImage
+				value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />
+		</p:dialog>
+
+		<!-- Expired session -->
+		<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();"
+			timeout="#{session.maxInactiveInterval * 1000}" />
+		<p:dialog modal="true" widgetVar="sessionTimeOutDialog"
+			header="Expired session" draggable="false" closable="false">
+			<h:outputText value="The session is finished" />
+			<input id="confirmBackToLogin" type="button" value="Sign in"
+				onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />
+		</p:dialog>
+
+		<h:form id="formDialog">
+			<br></br>
+			<p:growl id="growl" />
+			<p:panel id="pnlPilaProducto">
+				<h2>Pilas de producto</h2>
+				<h:panelGrid columns="1">
+					<p:outputPanel id="customPanel" style="margin-bottom:10px">
+						<h3>Lista de pila de producto por</h3>
+						<p:selectOneRadio id="customRadio"
+							value="#{vtPilaProductoView.stringFiltrado}" layout="custom">
+							<f:selectItem itemLabel="Empresa" itemValue="Empresa" />
+							<f:selectItem itemLabel="Proyecto" itemValue="Proyecto" />
+							<f:selectItem itemLabel="General" itemValue="General" />
+						</p:selectOneRadio>
+
+						<h:panelGrid columns="3" cellpadding="5">
+
+							<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+							<h:outputLabel for="opt1" value="Empresa" />
+							<p:selectOneMenu id="somEmpresas"
+								binding="#{vtPilaProductoView.somEmpresas}">
+								<f:selectItem itemValue="-1" itemLabel="Seleccionar empresa" />
+								<f:selectItems value="#{vtPilaProductoView.lasEmpresasItems}" />
+							</p:selectOneMenu>
+
+							<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+							<h:outputLabel for="opt2" value="Proyecto" />
+							<p:selectOneMenu id="somProyectos"
+								binding="#{vtPilaProductoView.somProyectos}">
+								<f:selectItem itemValue="-1" itemLabel="Seleccionar proyecto" />
+								<f:selectItems value="#{vtPilaProductoView.losProyectosItems}" />
+							</p:selectOneMenu>
+
+
+							<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+							<h:outputLabel for="opt3" value="General" />
+
+							<p:separator></p:separator>
+
+							<p:commandButton id="btnFiltrar" value="Filtrar"
+								icon="ui-icon-check" binding="#{vtPilaProductoView.btnFiltrar}"
+								action="#{vtPilaProductoView.filtrarTabla()}" 
+								update="frm"/>
+
+						</h:panelGrid>
+					</p:outputPanel>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+
+		<h:form id="frm"> 
+ 
+			<p:panel id="panelDataTableVtPilaProducto"
+				header="VtPilaProductoData">
+				<p:growl id="men" />
+				<p:dataTable value="#{vtPilaProductoView.dataFiltro}" var="vtPilaProducto" 
+					paginator="true" rows="5">
+					
+					<p:column filterBy="#{vtPilaProducto.pilaCodigo}"
+						sortBy="#{vtPilaProducto.pilaCodigo}">
+						<f:facet name="header">
+							<h:outputText value="pilaCodigo" />
+						</f:facet>
+						<h:outputText value="#{vtPilaProducto.pilaCodigo}" />
+					</p:column>
+
+					<p:column filterBy="#{vtPilaProducto.activo}"
+						sortBy="#{vtPilaProducto.activo}">
+						<f:facet name="header">
+							<h:outputText value="Activo" />
+						</f:facet>
+						<h:outputText value="#{vtPilaProducto.activo}" />
+					</p:column>
+
+					<p:column filterBy="#{vtPilaProducto.descripcion}"
+						sortBy="#{vtPilaProducto.descripcion}">
+						<f:facet name="header">
+							<h:outputText value="Descripcion" />
+						</f:facet>
+						<h:outputText value="#{vtPilaProducto.descripcion}" />
+					</p:column>
+
+					<p:column filterBy="#{vtPilaProducto.nombre}"
+						sortBy="#{vtPilaProducto.nombre}">
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+						<h:outputText value="#{vtPilaProducto.nombre}" />
+					</p:column>
+
+
+					<p:column filterBy="#{vtPilaProducto.proyCodigo_VtProyecto}"
+						sortBy="#{vtPilaProducto.proyCodigo_VtProyecto}">
+						<f:facet name="header">
+							<h:outputText value="ProyCodigo_VtProyecto" />
+						</f:facet>
+						<h:outputText value="#{vtPilaProducto.proyCodigo_VtProyecto}" />
+					</p:column>
+
+					<p:column headerText="Options">
+					
+						<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+							update=":dialogVtPilaProducto"
+							actionListener="#{vtPilaProductoView.action_edit}">
+							<f:attribute name="selectedVtPilaProducto"
+								value="#{vtPilaProducto}" />
+						</p:commandButton>
+						
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+
+		</h:form>
+
+
+
+	</ui:define>
+</ui:composition>
+
+

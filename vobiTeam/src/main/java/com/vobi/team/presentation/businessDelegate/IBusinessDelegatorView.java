@@ -249,6 +249,9 @@ public interface IBusinessDelegatorView {
 
     public List<VtPilaProductoDTO> getDataVtPilaProducto()
         throws Exception;
+    
+    public List<VtPilaProductoDTO> getDataVtPilaProducto(String empresa)
+            throws Exception;
 
     public List<VtPrioridad> getVtPrioridad() throws Exception;
 

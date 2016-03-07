@@ -124,7 +124,7 @@
 			resizable="false" modal="true" width="500">
 			<h:form id="formDialog">
 				<p:messages id="msg" />
-				<p:panel id="panelVtSprint" header="VtSprint">
+				<p:panel id="panelVtSprint" header="Sprint">
 					<h:panelGrid columns="2" id="panelGrid">
 					
 					<h:outputText id="msgActivo" value=" Activo" />
@@ -181,9 +181,9 @@
 							value="Save" action="#{vtSprintView.action_save()}"
 							update=":dialogVtSprint :frm:panelDataTableVtSprint" />
 							
-						<p:commandButton id="btnExit" value="Salir"
-							action="#{vtUsuarioView.action_closeDialog()}"
-							update=":dialogVtUsuario" />
+						<p:commandButton id="btnExit" value="Salir" 
+							action="#{vtSprintView.action_closeDialog()}"
+							update="dialogVtSprint" />
 						
 					</div>
 				</p:panel>

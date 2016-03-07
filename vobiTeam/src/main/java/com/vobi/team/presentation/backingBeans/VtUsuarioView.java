@@ -259,7 +259,6 @@ public class VtUsuarioView implements Serializable{
 				vtUsuario.setLogin(Login);
 				vtUsuario.setNombre(txtNombreC.getValue().toString().trim());
 				
-				
 				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 				vtUsuario.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 
@@ -571,39 +570,30 @@ public class VtUsuarioView implements Serializable{
 		return "";
 	}
 
-	public String action_clear() {/*
+	public String action_clear() {
 		entity = null;
 		selectedVtUsuario = null;
 
 		if (somActivo != null) {
 			somActivo.setValue("-1");
-			somActivo.setDisabled(true);
 		}
-
-		if (txtClave != null) {
-			txtClave.setValue(null);
-			txtClave.setDisabled(true);
+		
+		if (somEmpresasCambio != null) {
+			somEmpresasCambio.setValue("-1");
 		}
 
 		if (txtLogin != null) {
 			txtLogin.setValue(null);
-			txtLogin.setDisabled(true);
 		}
 
 		if (txtNombre != null) {
 			txtNombre.setValue(null);
-			txtNombre.setDisabled(true);
-		}
-
-		if (txtUsuaCodigo != null) {
-			txtUsuaCodigo.setValue(null);
-			txtUsuaCodigo.setDisabled(false);
 		}
 
 		if (btnSave != null) {
 			btnSave.setDisabled(true);
 		}
-	 */
+	
 		return "";
 	}
 

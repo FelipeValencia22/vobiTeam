@@ -530,6 +530,11 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
         throws Exception {
         return vtPilaProductoLogic.getDataVtPilaProducto();
     }
+    
+	public List<VtPilaProductoDTO> getDataVtPilaProducto(String empresa) throws Exception {
+		return vtPilaProductoLogic.getDataVtPilaProductoEmpresa(empresa);
+	}
+    
 
     public List<VtPrioridad> getVtPrioridad() throws Exception {
         return vtPrioridadLogic.getVtPrioridad();
@@ -1027,4 +1032,6 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 	public VtUsuario autenticarUsuario(String login, String clave) throws Exception {
 		return seguridadLogica.autenticarUsuario(login, clave);
 	}
+
+	
 }

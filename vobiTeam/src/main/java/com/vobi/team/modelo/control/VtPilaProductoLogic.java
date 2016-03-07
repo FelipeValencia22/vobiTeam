@@ -271,6 +271,49 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 			throw e;
 		}
 	}
+	
+	@Transactional(readOnly = true)
+	public List<VtPilaProductoDTO> getDataVtPilaProductoEmpresa(String empresa) throws Exception {
+		
+		List<VtPilaProducto> vtPilaProducto = vtPilaProductoDAO.findAll();
+
+		List<VtPilaProductoDTO> vtPilaProductoDTOEmpresa = new ArrayList<VtPilaProductoDTO>();
+		log.info("Iterando en la lista");
+		for (VtPilaProducto vtPilaProductoTmp : vtPilaProducto) {
+			log.info("Nombre empresa");
+			log.info(vtPilaProductoTmp.getVtProyecto().getVtEmpresa().getNombre());
+			log.info("");
+			if(vtPilaProductoTmp.getVtProyecto().getVtEmpresa().getIdentificacion().equalsIgnoreCase(empresa)){
+				log.info("Empresa encontrada");
+				VtPilaProductoDTO vtPilaProductoDTO2 = new VtPilaProductoDTO();
+				vtPilaProductoDTO2.setPilaCodigo(vtPilaProductoTmp.getPilaCodigo());
+				vtPilaProductoDTO2
+						.setActivo((vtPilaProductoTmp.getActivo() != null) ? vtPilaProductoTmp.getActivo() : null);
+				vtPilaProductoDTO2.setDescripcion(
+						(vtPilaProductoTmp.getDescripcion() != null) ? vtPilaProductoTmp.getDescripcion() : null);
+				vtPilaProductoDTO2.setFechaCreacion(vtPilaProductoTmp.getFechaCreacion());
+				vtPilaProductoDTO2.setFechaModificacion(vtPilaProductoTmp.getFechaModificacion());
+				vtPilaProductoDTO2
+						.setNombre((vtPilaProductoTmp.getNombre() != null) ? vtPilaProductoTmp.getNombre() : null);
+				vtPilaProductoDTO2.setUsuCreador(
+						(vtPilaProductoTmp.getUsuCreador() != null) ? vtPilaProductoTmp.getUsuCreador() : null);
+				vtPilaProductoDTO2.setUsuModificador(
+						(vtPilaProductoTmp.getUsuModificador() != null) ? vtPilaProductoTmp.getUsuModificador() : null);
+				vtPilaProductoDTO2.setProyCodigo_VtProyecto((vtPilaProductoTmp.getVtProyecto().getProyCodigo() != null)
+						? vtPilaProductoTmp.getVtProyecto().getProyCodigo() : null);
+				vtPilaProductoDTOEmpresa.add(vtPilaProductoDTO2);
+			}
+			
+		}
+		
+		log.info("Iteración terminada");
+
+		return vtPilaProductoDTOEmpresa;
+	}
+	
+	
+	
+
 
 	@Transactional(readOnly = true)
 	public VtPilaProducto getVtPilaProducto(Long pilaCodigo) throws Exception {
@@ -476,4 +519,8 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 
 		return list;
 	}
+
+	
+
+	
 }

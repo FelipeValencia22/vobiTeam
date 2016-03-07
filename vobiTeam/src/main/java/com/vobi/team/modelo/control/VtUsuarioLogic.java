@@ -142,21 +142,6 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 				throw new Exception("El nombre es obligatorio");
 			}
 
-			VtUsuario vtUsuario=new VtUsuario();
-
-			vtUsuario.setActivo("S");
-			vtUsuario.setClave(entity.getClave());
-			vtUsuario.setLogin(entity.getLogin());
-			vtUsuario.setNombre(entity.getNombre());
-			vtUsuario.setVtEmpresa(entity.getVtEmpresa());
-			vtUsuario.setUsuCreador(entity.getUsuCreador());
-
-
-
-
-
-
-
 			vtUsuarioDAO.save(entity);
 
 			log.debug("save VtUsuario successful");

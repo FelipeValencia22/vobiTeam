@@ -446,7 +446,7 @@ public class VtSprintView implements Serializable {
             entity.setNombre(FacesUtils.checkString(txtNombre));
             entity.setObjetivo(FacesUtils.checkString(txtObjetivo));
             businessDelegatorView.updateVtSprint(entity);
-            FacesUtils.addInfoMessage(ZMessManager.ENTITY_SUCCESFULLYMODIFIED);
+            FacesUtils.addInfoMessage("El Sprint ha sido modificado con exito");
         } catch (Exception e) {
             data = null;
             FacesUtils.addErrorMessage(e.getMessage());
@@ -454,6 +454,13 @@ public class VtSprintView implements Serializable {
 
         return "";
     }
+	
+	public String action_closeDialog() {
+		setShowDialog(false);
+		action_clear();
+
+		return "";
+	}
 
 
 }

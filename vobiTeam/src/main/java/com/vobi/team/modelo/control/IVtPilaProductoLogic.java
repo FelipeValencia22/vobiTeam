@@ -58,4 +58,7 @@ public interface IVtPilaProductoLogic {
 
     public List<VtPilaProductoDTO> getDataVtPilaProducto()
         throws Exception;
+    
+    public List<VtPilaProductoDTO> getDataVtPilaProductoEmpresa(String empresa)
+            throws Exception;
 }
