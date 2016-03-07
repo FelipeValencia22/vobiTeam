@@ -19,7 +19,7 @@ import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import com.vobi.team.modelo.VtEmpresa;
 import com.vobi.team.modelo.VtPilaProducto;
 import com.vobi.team.modelo.VtProyecto;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
@@ -32,6 +32,9 @@ public class VtPilaProductoView implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(VtEmpresaView.class);
 
+	private List<SelectItem> lasEmpresasItems;
+
+	private SelectOneMenu somEmpresas;
 	private SelectOneMenu somActivo;
 	private SelectOneMenu somProyectos;
 
@@ -41,13 +44,13 @@ public class VtPilaProductoView implements Serializable {
 
 	String stringActivo;
 
-	@ManagedProperty(value = "#{BusinessDelegatorView}")
-	private IBusinessDelegatorView businessDelegatorView;
-
 	private InputText txtNombre;
 	private InputTextarea txtDescripcion;
 	private List<SelectItem> esActivoItems;
 	private List<SelectItem> losProyectosItems;
+
+	@ManagedProperty(value = "#{BusinessDelegatorView}")
+	private IBusinessDelegatorView businessDelegatorView;
 
 	public IBusinessDelegatorView getBusinessDelegatorView() {
 		return businessDelegatorView;
@@ -153,6 +156,35 @@ public class VtPilaProductoView implements Serializable {
 
 	public void setStringActivo(String stringActivo) {
 		this.stringActivo = stringActivo;
+	}
+
+
+
+	public List<SelectItem> getLasEmpresasItems() {
+		try {
+			if(lasEmpresasItems==null){
+				List<VtEmpresa> listaEmpresas=businessDelegatorView.getVtEmpresa();
+				lasEmpresasItems=new ArrayList<SelectItem>();
+				for (VtEmpresa vtEmpresa: listaEmpresas) {
+					lasEmpresasItems.add(new SelectItem(vtEmpresa.getEmprCodigo(), vtEmpresa.getNombre()));
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return lasEmpresasItems;
+	}
+
+	public void setLasEmpresasItems(List<SelectItem> lasEmpresasItems) {
+		this.lasEmpresasItems = lasEmpresasItems;
+	}
+
+	public SelectOneMenu getSomEmpresas() {
+		return somEmpresas;
+	}
+
+	public void setSomEmpresas(SelectOneMenu somEmpresas) {
+		this.somEmpresas = somEmpresas;
 	}
 
 	public String crearPilaProducto() throws Exception {

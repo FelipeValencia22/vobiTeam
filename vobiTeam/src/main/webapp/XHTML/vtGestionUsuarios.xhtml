@@ -198,7 +198,7 @@
 					</p:dataTable>
 				</p:tab>
 
-			</p:accordionPanel>>
+			</p:accordionPanel>
 
 
 		</h:form>
@@ -214,17 +214,24 @@
 						<h:outputText id="msgActivo" value=" Activo" />
 
 						<p:selectOneMenu id="somActivo"
-							binding="#{vtProyectoView.somActivo}"> 
-							<f:selectItem   itemValue="#{vtUsuarioView.esUsuarioActivo}" itemLabel="Activo" />
+							binding="#{vtUsuarioView.somActivo}">
+							<f:selectItem itemValue="-1" itemLabel="Activo" />
 							<f:selectItems value="#{vtUsuarioView.esActivoItems}" />
-						</p:selectOneMenu> 
+						</p:selectOneMenu>
 
 						<h:outputText id="msgLogin" value=" Login" />
 						<p:inputText id="txtLogin" disabled="true"
 							binding="#{vtUsuarioView.txtLogin}" />
+
 						<h:outputText id="msgNombre" value=" Nombre" />
 						<p:inputText id="txtNombre" disabled="true"
 							binding="#{vtUsuarioView.txtNombre}" />
+
+						<p:selectOneMenu id="somEmpresas"
+							binding="#{vtUsuarioView.somEmpresas}">
+							<f:selectItem itemValue="-1" itemLabel="Seleccionar empresa" />
+							<f:selectItems value="#{vtUsuarioView.lasEmpresasItems}" />
+						</p:selectOneMenu>
 
 
 					</h:panelGrid>
@@ -232,7 +239,7 @@
 				<p:panel id="panelBotones">
 					<div align="center">
 						<p:commandButton id="btnSave" binding="#{vtUsuarioView.btnCrear}"
-							value="Guardar" action="#{vtUsuarioView.action_save()}"
+							value="Guardar" action="#{vtUsuarioView.action_save}"
 							update="dialogVtUsuario :frm:panelDataTableVtUsuario" />
 
 						<p:commandButton id="btnExit" value="Salir"

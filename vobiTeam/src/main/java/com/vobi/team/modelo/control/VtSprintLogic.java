@@ -80,56 +80,35 @@ public class VtSprintLogic implements IVtSprintLogic {
         log.debug("saving VtSprint instance");
 
         try {
-            if (entity.getVtPilaProducto() == null) {
-                throw new ZMessManager().new ForeignException("vtPilaProducto");
+        	if(entity == null) {
+                throw new Exception("La entidad es nula");
             }
-
-            if (entity.getActivo() == null) {
-                throw new ZMessManager().new EmptyFieldException("activo");
+        	
+        	if(entity.getNombre().toString().equals("") || entity.getNombre().toString().isEmpty()) {
+                throw new Exception("El nombre es obligatorio");
             }
-
-            if ((entity.getActivo() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 1) == false)) {
-                throw new ZMessManager().new NotValidFormatException("activo");
+        	
+        	if(entity.getObjetivo().toString().equals("") || entity.getObjetivo().toString().isEmpty()) {
+                throw new Exception("El objetivo es obligatorio");
             }
-
-            if (entity.getFechaCreacion() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "fechaCreacion");
-            }
-
-            if (entity.getNombre() == null) {
-                throw new ZMessManager().new EmptyFieldException("nombre");
-            }
-
-            if ((entity.getNombre() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getNombre(),
-                        255) == false)) {
-                throw new ZMessManager().new NotValidFormatException("nombre");
-            }
-
-            if ((entity.getObjetivo() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(
-                        entity.getObjetivo(), 255) == false)) {
-                throw new ZMessManager().new NotValidFormatException("objetivo");
-            }
-
-            if (entity.getSpriCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("spriCodigo");
-            }
-
-            if (entity.getUsuCreador() == null) {
-                throw new ZMessManager().new EmptyFieldException("usuCreador");
-            }
-
-            if (entity.getVtPilaProducto().getPilaCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "pilaCodigo_VtPilaProducto");
-            }
-
-            if (getVtSprint(entity.getSpriCodigo()) != null) {
-                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
-            }
+        	
+        	if(entity.getActivo().toString().equals("") || entity.getActivo().toString().isEmpty()){
+        		throw new Exception("Seleccionar si esta activo o inactivo");
+        	}
+        	
+        	if(entity.getVtPilaProducto().toString().equals("") || entity.getVtPilaProducto().toString().isEmpty()){
+        		throw new Exception("Seleccionar la pila de productos");
+        	}
+        	
+        	if(entity.getFechaInicio().toString().equals("") || entity.getFechaInicio().toString().isEmpty()){
+        		throw new Exception("Seleccionar la fecha de inicio");
+        	}
+        	
+        	if(entity.getFechaFin().toString().equals("") || entity.getFechaFin().toString().isEmpty()){
+        		throw new Exception("Seleccionar la fecha de fin");
+        	}
+        	
+        	entity.setUsuCreador(99999L);
 
             vtSprintDAO.save(entity);
 
@@ -250,23 +229,38 @@ public class VtSprintLogic implements IVtSprintLogic {
                 VtSprintDTO vtSprintDTO2 = new VtSprintDTO();
 
                 vtSprintDTO2.setSpriCodigo(vtSprintTmp.getSpriCodigo());
+                
                 vtSprintDTO2.setActivo((vtSprintTmp.getActivo() != null)
                     ? vtSprintTmp.getActivo() : null);
+                
                 vtSprintDTO2.setFechaCreacion(vtSprintTmp.getFechaCreacion());
+                
                 vtSprintDTO2.setFechaFin(vtSprintTmp.getFechaFin());
+                
                 vtSprintDTO2.setFechaInicio(vtSprintTmp.getFechaInicio());
+                
                 vtSprintDTO2.setFechaModificacion(vtSprintTmp.getFechaModificacion());
+                
                 vtSprintDTO2.setNombre((vtSprintTmp.getNombre() != null)
                     ? vtSprintTmp.getNombre() : null);
+                
                 vtSprintDTO2.setObjetivo((vtSprintTmp.getObjetivo() != null)
                     ? vtSprintTmp.getObjetivo() : null);
+                
                 vtSprintDTO2.setUsuCreador((vtSprintTmp.getUsuCreador() != null)
                     ? vtSprintTmp.getUsuCreador() : null);
+                
                 vtSprintDTO2.setUsuModificador((vtSprintTmp.getUsuModificador() != null)
                     ? vtSprintTmp.getUsuModificador() : null);
+                
                 vtSprintDTO2.setPilaCodigo_VtPilaProducto((vtSprintTmp.getVtPilaProducto()
                                                                       .getPilaCodigo() != null)
                     ? vtSprintTmp.getVtPilaProducto().getPilaCodigo() : null);
+                
+                vtSprintDTO2.setNombrePilaProducto(vtSprintTmp.getVtPilaProducto().getNombre());
+                
+                vtSprintDTO2.setNombreProyecto(vtSprintTmp.getVtPilaProducto().getVtProyecto().getNombre());
+                
                 vtSprintDTO.add(vtSprintDTO2);
             }
 

@@ -222,6 +222,7 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 		log.debug("updating VtUsuario instance");
 
 		try {
+			/*
 			if (entity == null) {
 				throw new ZMessManager().new NullEntityExcepcion("VtUsuario");
 			}
@@ -282,7 +283,7 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 				throw new ZMessManager().new EmptyFieldException(
 						"emprCodigo_VtEmpresa");
 			}
-
+*/
 			vtUsuarioDAO.update(entity);
 
 			log.debug("update VtUsuario successful");

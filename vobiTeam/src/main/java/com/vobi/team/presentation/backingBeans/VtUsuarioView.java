@@ -42,7 +42,6 @@ public class VtUsuarioView implements Serializable{
 	private InputText txtNombreC;
 	private Password txtClave;
 	private Password txtClaveR;
-	private InputText txtActivo;
 	private SelectOneMenu somEmpresas;
 	private SelectOneMenu somActivo;
 
@@ -385,14 +384,6 @@ public class VtUsuarioView implements Serializable{
 		this.entity = entity;
 	}
 
-	public InputText getTxtActivo() {
-		return txtActivo;
-	}
-
-	public void setTxtActivo(InputText txtActivo) {
-		this.txtActivo = txtActivo;
-	}
-
 	public InputText getTxtUsuaCodigo() {
 		return txtUsuaCodigo;
 	}
@@ -476,15 +467,12 @@ public class VtUsuarioView implements Serializable{
 		}
 
 		if (entity == null) {
-			txtActivo.setDisabled(false);
 			txtClave.setDisabled(false);
 			txtLogin.setDisabled(false);
 			txtNombre.setDisabled(false);
 			txtUsuaCodigo.setDisabled(false);
 			btnSave.setDisabled(false);
 		} else {
-			txtActivo.setValue(entity.getActivo());
-			txtActivo.setDisabled(false);
 			txtClave.setValue(entity.getClave());
 			txtClave.setDisabled(false);
 			txtLogin.setValue(entity.getLogin());
@@ -520,13 +508,24 @@ public class VtUsuarioView implements Serializable{
 				Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
 				entity = businessDelegatorView.getVtUsuario(usuaCodigo);
 			} 
-			entity.setActivo(somActivo.getValue().toString());
+			log.info("entidad no nula");
+			String activo = somActivo.getValue().toString().trim();
+			if (activo.equalsIgnoreCase("Si")) {
+				entity.setActivo("S");
+			} else {
+				entity.setActivo("N");
+			}
+			log.info("Obtuvo activo");
+			String nombreEmpresa=somEmpresas.getValue().toString().trim();
 			entity.setLogin(FacesUtils.checkString(txtLogin));
 			entity.setNombre(FacesUtils.checkString(txtNombre));
 			businessDelegatorView.updateVtUsuario(entity);
 			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
 		} catch (Exception e) {
 			data = null;
+			log.error(e.getMessage());
+			log.error(e.toString());
+			log.error(e.getLocalizedMessage());
 			FacesUtils.addErrorMessage(e.getMessage());
 		}
 
@@ -540,13 +539,13 @@ public class VtUsuarioView implements Serializable{
 		return "";
 	}
 
-	public String action_clear() {
+	public String action_clear() {/*
 		entity = null;
 		selectedVtUsuario = null;
 
-		if (txtActivo != null) {
-			txtActivo.setValue(null);
-			txtActivo.setDisabled(true);
+		if (somActivo != null) {
+			somActivo.setValue("-1");
+			somActivo.setDisabled(true);
 		}
 
 		if (txtClave != null) {
@@ -572,7 +571,7 @@ public class VtUsuarioView implements Serializable{
 		if (btnSave != null) {
 			btnSave.setDisabled(true);
 		}
-
+*/
 		return "";
 	}
 

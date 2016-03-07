@@ -30,6 +30,8 @@ public class VtSprintDTO implements Serializable {
     private Long usuCreador;
     private Long usuModificador;
     private Long pilaCodigo_VtPilaProducto;
+    private String nombrePilaProducto;
+    private String nombreProyecto;
 
     public String getActivo() {
         return activo;
@@ -118,4 +120,22 @@ public class VtSprintDTO implements Serializable {
     public void setPilaCodigo_VtPilaProducto(Long pilaCodigo_VtPilaProducto) {
         this.pilaCodigo_VtPilaProducto = pilaCodigo_VtPilaProducto;
     }
+
+	public String getNombrePilaProducto() {
+		return nombrePilaProducto;
+	}
+
+	public void setNombrePilaProducto(String nombrePilaProducto) {
+		this.nombrePilaProducto = nombrePilaProducto;
+	}
+
+	public String getNombreProyecto() {
+		return nombreProyecto;
+	}
+
+	public void setNombreProyecto(String nombreProyecto) {
+		this.nombreProyecto = nombreProyecto;
+	}
+    
+    
 }
