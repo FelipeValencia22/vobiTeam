@@ -470,18 +470,17 @@ public class VtProyectoView implements Serializable{
 			 String publico = somPublicoCambio.getValue().toString().trim();
 			 if (publico.equalsIgnoreCase("Público")) {
 					entity.setPublico("S");
-				} else {
-					if(activo.equals("-1")){
-						entity.setPublico(entity.getPublico());
-					}
-					else{
-						entity.setPublico("N");
-					}
+				}
+			 if (publico.equalsIgnoreCase("Privado")) {
+					entity.setPublico("N");
+				}
+			 if (publico.equalsIgnoreCase("-1")) {
+					entity.setPublico(entity.getPublico());
 				}
 
             entity.setDescripcion(FacesUtils.checkString(txtDescripcion));
             entity.setNombre(FacesUtils.checkString(txtNombre));
-            //TODO: entity.setVtEmpresa((FacesUtils.checkLong(txtEmpresa));
+            
             businessDelegatorView.updateVtProyecto(entity);
             FacesUtils.addInfoMessage("El proyecto ha sido modificado con exito");
         } catch (Exception e) {

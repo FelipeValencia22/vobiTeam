@@ -173,11 +173,11 @@
 							<f:selectItems value="#{vtProyectoView.lasEmpresasItems}" />
 						</p:selectOneMenu> 
 
-						<h:outputText id="msgPublico" value=" Publico" />
+						<h:outputText id="msgPublico" value="Privacidad" />
 						<p:selectOneMenu id="somPublicoCambio"
 							binding="#{vtProyectoView.somPublicoCambio}">
-							<f:selectItem itemValue="-1" itemLabel="P&#250;blico" />
-							<f:selectItems value="#{vtProyectoView.esActivoItems}" />
+							<f:selectItem itemValue="-1" itemLabel="Privacidad" />
+							<f:selectItems value="#{vtProyectoView.esPublicoItems}" />
 						</p:selectOneMenu>
 
 						<h:outputText id="msgNombre" value=" Nombre" />
