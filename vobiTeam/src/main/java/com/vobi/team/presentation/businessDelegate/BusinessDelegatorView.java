@@ -1033,5 +1033,10 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 		return seguridadLogica.autenticarUsuario(login, clave);
 	}
 
+	@Override
+	public VtUsuario findUsuarioByLogin(String login) {
+		return vtUsuarioLogic.findUsuarioByLogin(login);
+	}
+
 	
 }

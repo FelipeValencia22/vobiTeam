@@ -315,21 +315,7 @@ public class VtPilaProductoView implements Serializable {
 	}
 
 	public String filtrarTabla(){
-		log.info("Aplicando filtro");
-		String nombre = somEmpresas.getValue().toString().trim();
-		log.info("Nombre empresa: "+nombre);
-
-
-
-		try {
-			dataFiltro=businessDelegatorView.getDataVtPilaProducto(nombre);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-
-		return "";
+				return "";
 
 	}
 

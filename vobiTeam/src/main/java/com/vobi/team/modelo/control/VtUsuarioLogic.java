@@ -612,5 +612,23 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 		return vtUsuarioDAO.consultarUsuarioPorCodigo(usua_codigo);
 	}
 
+	@Transactional(readOnly=true)
+	public VtUsuario findUsuarioByLogin(String login){
+	
+		List<VtUsuario> usuario = new ArrayList<>();
+		
+		try {
+			Object[] variables = {"login", true, login, "="};
+			
+			usuario = findByCriteria(variables, null, null);
+			
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		
+		return (usuario != null && !usuario.isEmpty()
+				? usuario.get(0) : null);
+	}
+	
 
 }

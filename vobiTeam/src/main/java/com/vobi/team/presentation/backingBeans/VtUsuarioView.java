@@ -276,6 +276,7 @@ public class VtUsuarioView implements Serializable{
 					businessDelegatorView.saveVtUsuario(vtUsuario);
 					limpiar();
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El usuario se guardo con exito"));
+					data = businessDelegatorView.getDataVtUsuario();
 				} catch (Exception e) {
 					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 				}

@@ -21,15 +21,24 @@
 
 		<h:form id="menuform">
 			<ps:menu id="sm_leftmenu">
+			
+			
 
 				<p:submenu id="sm_Empresa" label="Empresa" icon="icon-truck">
 					<p:menuitem id="sm_vtEmpresa" value="Gesti&#243;n de empresas"
 						icon="icon-columns" outcome="/XHTML/vtGestionEmpresa.xhtml" />
 				</p:submenu>
+				
+				
+				<p:submenu id="sm_PickList" label="PickList" icon="icon-truck">
+					<p:menuitem id="data" value="PickList"
+						icon="icon-columns" outcome="/XHTML/VtProyectoUsuario.xhtml" />
+				</p:submenu>
+				
 
 				<p:submenu id="sm_Usuario" label="Usuario" icon="icon-users">
 					<p:menuitem id="sm_VtUsuario" value="Gesti&#243;n de usuarios"
-						icon="icon-columns" outcome="vtGestionUsuarios.xhtml" />
+						icon="icon-columns" outcome="/XHTML/vtGestionUsuarios.xhtml" />
 				</p:submenu>
 
 				<p:submenu id="sm_Proyecto" label="Proyecto" icon="icon-file-code">

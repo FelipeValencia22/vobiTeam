@@ -59,4 +59,6 @@ public interface IVtUsuarioLogic {
     public VtUsuario consultarLogin(String login);
     
     public VtUsuario consultarUsuarioPorCodigo(Long usua_codigo);
+    
+    public VtUsuario findUsuarioByLogin(String login);
 }

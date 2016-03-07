@@ -653,4 +653,5 @@ public class HibernateDaoImpl<T, PK extends Serializable> implements Dao<T, PK> 
 		return (VtUsuario) sessionFactory.getCurrentSession().getNamedQuery("consultarUsuarioPorLogin")
 				.setString("login", login).uniqueResult();
 	}
+
 }

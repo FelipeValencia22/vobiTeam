@@ -308,4 +308,5 @@ public interface Dao<T, PK extends Serializable> {
     public VtUsuario consultarUsuarioPorCodigo(Long usuaCodigo);
     
     public VtUsuario consultarUsuarioUnicoPorLogin(String login);
+    
 }

@@ -82,45 +82,13 @@ public class VtProyectoUsuarioLogic implements IVtProyectoUsuarioLogic {
         log.debug("saving VtProyectoUsuario instance");
 
         try {
-            if (entity.getVtProyecto() == null) {
-                throw new ZMessManager().new ForeignException("vtProyecto");
-            }
-
-            if (entity.getVtUsuario() == null) {
-                throw new ZMessManager().new ForeignException("vtUsuario");
-            }
-
-            if (entity.getActivo() == null) {
-                throw new ZMessManager().new EmptyFieldException("activo");
-            }
-
-            if ((entity.getActivo() != null) &&
-                    (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 1) == false)) {
-                throw new ZMessManager().new NotValidFormatException("activo");
-            }
-
-            if (entity.getFechaCreacion() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "fechaCreacion");
-            }
-
-            if (entity.getPrusCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("prusCodigo");
-            }
-
-            if (entity.getVtProyecto().getProyCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "proyCodigo_VtProyecto");
-            }
-
-            if (entity.getVtUsuario().getUsuaCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException(
-                    "usuaCodigo_VtUsuario");
-            }
-
-            if (getVtProyectoUsuario(entity.getPrusCodigo()) != null) {
-                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
-            }
+            
+        	VtProyectoUsuario vtProyectoUsuario= new VtProyectoUsuario();
+        	vtProyectoUsuario.setActivo(entity.getActivo());
+        	vtProyectoUsuario.setFechaCreacion(entity.getFechaCreacion());
+        	vtProyectoUsuario.setUsuCreador(entity.getUsuCreador());
+        	vtProyectoUsuario.setVtProyecto(entity.getVtProyecto());
+        	vtProyectoUsuario.setVtUsuario(entity.getVtUsuario());
 
             vtProyectoUsuarioDAO.save(entity);
 
