@@ -5,10 +5,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd">
-      
+    
+    
+    <http security="none" pattern="/login.xhtml" />
     <http auto-config="true" >
-        <intercept-url pattern="/" access="permitAll" />
-        <intercept-url pattern="/login.xhtml" access="permitAll" />
+    
         <intercept-url pattern="/XHTML/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
         
         <form-login login-page="/login.xhtml" authentication-failure-url="/login.xhtml?authfailed=true" default-target-url="/XHTML/initialMenu.xhtml" always-use-default-target="false"  />
@@ -17,6 +18,8 @@
 
  		<csrf disabled="true"/>
     </http>
+    
+    
   
     <authentication-manager alias="authenticationManager">
 		<authentication-provider ref="zathuraCodeAuthenticationProvider" />
