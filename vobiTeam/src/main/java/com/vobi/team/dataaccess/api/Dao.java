@@ -306,4 +306,6 @@ public interface Dao<T, PK extends Serializable> {
     public VtEmpresa consultarEmpresaPorId(String identificacion);
     
     public VtUsuario consultarUsuarioPorCodigo(Long usuaCodigo);
+    
+    public VtUsuario consultarUsuarioUnicoPorLogin(String login);
 }

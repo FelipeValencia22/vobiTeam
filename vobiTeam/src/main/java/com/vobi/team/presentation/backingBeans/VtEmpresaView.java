@@ -15,7 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vobi.team.modelo.VtEmpresa;
+import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
+import com.vobi.team.utilities.FacesUtils;
 
 @ManagedBean
 @ViewScoped
@@ -106,8 +108,8 @@ public class VtEmpresaView implements Serializable{
 		vtEmpresa.setActivo("S");
 		Date fechaCreacion = new Date();
 		vtEmpresa.setFechaCreacion(fechaCreacion);
-		Long usuCreador=1L;
-		vtEmpresa.setUsuCreador(usuCreador);
+		VtUsuario vtUsuario =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+		vtEmpresa.setUsuCreador(vtUsuario.getUsuaCodigo());
 		
 		try {
 			businessDelegatorView.saveVtEmpresa(vtEmpresa);

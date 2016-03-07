@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.vobi.team.modelo.VtEmpresa;
 import com.vobi.team.modelo.VtProyecto;
+import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 
 import com.vobi.team.utilities.FacesUtils;
@@ -283,7 +284,8 @@ public class VtProyectoView implements Serializable{
 			vtProyecto.setActivo("N");
 		}
 
-		vtProyecto.setUsuCreador(1L);
+		VtUsuario vtUsuario =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+		vtProyecto.setUsuCreador(vtUsuario.getUsuaCodigo());
 
 		String empresaS=somEmpresas.getValue().toString().trim();
 		if(empresaS.isEmpty() || empresaS.equals("-1")){

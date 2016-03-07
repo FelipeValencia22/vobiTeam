@@ -258,7 +258,10 @@ public class VtUsuarioView implements Serializable{
 				vtUsuario.setFechaCreacion(fechaCreacion);
 				vtUsuario.setLogin(Login);
 				vtUsuario.setNombre(txtNombreC.getValue().toString().trim());
-				vtUsuario.setUsuCreador(99999L);
+				
+				
+				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+				vtUsuario.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 
 				String empresaS=somEmpresas.getValue().toString().trim();
 				if(empresaS.isEmpty() || empresaS.equals("-1")){

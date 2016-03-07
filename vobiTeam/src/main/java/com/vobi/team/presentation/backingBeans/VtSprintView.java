@@ -276,13 +276,15 @@ public class VtSprintView implements Serializable {
 			Long codigoPila= Long.valueOf(longPila);
 			vtPilaProducto=businessDelegatorView.getVtPilaProducto(codigoPila);
 			vtSprint.setVtPilaProducto(vtPilaProducto);
-			vtSprint.setVtPilaProducto(vtPilaProducto);
+			//vtSprint.setVtPilaProducto(vtPilaProducto);
 			Date fechaCreacion= new Date();
 			vtSprint.setFechaCreacion(fechaCreacion);
 			vtSprint.setFechaFin(FacesUtils.checkDate(txtFechaFin));
 			vtSprint.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
 			vtSprint.setNombre(txtNombre.getValue().toString().trim());
 			vtSprint.setObjetivo(txtObjetivo.getValue().toString().trim());
+			
+
 
 			businessDelegatorView.saveVtSprint(vtSprint);
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint se creó con exito"));

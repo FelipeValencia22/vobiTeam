@@ -477,4 +477,6 @@ public interface IBusinessDelegatorView {
     public VtEmpresa consultarEmpresaPorId(String login);
     
     public VtUsuario consultarUsuarioPorCodigo(Long usuacodigo);
+    
+    public VtUsuario autenticarUsuario(String login, String clave) throws Exception;
 }

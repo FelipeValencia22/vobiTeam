@@ -647,4 +647,10 @@ public class HibernateDaoImpl<T, PK extends Serializable> implements Dao<T, PK> 
 		VtUsuario usuarioCodigo= (VtUsuario) query.uniqueResult();
 		return usuarioCodigo;
 	}
+	
+	@Override
+	public VtUsuario consultarUsuarioUnicoPorLogin(String login) {
+		return (VtUsuario) sessionFactory.getCurrentSession().getNamedQuery("consultarUsuarioPorLogin")
+				.setString("login", login).uniqueResult();
+	}
 }

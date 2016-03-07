@@ -4,6 +4,7 @@ import com.vobi.team.dataaccess.dao.*;
 import com.vobi.team.exceptions.*;
 import com.vobi.team.modelo.*;
 import com.vobi.team.modelo.dto.VtSprintDTO;
+import com.vobi.team.utilities.FacesUtils;
 import com.vobi.team.utilities.Utilities;
 
 import org.slf4j.Logger;
@@ -107,8 +108,8 @@ public class VtSprintLogic implements IVtSprintLogic {
         	if(entity.getFechaFin().toString().equals("") || entity.getFechaFin().toString().isEmpty()){
         		throw new Exception("Seleccionar la fecha de fin");
         	}
-        	
-        	entity.setUsuCreador(99999L);
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 
             vtSprintDAO.save(entity);
 

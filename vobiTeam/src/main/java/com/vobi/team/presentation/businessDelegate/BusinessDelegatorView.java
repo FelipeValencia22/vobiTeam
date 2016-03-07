@@ -27,6 +27,7 @@ import com.vobi.team.modelo.control.IVtPrioridadLogic;
 import com.vobi.team.modelo.control.IVtProyectoLogic;
 import com.vobi.team.modelo.control.IVtProyectoUsuarioLogic;
 import com.vobi.team.modelo.control.IVtRolLogic;
+import com.vobi.team.modelo.control.IVtSeguridadLogica;
 import com.vobi.team.modelo.control.IVtSprintLogic;
 import com.vobi.team.modelo.control.IVtTipoArtefactoLogic;
 import com.vobi.team.modelo.control.IVtUsuarioArtefactoLogic;
@@ -132,6 +133,11 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
     private static final Logger log = LoggerFactory.getLogger(BusinessDelegatorView.class);
     @Autowired
     private IVtArchivoLogic vtArchivoLogic;
+    
+    @Autowired
+    private IVtSeguridadLogica seguridadLogica;
+    
+    
     @Autowired
     private IVtArtefactoLogic vtArtefactoLogic;
     @Autowired
@@ -1014,5 +1020,11 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 	@Override
 	public VtUsuario consultarUsuarioPorCodigo(Long usuacodigo) {
 		return vtUsuarioLogic.consultarUsuarioPorCodigo(usuacodigo);
+	}
+	
+
+	@Override
+	public VtUsuario autenticarUsuario(String login, String clave) throws Exception {
+		return seguridadLogica.autenticarUsuario(login, clave);
 	}
 }

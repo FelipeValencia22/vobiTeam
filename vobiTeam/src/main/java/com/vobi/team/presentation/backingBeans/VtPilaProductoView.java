@@ -22,7 +22,9 @@ import org.slf4j.LoggerFactory;
 import com.vobi.team.modelo.VtEmpresa;
 import com.vobi.team.modelo.VtPilaProducto;
 import com.vobi.team.modelo.VtProyecto;
+import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
+import com.vobi.team.utilities.FacesUtils;
 
 @ManagedBean 
 @ViewScoped
@@ -206,8 +208,10 @@ public class VtPilaProductoView implements Serializable {
 		String proyectos = somProyectos.getValue().toString().trim();
 		Long proyecto = Long.parseLong(proyectos);
 		VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(proyecto);
-		vtPilaProducto.setUsuCreador(1L);
 		vtPilaProducto.setVtProyecto(vtProyecto);
+		
+		VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+		vtPilaProducto.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 
 		try {
 			businessDelegatorView.saveVtPilaProducto(vtPilaProducto);
