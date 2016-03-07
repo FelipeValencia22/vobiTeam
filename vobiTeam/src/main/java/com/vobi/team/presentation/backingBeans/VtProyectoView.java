@@ -49,7 +49,10 @@ public class VtProyectoView implements Serializable{
 
 	private SelectOneMenu somPublico;
 	private SelectOneMenu somActivo;
+	private SelectOneMenu somPublicoCambio;
+	private SelectOneMenu somActivoCambio;
 	private SelectOneMenu somEmpresas;
+	private SelectOneMenu somEmpresasCambio;
 
 	private CommandButton btnCrear;
 	private CommandButton btnModificar;
@@ -231,8 +234,31 @@ public class VtProyectoView implements Serializable{
 		this.txtEmpresa = txtEmpresa;
 	}
 
-	/// CREAR PROYECTO Y LIMPIAR PANTALLA
+	public SelectOneMenu getSomPublicoCambio() {
+		return somPublicoCambio;
+	}
+
+	public void setSomPublicoCambio(SelectOneMenu somPublicoCambio) {
+		this.somPublicoCambio = somPublicoCambio;
+	}
+
+	public SelectOneMenu getSomActivoCambio() {
+		return somActivoCambio;
+	}
+
+	public void setSomActivoCambio(SelectOneMenu somActivoCambio) {
+		this.somActivoCambio = somActivoCambio;
+	}
+
+	public SelectOneMenu getSomEmpresasCambio() {
+		return somEmpresasCambio;
+	}
+
+	public void setSomEmpresasCambio(SelectOneMenu somEmpresasCambio) {
+		this.somEmpresasCambio = somEmpresasCambio;
+	}
 	
+	/// CREAR PROYECTO Y LIMPIAR PANTALLA
 	public String crearProyecto() throws Exception{
 		log.info("Creando proyecto");
 
@@ -358,14 +384,15 @@ public class VtProyectoView implements Serializable{
 	public String action_edit(ActionEvent evt) {
         selectedVtProyecto = (VtProyectoDTO) (evt.getComponent().getAttributes()
                                                  .get("selectedVtProyecto"));
-        txtActivo.setValue(selectedVtProyecto.getActivo());
-        txtActivo.setDisabled(false);
+        
         txtDescripcion.setValue(selectedVtProyecto.getDescripcion());
         txtDescripcion.setDisabled(false);
         txtNombre.setValue(selectedVtProyecto.getNombre());
         txtNombre.setDisabled(false);
-        txtPublico.setValue(selectedVtProyecto.getPublico());
-        txtPublico.setDisabled(false);
+        somActivoCambio.setValue(selectedVtProyecto.getActivo());
+        somActivoCambio.setDisabled(false);
+        somPublicoCambio.setValue(selectedVtProyecto.getPublico());
+        somPublicoCambio.setDisabled(false);
         btnSave.setDisabled(false);
         setShowDialog(true);
 
@@ -428,10 +455,32 @@ public class VtProyectoView implements Serializable{
                 entity = businessDelegatorView.getVtProyecto(proyCodigo);
             }
 
-            entity.setActivo(FacesUtils.checkString(txtActivo));
+            String activo = somActivoCambio.getValue().toString().trim();
+			if (activo.equalsIgnoreCase("Si")) {
+				entity.setActivo("S");
+			} else {
+				if(activo.equals("-1")){
+					entity.setActivo(entity.getActivo());
+				}
+				else{
+					entity.setActivo("N");
+				}
+			}
+			
+			 String publico = somPublicoCambio.getValue().toString().trim();
+			 if (publico.equalsIgnoreCase("Público")) {
+					entity.setPublico("S");
+				} else {
+					if(activo.equals("-1")){
+						entity.setPublico(entity.getPublico());
+					}
+					else{
+						entity.setPublico("N");
+					}
+				}
+
             entity.setDescripcion(FacesUtils.checkString(txtDescripcion));
             entity.setNombre(FacesUtils.checkString(txtNombre));
-            entity.setPublico(FacesUtils.checkString(txtPublico));
             //TODO: entity.setVtEmpresa((FacesUtils.checkLong(txtEmpresa));
             businessDelegatorView.updateVtProyecto(entity);
             FacesUtils.addInfoMessage("El proyecto ha sido modificado con exito");

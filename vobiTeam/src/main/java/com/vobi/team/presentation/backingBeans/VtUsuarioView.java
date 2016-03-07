@@ -43,6 +43,7 @@ public class VtUsuarioView implements Serializable{
 	private Password txtClave;
 	private Password txtClaveR;
 	private SelectOneMenu somEmpresas;
+	private SelectOneMenu somEmpresasCambio;
 	private SelectOneMenu somActivo;
 
 	private CommandButton btnCrearU;
@@ -56,7 +57,7 @@ public class VtUsuarioView implements Serializable{
 	private List<SelectItem> esUsuarioActivo;
 	private List<VtUsuarioDTO> data;
 	private List<VtUsuarioDTO> dataI;
-	
+
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
 	private IBusinessDelegatorView businessDelegatorView;
@@ -68,7 +69,7 @@ public class VtUsuarioView implements Serializable{
 	public void setBusinessDelegatorView(IBusinessDelegatorView businessDelegatorView) {
 		this.businessDelegatorView = businessDelegatorView;
 	}
-	
+
 	public List<SelectItem> getEsUsuarioActivo() {
 		return esUsuarioActivo;
 	}
@@ -137,12 +138,22 @@ public class VtUsuarioView implements Serializable{
 		this.txtClaveR = txtClaveR;
 	}
 
+
 	public SelectOneMenu getSomEmpresas() {
 		return somEmpresas;
 	}
 
 	public void setSomEmpresas(SelectOneMenu somEmpresas) {
 		this.somEmpresas = somEmpresas;
+	}
+
+
+	public SelectOneMenu getSomEmpresasCambio() {
+		return somEmpresasCambio;
+	}
+
+	public void setSomEmpresasCambio(SelectOneMenu somEmpresasCambio) {
+		this.somEmpresasCambio = somEmpresasCambio;
 	}
 
 	public CommandButton getBtnCrear() {
@@ -217,7 +228,7 @@ public class VtUsuarioView implements Serializable{
 	public void setSomActivo(SelectOneMenu somActivo) {
 		this.somActivo = somActivo;
 	}
-	
+
 	public List<SelectItem> getEsActivoItems() {
 		if(esActivoItems==null){
 			esActivoItems=new ArrayList<SelectItem>();
@@ -415,7 +426,7 @@ public class VtUsuarioView implements Serializable{
 	public void setDataI(List<VtUsuarioDTO> dataI) {
 		this.dataI = dataI;
 	}
-	
+
 	public List<VtUsuarioDTO> getDataI() {
 		try {
 			if (dataI == null) {
@@ -443,7 +454,7 @@ public class VtUsuarioView implements Serializable{
 	public String action_edit(ActionEvent evt) {
 		selectedVtUsuario = (VtUsuarioDTO) (evt.getComponent().getAttributes()
 				.get("selectedVtUsuario"));	
-		
+
 		txtClave.setValue(selectedVtUsuario.getClave());
 		txtClave.setDisabled(false);
 		txtLogin.setValue(selectedVtUsuario.getLogin());
@@ -508,15 +519,33 @@ public class VtUsuarioView implements Serializable{
 				Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
 				entity = businessDelegatorView.getVtUsuario(usuaCodigo);
 			} 
-			log.info("entidad no nula");
 			String activo = somActivo.getValue().toString().trim();
 			if (activo.equalsIgnoreCase("Si")) {
 				entity.setActivo("S");
 			} else {
-				entity.setActivo("N");
+				if(activo.equals("-1")){
+					entity.setActivo(entity.getActivo());
+				}
+				else{
+					entity.setActivo("N");
+				}
+
 			}
-			log.info("Obtuvo activo");
-			String nombreEmpresa=somEmpresas.getValue().toString().trim();
+
+			/*			TODO: Cambiar usuario de empresa
+			String nombreEmpresa=somEmpresasCambio.getValue().toString().trim();
+			Long codigoEmpresa = null;
+			List<VtEmpresa> listaEmpresas=businessDelegatorView.getVtEmpresa();
+			for (VtEmpresa vtEmpresa: listaEmpresas) {
+				if(vtEmpresa.getNombre().equals(nombreEmpresa)){
+					log.info("Empresa igual");
+					codigoEmpresa=vtEmpresa.getEmprCodigo();
+				}
+			}
+			Long codigo= Long.valueOf(codigoEmpresa);
+			VtEmpresa vtEmpresaCodigo=businessDelegatorView.getVtEmpresa(codigo);
+			entity.setVtEmpresa(vtEmpresaCodigo);
+			 */
 			entity.setLogin(FacesUtils.checkString(txtLogin));
 			entity.setNombre(FacesUtils.checkString(txtNombre));
 			businessDelegatorView.updateVtUsuario(entity);
@@ -571,7 +600,7 @@ public class VtUsuarioView implements Serializable{
 		if (btnSave != null) {
 			btnSave.setDisabled(true);
 		}
-*/
+	 */
 		return "";
 	}
 

@@ -157,12 +157,28 @@
 
 					<h:panelGrid columns="2" id="panelGrid">
 
+
+
 						<h:outputText id="msgActivo" value=" Activo" />
-						<p:inputText id="txtActivo" disabled="true"
-							binding="#{vtProyectoView.txtActivo}" />
-						<h:outputText id="msgPublico" value=" P&#250;blico" />
-						<p:inputText id="txtPublico" disabled="true"
-							binding="#{vtProyectoView.txtPublico}" />
+						<p:selectOneMenu id="somActivoCambio"
+							binding="#{vtProyectoView.somActivoCambio}"> 
+							<f:selectItem itemValue="-1" itemLabel="Activo" />
+							<f:selectItems value="#{vtProyectoView.esActivoItems}" />
+						</p:selectOneMenu>
+
+						<h:outputText id="msgSomEmpresa" value=" Empresa" />
+						<p:selectOneMenu id="somEmpresasCambio"
+							binding="#{vtProyectoView.somEmpresasCambio}">
+							<f:selectItem itemValue="-1" itemLabel="Empresa" />
+							<f:selectItems value="#{vtProyectoView.lasEmpresasItems}" />
+						</p:selectOneMenu> 
+
+						<h:outputText id="msgPublico" value=" Publico" />
+						<p:selectOneMenu id="somPublicoCambio"
+							binding="#{vtProyectoView.somPublicoCambio}">
+							<f:selectItem itemValue="-1" itemLabel="P&#250;blico" />
+							<f:selectItems value="#{vtProyectoView.esActivoItems}" />
+						</p:selectOneMenu>
 
 						<h:outputText id="msgNombre" value=" Nombre" />
 						<p:inputText id="txtNombre" disabled="true"

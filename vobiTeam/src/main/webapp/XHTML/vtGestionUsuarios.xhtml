@@ -212,11 +212,17 @@
 					<h:panelGrid columns="2" id="panelGrid">
 
 						<h:outputText id="msgActivo" value=" Activo" />
-
 						<p:selectOneMenu id="somActivo"
 							binding="#{vtUsuarioView.somActivo}">
 							<f:selectItem itemValue="-1" itemLabel="Activo" />
 							<f:selectItems value="#{vtUsuarioView.esActivoItems}" />
+						</p:selectOneMenu>
+
+						<h:outputText id="msgSomEmpresa" value=" Empresa" />
+						<p:selectOneMenu id="somEmpresasCambio"
+							binding="#{vtUsuarioView.somEmpresasCambio}">
+							<f:selectItem itemValue="-1" itemLabel="Seleccionar empresa" />
+							<f:selectItems value="#{vtUsuarioView.lasEmpresasItems}" />
 						</p:selectOneMenu>
 
 						<h:outputText id="msgLogin" value=" Login" />
@@ -227,11 +233,7 @@
 						<p:inputText id="txtNombre" disabled="true"
 							binding="#{vtUsuarioView.txtNombre}" />
 
-						<p:selectOneMenu id="somEmpresas"
-							binding="#{vtUsuarioView.somEmpresas}">
-							<f:selectItem itemValue="-1" itemLabel="Seleccionar empresa" />
-							<f:selectItems value="#{vtUsuarioView.lasEmpresasItems}" />
-						</p:selectOneMenu>
+
 
 
 					</h:panelGrid>
