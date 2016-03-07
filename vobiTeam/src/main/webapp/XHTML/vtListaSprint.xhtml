@@ -25,7 +25,7 @@
 		</p:dialog>
 
 
-		<h:form id="formDialog">
+		<h:form id="frm">
 			<p:growl id="msg" />
 			<br></br>
 			<p:panel id="panelDataTableVtSprint">
@@ -90,6 +90,14 @@
 						</f:facet>
 						<h:outputText value="#{vtSprint.pilaCodigo_VtPilaProducto}" />
 					</p:column>
+					
+					<p:column filterBy="#{vtSprint.nombrePilaProducto}"
+						sortBy="#{vtSprint.nombrePilaProducto}">
+						<f:facet name="header">
+							<h:outputText value="Nombre de producto" />
+						</f:facet>
+						<h:outputText value="#{vtSprint.nombrePilaProducto}" />
+					</p:column>
 
 					<p:column filterBy="#{vtSprint.nombreProyecto}"
 						sortBy="#{vtSprint.nombreProyecto}">
@@ -118,6 +126,27 @@
 				<p:messages id="msg" />
 				<p:panel id="panelVtSprint" header="VtSprint">
 					<h:panelGrid columns="2" id="panelGrid">
+					
+					<h:outputText id="msgActivo" value=" Activo" />
+						<p:selectOneMenu id="somActivoCambio"
+							binding="#{vtSprintView.somActivoCambio}"> 
+							<f:selectItem itemValue="-1" itemLabel="Activo" />
+							<f:selectItems value="#{vtSprintView.esActivoItems}" />
+						</p:selectOneMenu>
+						
+						<h:outputText id="msgPilaProducto" value="Pila producto" />
+						<p:selectOneMenu id="somPilaProductoCambio"
+							binding="#{vtSprintView.somPilaProductoCambio}"> 
+							<f:selectItem itemValue="-1" itemLabel="Pila producto" />
+							<f:selectItems value="#{vtSprintView.esPilaProductoItems}" />
+						</p:selectOneMenu>
+						
+						<h:outputText id="msgProyecto" value="Proyecto" />
+						<p:selectOneMenu id="somProyectoCambio"
+							binding="#{vtSprintView.somProyectoCambio}"> 
+							<f:selectItem itemValue="-1" itemLabel="Proyectos" />
+							<f:selectItems value="#{vtSprintView.losProyectosItems}" />
+						</p:selectOneMenu>
 
 						<h:outputText id="msgNombre" value=" Nombre" />
 						<p:inputText id="txtNombre" disabled="true"
@@ -145,17 +174,17 @@
 						
 
 					</h:panelGrid>
-				</p:panel>
-				<p:panel id="panelBotones">
+				</p:panel> 
+				<p:panel id="panelBotones"> 
 					<div align="center">
-						<p:commandButton id="btnSave" binding="#{vtSprintView.btnSave}"
+						<p:commandButton id="btnSave" binding="#{vtSprintView.btnGuardar}"
 							value="Save" action="#{vtSprintView.action_save()}"
 							update=":dialogVtSprint :frm:panelDataTableVtSprint" />
-						<p:commandButton id="btnClear" value="Clear"
-							action="#{vtSprintView.action_clear()}" update=":dialogVtSprint" />
-						<p:commandButton id="btnExit" value="Exit"
-							action="#{vtSprintView.action_closeDialog()}"
-							update=":dialogVtSprint" />
+							
+						<p:commandButton id="btnExit" value="Salir"
+							action="#{vtUsuarioView.action_closeDialog()}"
+							update=":dialogVtUsuario" />
+						
 					</div>
 				</p:panel>
 			</h:form>
