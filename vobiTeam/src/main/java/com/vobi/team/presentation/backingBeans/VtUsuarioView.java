@@ -138,7 +138,6 @@ public class VtUsuarioView implements Serializable{
 		this.txtClaveR = txtClaveR;
 	}
 
-
 	public SelectOneMenu getSomEmpresas() {
 		return somEmpresas;
 	}
@@ -146,7 +145,6 @@ public class VtUsuarioView implements Serializable{
 	public void setSomEmpresas(SelectOneMenu somEmpresas) {
 		this.somEmpresas = somEmpresas;
 	}
-
 
 	public SelectOneMenu getSomEmpresasCambio() {
 		return somEmpresasCambio;
@@ -287,48 +285,6 @@ public class VtUsuarioView implements Serializable{
 		}else{
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("Las contraseñas no coinciden"));
 		}
-
-		return "";
-	}
-
-	public String modificarUsuario(){
-		log.info("Modificando usuario");
-
-		VtUsuario vtUsuario = null;
-
-		String login= txtLogin.getValue().toString().trim();
-		vtUsuario=businessDelegatorView.consultarLogin(login);
-		String claveR=txtClaveR.getValue().toString().trim();
-		String clave=txtClave.getValue().toString().trim(); 
-
-		if(clave.isEmpty() && claveR.isEmpty()){
-			vtUsuario.setClave(clave);
-			vtUsuario.setNombre(txtNombre.getValue().toString().trim());
-			Date fechaModificacion = new Date();
-			vtUsuario.setFechaModificacion(fechaModificacion);
-			vtUsuario.setLogin(login);
-			String empresaS=somEmpresas.getValue().toString().trim();
-			if(empresaS.isEmpty() || empresaS.equals("")){
-			}else{
-				Long empresa=Long.parseLong(empresaS);
-				VtEmpresa vtEmpresa;
-				try {
-					vtEmpresa = businessDelegatorView.getVtEmpresa(empresa);
-					vtUsuario.setVtEmpresa(vtEmpresa);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					businessDelegatorView.updateVtUsuario(vtUsuario);
-					FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El usuario se modifico con exito"));
-				} catch (Exception e) {
-					FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
-				}
-			}
-		}
-
-
-
 
 		return "";
 	}
@@ -534,25 +490,19 @@ public class VtUsuarioView implements Serializable{
 				}
 
 			}
-
-			/*			TODO: Cambiar usuario de empresa
-			String nombreEmpresa=somEmpresasCambio.getValue().toString().trim();
-			Long codigoEmpresa = null;
-			List<VtEmpresa> listaEmpresas=businessDelegatorView.getVtEmpresa();
-			for (VtEmpresa vtEmpresa: listaEmpresas) {
-				if(vtEmpresa.getNombre().equals(nombreEmpresa)){
-					log.info("Empresa igual");
-					codigoEmpresa=vtEmpresa.getEmprCodigo();
-				}
-			}
-			Long codigo= Long.valueOf(codigoEmpresa);
-			VtEmpresa vtEmpresaCodigo=businessDelegatorView.getVtEmpresa(codigo);
-			entity.setVtEmpresa(vtEmpresaCodigo);
-			 */
+			Date fechaModificacion = new Date();
+			entity.setFechaModificacion(fechaModificacion);
+			
 			entity.setLogin(FacesUtils.checkString(txtLogin));
 			entity.setNombre(FacesUtils.checkString(txtNombre));
+			
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			
 			businessDelegatorView.updateVtUsuario(entity);
 			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
+			data = businessDelegatorView.getDataVtUsuario();
+			dataI = businessDelegatorView.getDataVtUsuarioInactivo();
 		} catch (Exception e) {
 			data = null;
 			log.error(e.getMessage());

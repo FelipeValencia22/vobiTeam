@@ -14,6 +14,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.picklist.PickList;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.DualListModel;
 import org.slf4j.Logger;
@@ -116,8 +117,11 @@ public class VtProyectoUsuariosView implements Serializable{
 		}else{ 
 			try {
 				List<VtUsuario> listUsuariosSource = businessDelegatorView.getVtUsuario();
+				
 				List<VtProyectoUsuario> listaProyectoUsuarios= businessDelegatorView.getVtProyectoUsuario();
+				
 				for(VtProyectoUsuario vtProyectoUsuario: listaProyectoUsuarios){
+					
 					if(vtProyectoUsuario.getVtProyecto().getNombre().equals(getProyectoSeleccionado())){
 						for(VtUsuario vtUsuario: listUsuariosSource){
 							if(vtProyectoUsuario.getVtUsuario().getUsuaCodigo() == (vtUsuario.getUsuaCodigo())){
@@ -135,7 +139,7 @@ public class VtProyectoUsuariosView implements Serializable{
 								usuariosSource.add("Nombre: "+vtUsuario.getNombre().toString()+", Login:"+ vtUsuario.getLogin()+"\n");	
 							}
 						}
-						
+
 					}
 				}
 			}catch (Exception e) {
@@ -198,9 +202,7 @@ public class VtProyectoUsuariosView implements Serializable{
 
 	public String action_closeDialog() {
 		setShowDialog(false);
-		usuariosSource = new ArrayList<String>(); //Usuarios disponibles
-		usuariosTarget = new ArrayList<String>(); //Usuarios no disponibles
-		vtUsuario = new DualListModel<String>(usuariosSource, usuariosTarget);
+
 		return "";
 	}
 
@@ -236,16 +238,20 @@ public class VtProyectoUsuariosView implements Serializable{
 			loginTarget[i]=parts[1];
 		}
 
-		
 		try {
 			VtProyecto vtProyecto = null;
 			List<VtProyectoUsuario> listaProyectoUsuarios = businessDelegatorView.getVtProyectoUsuario();
 			for(VtProyectoUsuario vtProyectoUsuario: listaProyectoUsuarios){
 				if(vtProyectoUsuario.getVtProyecto().getNombre().equals(getProyectoSeleccionado())){
 					vtProyecto = businessDelegatorView.getVtProyecto(vtProyectoUsuario.getVtProyecto().getProyCodigo());
+
+					
+					for (int i = 0; i < loginSource.length; i++) {
+						System.out.println("#"+i+": "+loginSource[i]);
+					}
 					
 					for(int i = 0;i < loginSource.length; i++){
-						if(vtProyectoUsuario.getVtUsuario().getLogin().equals(loginSource[i])){
+						if(vtProyectoUsuario.getVtUsuario().getLogin().equals(loginSource[i].toString())){
 						}else{
 							VtProyectoUsuario vtProyectoUsuarioCrear= new VtProyectoUsuario();
 							vtProyectoUsuarioCrear.setVtProyecto(vtProyecto);
@@ -256,7 +262,7 @@ public class VtProyectoUsuariosView implements Serializable{
 							VtUsuario vtUsuarioCreador =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 							vtProyectoUsuarioCrear.setUsuCreador(vtUsuarioCreador.getUsuaCodigo());
 
-							VtUsuario vtUsuarioBuscar=businessDelegatorView.findUsuarioByLogin("pipeavb225@hotmail.com");
+							VtUsuario vtUsuarioBuscar=businessDelegatorView.findUsuarioByLogin(loginSource[i]);
 							vtProyectoUsuarioCrear.setVtUsuario(vtUsuarioBuscar);
 
 							vtProyectoUsuarioCrear.setActivo("S");
@@ -265,10 +271,10 @@ public class VtProyectoUsuariosView implements Serializable{
 							FacesContext.getCurrentInstance().addMessage("", new FacesMessage("Se realizo la asignacion del desarrollador(es)"));
 						}
 					}
-					
+
 				}
-				
-				
+
+
 			}
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));

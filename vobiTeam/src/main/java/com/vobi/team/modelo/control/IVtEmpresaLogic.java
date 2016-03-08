@@ -53,6 +53,7 @@ public interface IVtEmpresaLogic {
     public Long findTotalNumberVtEmpresa() throws Exception;
 
     public List<VtEmpresaDTO> getDataVtEmpresa() throws Exception;
+    public List<VtEmpresaDTO> getDataVtEmpresaInactiva() throws Exception;
     
     public VtEmpresa consultarEmpresaPorId(String identificacion);
 }

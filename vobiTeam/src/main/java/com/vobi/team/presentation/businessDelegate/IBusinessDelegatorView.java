@@ -150,6 +150,8 @@ public interface IBusinessDelegatorView {
     public Long findTotalNumberVtEmpresa() throws Exception;
 
     public List<VtEmpresaDTO> getDataVtEmpresa() throws Exception;
+    
+    public List<VtEmpresaDTO> getDataVtEmpresaInactiva() throws Exception;
 
     public List<VtEstado> getVtEstado() throws Exception;
 
@@ -297,6 +299,8 @@ public interface IBusinessDelegatorView {
     public Long findTotalNumberVtProyecto() throws Exception;
 
     public List<VtProyectoDTO> getDataVtProyecto() throws Exception;
+    
+    public List<VtProyectoDTO> getDataVtProyectoInactivo() throws Exception;
 
     public List<VtProyectoUsuario> getVtProyectoUsuario()
         throws Exception;

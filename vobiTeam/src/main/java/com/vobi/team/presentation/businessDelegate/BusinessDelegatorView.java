@@ -319,6 +319,10 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
     public List<VtEmpresaDTO> getDataVtEmpresa() throws Exception {
         return vtEmpresaLogic.getDataVtEmpresa();
     }
+    
+    public List<VtEmpresaDTO> getDataVtEmpresaInactiva() throws Exception {
+        return vtEmpresaLogic.getDataVtEmpresaInactiva();
+    }
 
     public List<VtEstado> getVtEstado() throws Exception {
         return vtEstadoLogic.getVtEstado();
@@ -636,6 +640,11 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
     public List<VtProyectoDTO> getDataVtProyecto() throws Exception {
         return vtProyectoLogic.getDataVtProyecto();
     }
+    
+    public List<VtProyectoDTO> getDataVtProyectoInactivo() throws Exception {
+        return vtProyectoLogic.getDataVtProyectoInactivo(); 
+    }
+
 
     public List<VtProyectoUsuario> getVtProyectoUsuario()
         throws Exception {

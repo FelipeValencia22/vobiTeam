@@ -63,7 +63,7 @@
 				<p:commandButton id="btnCrear" icon="ui-icon-plus"
 					title="Crear proyecto" binding="#{vtProyectoView.btnCrear}"
 					disable="true" action="#{vtProyectoView.crearProyecto}"
-					update="growl" />
+					update="pnlProyecto,growl, @([id$=panelDataTableVtProyecto], @([id$=panelDataTableVtProyectoI])" />
 
 				<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"
 					title="Limpiar " binding="#{vtProyectoView.btnLimpiar}"
@@ -74,78 +74,154 @@
 			<br> </br>
 
 
-
-			<p:panel id="panelDataTableVtProyecto" header="Proyectos">
+			<p:accordionPanel id="accordionPanelVtProyecto"
+				multiple="true">
 				<p:growl id="men" />
 
-				<p:dataTable value="#{vtProyectoView.data}" var="vtProyecto"
-					paginator="true" rows="5">
+				<p:tab title="Proyectos activos">
+					<p:panel id="panelDataTableVtProyecto" >
+
+						<p:dataTable value="#{vtProyectoView.data}" var="vtProyecto"
+							paginator="true" rows="10">
 
 
-					<p:column filterBy="#{vtProyecto.proyCodigo}"
-						sortBy="#{vtProyecto.proyCodigo}">
-						<f:facet name="header">
-							<h:outputText value="C&#243;digo proyecto" />
-						</f:facet>
-						<h:outputText value="#{vtProyecto.proyCodigo}" />
-					</p:column>
+							<p:column filterBy="#{vtProyecto.proyCodigo}"
+								sortBy="#{vtProyecto.proyCodigo}">
+								<f:facet name="header">
+									<h:outputText value="C&#243;digo proyecto" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.proyCodigo}" />
+							</p:column>
 
-					<p:column filterBy="#{vtProyecto.nombre_VtEmpresa}"
-						sortBy="#{vtProyecto.nombre_VtEmpresa}">
-						<f:facet name="header">
-							<h:outputText value="Nombre Empresa" />
-						</f:facet>
-						<h:outputText value="#{vtProyecto.nombre_VtEmpresa}" />
-					</p:column>
+							<p:column filterBy="#{vtProyecto.nombre_VtEmpresa}"
+								sortBy="#{vtProyecto.nombre_VtEmpresa}">
+								<f:facet name="header">
+									<h:outputText value="Nombre Empresa" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.nombre_VtEmpresa}" />
+							</p:column>
 
-					<p:column filterBy="#{vtProyecto.activo}"
-						sortBy="#{vtProyecto.activo}">
-						<f:facet name="header">
-							<h:outputText value="Activo" />
-						</f:facet>
-						<h:outputText value="#{vtProyecto.activo}" />
-					</p:column>
+							<p:column filterBy="#{vtProyecto.activo}"
+								sortBy="#{vtProyecto.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.activo}" />
+							</p:column>
 
-					<p:column filterBy="#{vtProyecto.publico}"
-						sortBy="#{vtProyecto.publico}">
-						<f:facet name="header">
-							<h:outputText value="P&#250;blico" />
-						</f:facet>
-						<h:outputText value="#{vtProyecto.publico}" />
-					</p:column>
+							<p:column filterBy="#{vtProyecto.publico}"
+								sortBy="#{vtProyecto.publico}">
+								<f:facet name="header">
+									<h:outputText value="P&#250;blico" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.publico}" />
+							</p:column>
 
-					<p:column filterBy="#{vtProyecto.nombre}"
-						sortBy="#{vtProyecto.nombre}">
-						<f:facet name="header">
-							<h:outputText value="Nombre proyecto" />
-						</f:facet>
-						<h:outputText value="#{vtProyecto.nombre}" />
-					</p:column>
+							<p:column filterBy="#{vtProyecto.nombre}"
+								sortBy="#{vtProyecto.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre proyecto" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.nombre}" />
+							</p:column>
 
-					<p:column filterBy="#{vtProyecto.descripcion}"
-						sortBy="#{vtProyecto.descripcion}">
-						<f:facet name="header">
-							<h:outputText value="Descripci&#243;n" />
-						</f:facet>
-						<h:outputText value="#{vtProyecto.descripcion}" />
-					</p:column>
-
-
+							<p:column filterBy="#{vtProyecto.descripcion}"
+								sortBy="#{vtProyecto.descripcion}">
+								<f:facet name="header">
+									<h:outputText value="Descripci&#243;n" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.descripcion}" />
+							</p:column>
 
 
-					<p:column headerText="Modificar">
-
-						<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-							update=":dialogVtProyecto"
-							actionListener="#{vtProyectoView.action_edit}">
-							<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
-						</p:commandButton>
-
-					</p:column>
-				</p:dataTable>
-			</p:panel>
 
 
+							<p:column headerText="Modificar">
+
+								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									update=":dialogVtProyecto"
+									actionListener="#{vtProyectoView.action_edit}">
+									<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
+								</p:commandButton>
+
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</p:tab>
+				
+				
+				<p:tab title="Proyectos inactivos">
+					<p:panel id="panelDataTableVtProyectoI" >
+
+						<p:dataTable value="#{vtProyectoView.dataI}" var="vtProyecto"
+							paginator="true" rows="10">
+
+
+							<p:column filterBy="#{vtProyecto.proyCodigo}"
+								sortBy="#{vtProyecto.proyCodigo}">
+								<f:facet name="header">
+									<h:outputText value="C&#243;digo proyecto" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.proyCodigo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtProyecto.nombre_VtEmpresa}"
+								sortBy="#{vtProyecto.nombre_VtEmpresa}">
+								<f:facet name="header">
+									<h:outputText value="Nombre Empresa" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.nombre_VtEmpresa}" />
+							</p:column>
+
+							<p:column filterBy="#{vtProyecto.activo}"
+								sortBy="#{vtProyecto.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.activo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtProyecto.publico}"
+								sortBy="#{vtProyecto.publico}">
+								<f:facet name="header">
+									<h:outputText value="P&#250;blico" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.publico}" />
+							</p:column>
+
+							<p:column filterBy="#{vtProyecto.nombre}"
+								sortBy="#{vtProyecto.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre proyecto" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtProyecto.descripcion}"
+								sortBy="#{vtProyecto.descripcion}">
+								<f:facet name="header">
+									<h:outputText value="Descripci&#243;n" />
+								</f:facet>
+								<h:outputText value="#{vtProyecto.descripcion}" />
+							</p:column>
+
+
+
+
+							<p:column headerText="Modificar">
+
+								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									update=":dialogVtProyecto"
+									actionListener="#{vtProyectoView.action_edit}">
+									<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
+								</p:commandButton>
+
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</p:tab>
+				
+				</p:accordionPanel>
 		</h:form>
 
 		<p:dialog id="dialogVtProyecto" appendTo="@(body)" draggable="true"
@@ -161,7 +237,7 @@
 
 						<h:outputText id="msgActivo" value=" Activo" />
 						<p:selectOneMenu id="somActivoCambio"
-							binding="#{vtProyectoView.somActivoCambio}"> 
+							binding="#{vtProyectoView.somActivoCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Activo" />
 							<f:selectItems value="#{vtProyectoView.esActivoItems}" />
 						</p:selectOneMenu>
@@ -171,7 +247,7 @@
 							binding="#{vtProyectoView.somEmpresasCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Empresa" />
 							<f:selectItems value="#{vtProyectoView.lasEmpresasItems}" />
-						</p:selectOneMenu> 
+						</p:selectOneMenu>
 
 						<h:outputText id="msgPublico" value="Privacidad" />
 						<p:selectOneMenu id="somPublicoCambio"
@@ -196,7 +272,7 @@
 					<div align="center">
 						<p:commandButton id="btnSave" binding="#{vtProyectoView.btnSave}"
 							value="Guardar" action="#{vtProyectoView.action_save()}"
-							update=":dialogVtProyecto " />
+							update=":dialogVtProyecto :formDialog1:accordionPanelVtProyecto" />
 
 
 						<p:commandButton id="btnExit" value="Salir"

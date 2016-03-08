@@ -1,16 +1,21 @@
 package com.vobi.team.presentation.backingBeans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +23,9 @@ import com.vobi.team.modelo.VtEmpresa;
 import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 import com.vobi.team.utilities.FacesUtils;
+
+import com.vobi.team.modelo.dto.VtEmpresaDTO;
+import com.vobi.team.modelo.dto.VtUsuarioDTO;
 
 @ManagedBean
 @ViewScoped
@@ -29,11 +37,21 @@ public class VtEmpresaView implements Serializable{
 
 	private InputText txtId;
 	private InputText txtNombre;
+	private InputText txtIDCrear;
+	private InputText txtNombreCrear; 
 
 	private CommandButton btnCrear;
 	private CommandButton btnModificar;
 	private CommandButton btnBorrar;
 	private CommandButton btnLimpiar;
+	private CommandButton btnGuardar;
+	private SelectOneMenu somActivo;
+	private List<SelectItem> esActivoItems;
+	private List<VtEmpresaDTO> data;
+	private List<VtEmpresaDTO> dataI;
+	private VtEmpresaDTO selectedVtEmpresa;
+	private VtEmpresa entity;
+	private boolean showDialog;
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
 	private IBusinessDelegatorView businessDelegatorView;
@@ -98,13 +116,106 @@ public class VtEmpresaView implements Serializable{
 		this.btnLimpiar = btnLimpiar;
 	}
 	
+	public List<VtEmpresaDTO> getDataI() {
+        try {
+            if (dataI == null) {
+            	dataI = businessDelegatorView.getDataVtEmpresaInactiva();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dataI;
+    }
+
+    public void setDataI(List<VtEmpresaDTO> vtEmpresaDTO) {
+        this.dataI = vtEmpresaDTO;
+    }
+    
+    public List<VtEmpresaDTO> getData() {
+        try {
+            if (data == null) {
+                data = businessDelegatorView.getDataVtEmpresa();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+    public void setData(List<VtEmpresaDTO> vtEmpresaDTO) {
+        this.data = vtEmpresaDTO;
+    }
+    
+    public VtEmpresaDTO getSelectedVtEmpresa() {
+        return selectedVtEmpresa;
+    }
+
+    public void setSelectedVtEmpresa(VtEmpresaDTO vtEmpresa) {
+        this.selectedVtEmpresa = vtEmpresa;
+    }	
 	
+	public CommandButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(CommandButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
+	}
+	
+	public boolean isShowDialog() {
+        return showDialog;
+    }
+
+    public void setShowDialog(boolean showDialog) {
+        this.showDialog = showDialog;
+    }
+    
+    public SelectOneMenu getSomActivo() {
+		return somActivo;
+	}
+
+	public InputText getTxtIDCrear() {
+		return txtIDCrear;
+	}
+
+	public void setTxtIDCrear(InputText txtIdCrear) {
+		this.txtIDCrear = txtIdCrear;
+	}
+
+	public InputText getTxtNombreCrear() {
+		return txtNombreCrear;
+	}
+
+	public void setTxtNombreCrear(InputText txtNombreCrear) {
+		this.txtNombreCrear = txtNombreCrear;
+	}
+
+	public void setSomActivo(SelectOneMenu somActivo) {
+		this.somActivo = somActivo;
+	}
+	
+	public List<SelectItem> getEsActivoItems() {
+		if(esActivoItems==null){
+			esActivoItems=new ArrayList<SelectItem>();
+			esActivoItems.add(new SelectItem("Si"));
+			esActivoItems.add(new SelectItem("No"));
+
+		}
+		return esActivoItems;
+	}
+
+	public void setEsActivoItems(List<SelectItem> esActivoItems) {
+		this.esActivoItems = esActivoItems;
+	}
+
 	public String crearEmpresa(){
 		log.info("Creando empresa");
 		
 		VtEmpresa vtEmpresa= new VtEmpresa();
-		vtEmpresa.setNombre(txtNombre.getValue().toString().trim());
-		vtEmpresa.setIdentificacion(txtId.getValue().toString().trim());
+		vtEmpresa.setNombre(txtNombreCrear.getValue().toString().trim());
+		vtEmpresa.setIdentificacion(txtIDCrear.getValue().toString().trim());
 		vtEmpresa.setActivo("S");
 		Date fechaCreacion = new Date();
 		vtEmpresa.setFechaCreacion(fechaCreacion);
@@ -113,8 +224,9 @@ public class VtEmpresaView implements Serializable{
 		
 		try {
 			businessDelegatorView.saveVtEmpresa(vtEmpresa);
-			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se creó con exito"));
 			limpiar();
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se creó con exito"));
+			data = businessDelegatorView.getDataVtEmpresa();
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
@@ -143,8 +255,8 @@ public class VtEmpresaView implements Serializable{
 	
 	public String limpiar(){
 		log.info("Limpiando campos de texto");
-		txtNombre.resetValue();
-		txtId.resetValue();
+		txtNombreCrear.resetValue();
+		txtIDCrear.resetValue();
 
 		btnCrear.setDisabled(true);
 		btnModificar.setDisabled(true);
@@ -157,25 +269,93 @@ public class VtEmpresaView implements Serializable{
 		
 		VtEmpresa vtEmpresa= null;
 		
-		String codigo= txtId.getValue().toString().trim();
+		String codigo= txtIDCrear.getValue().toString().trim();
 		vtEmpresa=businessDelegatorView.consultarEmpresaPorId(codigo);
 
 		
 		if(vtEmpresa==null){
-			txtNombre.resetValue();
+			txtNombreCrear.resetValue();
 			
 			btnCrear.setDisabled(false);
 			btnModificar.setDisabled(true);
 		}else{
 			
-			txtNombre.setValue(vtEmpresa.getNombre());
+			txtNombreCrear.setValue(vtEmpresa.getNombre());
 			
 			btnCrear.setDisabled(true);
 			btnModificar.setDisabled(false);
 		}
-		
-		
 	}
+	
+	public String action_edit(ActionEvent evt) {
+        selectedVtEmpresa = (VtEmpresaDTO) (evt.getComponent().getAttributes()
+                                               .get("selectedVtEmpresa"));
+       
+        txtNombre.setValue(selectedVtEmpresa.getNombre());
+        txtNombre.setDisabled(false);
+        btnGuardar.setDisabled(false);
+        setShowDialog(true);
+
+        return "";
+    }
+	
+	public String action_save() {
+        try {
+            if ((selectedVtEmpresa == null) && (entity == null)) {
+            	
+            } else {
+                action_modify();
+            }
+
+            data = null;
+        } catch (Exception e) {
+            FacesUtils.addErrorMessage(e.getMessage());
+        }
+
+        return "";
+    }
+	
+	 public String action_modify() {
+	        try {
+	            if (entity == null) {
+	                Long emprCodigo = new Long(selectedVtEmpresa.getEmprCodigo());
+	                entity = businessDelegatorView.getVtEmpresa(emprCodigo);
+	            }
+
+	            String activo = somActivo.getValue().toString().trim();
+				if (activo.equalsIgnoreCase("Si")) {
+					entity.setActivo("S");
+				} else {
+					if(activo.equals("-1")){
+						entity.setActivo(entity.getActivo());
+					}
+					else{
+						entity.setActivo("N");
+					}
+
+				}
+				Date fechaModificacion= new Date();
+				entity.setFechaModificacion(fechaModificacion);
+				
+				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+				entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+
+	            businessDelegatorView.updateVtEmpresa(entity);
+				FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modificó con exito"));
+				data = businessDelegatorView.getDataVtEmpresa();
+				dataI = businessDelegatorView.getDataVtEmpresaInactiva();
+	        } catch (Exception e) {
+	            data = null;
+	            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
+	        }
+
+	        return "";
+	    }
+	 
+	 public String action_closeDialog() {
+	        setShowDialog(false);
+	        return "";
+	    }
 
 	
 }

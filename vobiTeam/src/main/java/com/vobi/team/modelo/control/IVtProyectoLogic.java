@@ -53,4 +53,6 @@ public interface IVtProyectoLogic {
     public Long findTotalNumberVtProyecto() throws Exception;
 
     public List<VtProyectoDTO> getDataVtProyecto() throws Exception;
+    
+    public List<VtProyectoDTO> getDataVtProyectoInactivo() throws Exception;
 }

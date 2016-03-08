@@ -182,7 +182,9 @@ public class VtProyectoView implements Serializable{
 				List<VtEmpresa> listaEmpresas=businessDelegatorView.getVtEmpresa();
 				lasEmpresasItems=new ArrayList<SelectItem>();
 				for (VtEmpresa vtEmpresa: listaEmpresas) {
+					if(vtEmpresa.getActivo().equalsIgnoreCase("S")){
 					lasEmpresasItems.add(new SelectItem(vtEmpresa.getEmprCodigo(), vtEmpresa.getNombre()));
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -299,8 +301,10 @@ public class VtProyectoView implements Serializable{
 
 		try {
 			businessDelegatorView.saveVtProyecto(vtProyecto);
-			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El proyecto se creo con exito"));
 			limpiar();
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El proyecto se creo con exito"));
+			data = businessDelegatorView.getDataVtProyecto();
+			dataI = businessDelegatorView.getDataVtProyectoInactivo();
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
@@ -329,6 +333,8 @@ public class VtProyectoView implements Serializable{
 	
 	private List<VtProyectoDTO> data;
 	
+	private List<VtProyectoDTO> dataI;
+	
 	private VtProyectoDTO selectedVtProyecto;
 	
 	private boolean showDialog;
@@ -345,6 +351,22 @@ public class VtProyectoView implements Serializable{
         }
 
         return data;
+    }
+
+    public void setDataI(List<VtProyectoDTO> vtProyectoDTO) {
+        this.dataI = vtProyectoDTO;
+    }
+    
+    public List<VtProyectoDTO> getDataI() {
+        try {
+            if (dataI == null) {
+                dataI = businessDelegatorView.getDataVtProyectoInactivo();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dataI;
     }
 
     public void setData(List<VtProyectoDTO> vtProyectoDTO) {
@@ -482,9 +504,15 @@ public class VtProyectoView implements Serializable{
 
             entity.setDescripcion(FacesUtils.checkString(txtDescripcion));
             entity.setNombre(FacesUtils.checkString(txtNombre));
+            Date fechaModificacion = new Date();
+            entity.setFechaModificacion(fechaModificacion);
+            VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
             
             businessDelegatorView.updateVtProyecto(entity);
             FacesUtils.addInfoMessage("El proyecto ha sido modificado con exito");
+            data = businessDelegatorView.getDataVtProyecto();
+            dataI = businessDelegatorView.getDataVtProyectoInactivo();
         } catch (Exception e) {
             data = null;
             FacesUtils.addErrorMessage(e.getMessage());
