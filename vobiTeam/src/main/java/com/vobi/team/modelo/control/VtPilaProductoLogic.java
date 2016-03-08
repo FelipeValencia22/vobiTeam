@@ -312,7 +312,7 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 	}
 
 	@Transactional(readOnly = true)
-	public List<VtPilaProductoDTO> getDataVtPilaProductoNombreEmpresa(String nombre) throws Exception {
+	public List<VtPilaProductoDTO> getDataVtPilaProductoNombreProyecto(String nombre) throws Exception {
 		try {
 			List<VtPilaProducto> vtPilaProducto = vtPilaProductoDAO.findAll();
 
@@ -321,7 +321,7 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 			for (VtPilaProducto vtPilaProductoTmp : vtPilaProducto) {
 				VtPilaProductoDTO vtPilaProductoDTO2 = new VtPilaProductoDTO();
 
-				if(vtPilaProductoTmp.getVtProyecto().getVtEmpresa().getNombre().equalsIgnoreCase(nombre)){
+				if(vtPilaProductoTmp.getVtProyecto().getNombre().equals(nombre)){ 
 
 					vtPilaProductoDTO2.setPilaCodigo(vtPilaProductoTmp.getPilaCodigo());
 					vtPilaProductoDTO2

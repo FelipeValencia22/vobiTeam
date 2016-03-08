@@ -37,18 +37,19 @@
 						<f:selectItem itemValue="-1" itemLabel="Pila producto" />
 						<f:selectItems value="#{vtSprintView.esPilaProductoItems}" />
 					</p:selectOneMenu>
-					
-					<p:selectOneMenu id="somActivo"
-						binding="#{vtSprintView.somActivo}"> 
+
+					<p:selectOneMenu id="somActivo" binding="#{vtSprintView.somActivo}">
 						<f:selectItem itemValue="-1" itemLabel="Activo" />
 						<f:selectItems value="#{vtSprintView.esActivoItems}" />
 					</p:selectOneMenu>
 
-					
-					<p:inputText id="txtNombre" placeholder="Nombre" binding="#{vtSprintView.txtNombre}" />
 
-					
-					<p:inputText id="txtObjetivo" placeholder="Objetivo" binding="#{vtSprintView.txtObjetivo}" />
+					<p:inputText id="txtNombre" placeholder="Nombre"
+						binding="#{vtSprintView.txtNombre}" />
+
+
+					<p:inputText id="txtObjetivo" placeholder="Objetivo"
+						binding="#{vtSprintView.txtObjetivo}" />
 
 					<h:outputText id="msgFechaInicio" value=" Fecha inicio" />
 					<p:calendar showOn="button" navigator="true" locale="en"
@@ -65,19 +66,16 @@
 					</p:calendar>
 
 				</h:panelGrid>
-			</p:panel>
-			<p:panel id="panelBotones">
-				<div align="center">
 
-					<p:commandButton id="btnCrearS" binding="#{vtSprintView.btnCrearS}"
-						value="Save" action="#{vtSprintView.crearSprint()}" 
-						update="panelVtSprint,msg,panelBotones" />
+				<br></br>
+				<p:commandButton id="btnCrearS" binding="#{vtSprintView.btnCrearS}"
+					icon="ui-icon-plus" title="Crear"
+					action="#{vtSprintView.crearSprint()}" update="panelVtSprint,msg" />
 
-					<p:commandButton id="btnLimpiarS"
-						binding="#{vtSprintView.btnLimpiarS}" value="Clear"
-						action="#{vtSprintView.action_clear()}"
-						update="panelVtSprint,msg,panelBotones" />
-				</div>
+				<p:commandButton id="btnLimpiarS"
+					binding="#{vtSprintView.btnLimpiarS}" icon="ui-icon-refresh"
+					title="Limpiar" action="#{vtSprintView.action_clear()}"
+					update="panelVtSprint,msg" />
 			</p:panel>
 		</h:form>
 

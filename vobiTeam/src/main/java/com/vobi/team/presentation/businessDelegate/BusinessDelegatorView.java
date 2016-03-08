@@ -535,9 +535,9 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
         return vtPilaProductoLogic.getDataVtPilaProducto();
     }
     
-    public List<VtPilaProductoDTO> getDataVtPilaProductoNombreEmpresa(String nombre) 
+    public List<VtPilaProductoDTO> getDataVtPilaProductoNombreProyecto(String nombre) 
             throws Exception {
-            return vtPilaProductoLogic.getDataVtPilaProductoNombreEmpresa(nombre);
+            return vtPilaProductoLogic.getDataVtPilaProductoNombreProyecto(nombre);
         }
     
 	public List<VtPilaProductoDTO> getDataVtPilaProducto(String empresa) throws Exception {

@@ -15,7 +15,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.panel.Panel;
@@ -44,14 +43,16 @@ public class VtPilaProductoView implements Serializable {
 
 	private SelectOneMenu somEmpresas;
 	private SelectOneMenu somActivo;
+	private SelectOneMenu somActivoCambio;
 	private SelectOneMenu somProyectos;
+	private SelectOneMenu somProyectoCambio;
 
 	private CommandButton btnCrear;
 	private CommandButton btnModificar;
 	private CommandButton btnLimpiar;
 	private CommandButton btnFiltrar;
 	private CommandButton btnGuardar;
-	
+
 	private Panel panelDataTableVtPilaProducto; 
 
 	String stringActivo;
@@ -66,6 +67,7 @@ public class VtPilaProductoView implements Serializable {
 
 	private List<VtPilaProductoDTO> data;
 	private List<VtPilaProductoDTO> dataFiltro;
+	private VtPilaProducto entity;
 	private VtPilaProductoDTO selectedVtPilaProducto;
 	private boolean showDialog;
 
@@ -179,6 +181,14 @@ public class VtPilaProductoView implements Serializable {
 	public void setStringActivo(String stringActivo) {
 		this.stringActivo = stringActivo;
 	}
+	
+	public SelectOneMenu getSomProyectoCambio() {
+		return somProyectoCambio;
+	}
+
+	public void setSomProyectoCambio(SelectOneMenu somProyectoCambio) {
+		this.somProyectoCambio = somProyectoCambio;
+	}
 
 	public Panel getPanelDataTableVtPilaProducto() {
 		return panelDataTableVtPilaProducto;
@@ -261,6 +271,14 @@ public class VtPilaProductoView implements Serializable {
 
 	public void setDataFiltro(List<VtPilaProductoDTO> dataFiltro) {
 		this.dataFiltro = dataFiltro;
+	}
+	
+	public SelectOneMenu getSomActivoCambio() {
+		return somActivoCambio;
+	}
+
+	public void setSomActivoCambio(SelectOneMenu somActivoCambio) {
+		this.somActivoCambio = somActivoCambio;
 	}
 
 	//TODO: Obtener DTO para el Filtro
@@ -348,16 +366,25 @@ public class VtPilaProductoView implements Serializable {
 
 		return "";
 	}
-	
+
 	public void localeChanged(ValueChangeEvent e){
 		setProyectoSeleccionado(e.getNewValue().toString());
 		try {
-			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreEmpresa(getProyectoSeleccionado());
+			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreProyecto(getProyectoSeleccionado());
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 	}
-	
+
+	public String filtrar(){
+		try {
+			dataFiltro=businessDelegatorView.getDataVtPilaProducto();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
 	public String getProyectoSeleccionado() {
 		return proyectoSeleccionado;
 	}
@@ -365,5 +392,70 @@ public class VtPilaProductoView implements Serializable {
 	public void setProyectoSeleccionado(String proyectoSeleccionado) {
 		this.proyectoSeleccionado = proyectoSeleccionado;
 	}
+
+	public String action_save() {
+		try {
+			if ((selectedVtPilaProducto == null) && (entity == null)) {
+
+			} else {
+				action_modify();
+			}
+
+			data = null;
+		} catch (Exception e) {
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
+
+	public String action_modify() {
+		try {
+			if (entity == null) {
+				Long pilaCodigo = new Long(selectedVtPilaProducto.getPilaCodigo());
+				entity = businessDelegatorView.getVtPilaProducto(pilaCodigo);
+			} 
+			
+			String activo = somActivo.getValue().toString().trim();
+			if (activo.equalsIgnoreCase("Si")) {
+				entity.setActivo("S");
+			} else {
+				if(activo.equals("-1")){
+					entity.setActivo(entity.getActivo());
+				}
+				else{
+					entity.setActivo("N");
+				}
+
+			}
+			Date fechaModificacion = new Date();
+			entity.setFechaModificacion(fechaModificacion);
+			
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+
+			entity.setDescripcion(FacesUtils.checkString(txtDescripcion));
+			
+			entity.setNombre(FacesUtils.checkString(txtNombre));
+			
+			String proyectos = somProyectos.getValue().toString().trim();
+			Long proyecto = Long.parseLong(proyectos);
+			VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(proyecto);
+			entity.setVtProyecto(vtProyecto);
+			
+			businessDelegatorView.updateVtPilaProducto(entity);
+		} catch (Exception e) {
+			data = null;
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
+	
+	public String action_closeDialog() {
+        setShowDialog(false);
+
+        return "";
+    }
 
 }

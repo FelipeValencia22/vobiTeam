@@ -489,6 +489,6 @@ public interface IBusinessDelegatorView {
     
     public VtUsuario findUsuarioByLogin(String login);
     
-    public List<VtPilaProductoDTO> getDataVtPilaProductoNombreEmpresa(String nombre) 
+    public List<VtPilaProductoDTO> getDataVtPilaProductoNombreProyecto(String nombre) 
     		throws Exception;
 }
