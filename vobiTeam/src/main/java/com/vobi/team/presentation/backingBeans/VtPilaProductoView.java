@@ -11,11 +11,14 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.component.panel.Panel;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +40,7 @@ public class VtPilaProductoView implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(VtEmpresaView.class);
 
-
+	String proyectoSeleccionado;
 
 	private SelectOneMenu somEmpresas;
 	private SelectOneMenu somActivo;
@@ -48,6 +51,8 @@ public class VtPilaProductoView implements Serializable {
 	private CommandButton btnLimpiar;
 	private CommandButton btnFiltrar;
 	private CommandButton btnGuardar;
+	
+	private Panel panelDataTableVtPilaProducto; 
 
 	String stringActivo;
 
@@ -112,7 +117,9 @@ public class VtPilaProductoView implements Serializable {
 				losProyectosItems = new ArrayList<SelectItem>();
 
 				for (VtProyecto vtProyecto : listaProyectos) {
-					losProyectosItems.add(new SelectItem(vtProyecto.getProyCodigo(), vtProyecto.getNombre()));
+					if(vtProyecto.getActivo().equalsIgnoreCase("S")){
+						losProyectosItems.add(new SelectItem(vtProyecto.getProyCodigo(), vtProyecto.getNombre()));
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -173,7 +180,13 @@ public class VtPilaProductoView implements Serializable {
 		this.stringActivo = stringActivo;
 	}
 
+	public Panel getPanelDataTableVtPilaProducto() {
+		return panelDataTableVtPilaProducto;
+	}
 
+	public void setPanelDataTableVtPilaProducto(Panel panelDataTableVtPilaProducto) {
+		this.panelDataTableVtPilaProducto = panelDataTableVtPilaProducto;
+	}
 
 	public List<SelectItem> getLasEmpresasItems() {
 		try {
@@ -294,8 +307,8 @@ public class VtPilaProductoView implements Serializable {
 
 		try {
 			businessDelegatorView.saveVtPilaProducto(vtPilaProducto);
-			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La pila de producto se creo con exito"));
 			limpiar();
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La pila de producto se creo con exito"));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
@@ -315,7 +328,7 @@ public class VtPilaProductoView implements Serializable {
 	}
 
 	public String filtrarTabla(){
-				return "";
+		return "";
 
 	}
 
@@ -334,6 +347,23 @@ public class VtPilaProductoView implements Serializable {
 		setShowDialog(true);
 
 		return "";
+	}
+	
+	public void localeChanged(ValueChangeEvent e){
+		setProyectoSeleccionado(e.getNewValue().toString());
+		try {
+			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreEmpresa(getProyectoSeleccionado());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public String getProyectoSeleccionado() {
+		return proyectoSeleccionado;
+	}
+
+	public void setProyectoSeleccionado(String proyectoSeleccionado) {
+		this.proyectoSeleccionado = proyectoSeleccionado;
 	}
 
 }

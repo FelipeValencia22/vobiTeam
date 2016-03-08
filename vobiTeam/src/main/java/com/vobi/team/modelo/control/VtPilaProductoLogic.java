@@ -119,8 +119,8 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 				throw new ZMessManager().new EmptyFieldException("proyCodigo_VtProyecto");
 			}
 
-		
-			
+
+
 			VtPilaProducto vtPilaProducto =  new VtPilaProducto();
 			vtPilaProducto.setDescripcion(entity.getDescripcion());
 			vtPilaProducto.setFechaCreacion(entity.getFechaCreacion());
@@ -130,7 +130,7 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 			vtPilaProducto.setNombre(entity.getNombre());
 			vtPilaProducto.setActivo(entity.getActivo());
 			vtPilaProducto.setVtProyecto(entity.getVtProyecto());
-			
+
 
 			vtPilaProductoDAO.save(vtPilaProducto);
 
@@ -250,13 +250,13 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 
 				vtPilaProductoDTO2.setPilaCodigo(vtPilaProductoTmp.getPilaCodigo());
 				vtPilaProductoDTO2
-						.setActivo((vtPilaProductoTmp.getActivo() != null) ? vtPilaProductoTmp.getActivo() : null);
+				.setActivo((vtPilaProductoTmp.getActivo() != null) ? vtPilaProductoTmp.getActivo() : null);
 				vtPilaProductoDTO2.setDescripcion(
 						(vtPilaProductoTmp.getDescripcion() != null) ? vtPilaProductoTmp.getDescripcion() : null);
 				vtPilaProductoDTO2.setFechaCreacion(vtPilaProductoTmp.getFechaCreacion());
 				vtPilaProductoDTO2.setFechaModificacion(vtPilaProductoTmp.getFechaModificacion());
 				vtPilaProductoDTO2
-						.setNombre((vtPilaProductoTmp.getNombre() != null) ? vtPilaProductoTmp.getNombre() : null);
+				.setNombre((vtPilaProductoTmp.getNombre() != null) ? vtPilaProductoTmp.getNombre() : null);
 				vtPilaProductoDTO2.setUsuCreador(
 						(vtPilaProductoTmp.getUsuCreador() != null) ? vtPilaProductoTmp.getUsuCreador() : null);
 				vtPilaProductoDTO2.setUsuModificador(
@@ -271,10 +271,10 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 			throw e;
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<VtPilaProductoDTO> getDataVtPilaProductoEmpresa(String empresa) throws Exception {
-		
+
 		List<VtPilaProducto> vtPilaProducto = vtPilaProductoDAO.findAll();
 
 		List<VtPilaProductoDTO> vtPilaProductoDTOEmpresa = new ArrayList<VtPilaProductoDTO>();
@@ -288,13 +288,13 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 				VtPilaProductoDTO vtPilaProductoDTO2 = new VtPilaProductoDTO();
 				vtPilaProductoDTO2.setPilaCodigo(vtPilaProductoTmp.getPilaCodigo());
 				vtPilaProductoDTO2
-						.setActivo((vtPilaProductoTmp.getActivo() != null) ? vtPilaProductoTmp.getActivo() : null);
+				.setActivo((vtPilaProductoTmp.getActivo() != null) ? vtPilaProductoTmp.getActivo() : null);
 				vtPilaProductoDTO2.setDescripcion(
 						(vtPilaProductoTmp.getDescripcion() != null) ? vtPilaProductoTmp.getDescripcion() : null);
 				vtPilaProductoDTO2.setFechaCreacion(vtPilaProductoTmp.getFechaCreacion());
 				vtPilaProductoDTO2.setFechaModificacion(vtPilaProductoTmp.getFechaModificacion());
 				vtPilaProductoDTO2
-						.setNombre((vtPilaProductoTmp.getNombre() != null) ? vtPilaProductoTmp.getNombre() : null);
+				.setNombre((vtPilaProductoTmp.getNombre() != null) ? vtPilaProductoTmp.getNombre() : null);
 				vtPilaProductoDTO2.setUsuCreador(
 						(vtPilaProductoTmp.getUsuCreador() != null) ? vtPilaProductoTmp.getUsuCreador() : null);
 				vtPilaProductoDTO2.setUsuModificador(
@@ -303,16 +303,51 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 						? vtPilaProductoTmp.getVtProyecto().getProyCodigo() : null);
 				vtPilaProductoDTOEmpresa.add(vtPilaProductoDTO2);
 			}
-			
+
 		}
-		
+
 		log.info("Iteración terminada");
 
 		return vtPilaProductoDTOEmpresa;
 	}
-	
-	
-	
+
+	@Transactional(readOnly = true)
+	public List<VtPilaProductoDTO> getDataVtPilaProductoNombreEmpresa(String nombre) throws Exception {
+		try {
+			List<VtPilaProducto> vtPilaProducto = vtPilaProductoDAO.findAll();
+
+			List<VtPilaProductoDTO> vtPilaProductoDTO = new ArrayList<VtPilaProductoDTO>();
+
+			for (VtPilaProducto vtPilaProductoTmp : vtPilaProducto) {
+				VtPilaProductoDTO vtPilaProductoDTO2 = new VtPilaProductoDTO();
+
+				if(vtPilaProductoTmp.getVtProyecto().getVtEmpresa().getNombre().equalsIgnoreCase(nombre)){
+
+					vtPilaProductoDTO2.setPilaCodigo(vtPilaProductoTmp.getPilaCodigo());
+					vtPilaProductoDTO2
+					.setActivo((vtPilaProductoTmp.getActivo() != null) ? vtPilaProductoTmp.getActivo() : null);
+					vtPilaProductoDTO2.setDescripcion(
+							(vtPilaProductoTmp.getDescripcion() != null) ? vtPilaProductoTmp.getDescripcion() : null);
+					vtPilaProductoDTO2.setFechaCreacion(vtPilaProductoTmp.getFechaCreacion());
+					vtPilaProductoDTO2.setFechaModificacion(vtPilaProductoTmp.getFechaModificacion());
+					vtPilaProductoDTO2
+					.setNombre((vtPilaProductoTmp.getNombre() != null) ? vtPilaProductoTmp.getNombre() : null);
+					vtPilaProductoDTO2.setUsuCreador(
+							(vtPilaProductoTmp.getUsuCreador() != null) ? vtPilaProductoTmp.getUsuCreador() : null);
+					vtPilaProductoDTO2.setUsuModificador(
+							(vtPilaProductoTmp.getUsuModificador() != null) ? vtPilaProductoTmp.getUsuModificador() : null);
+					vtPilaProductoDTO2.setProyCodigo_VtProyecto((vtPilaProductoTmp.getVtProyecto().getProyCodigo() != null)
+							? vtPilaProductoTmp.getVtProyecto().getProyCodigo() : null);
+					vtPilaProductoDTO.add(vtPilaProductoDTO2);
+				}
+			}
+
+			return vtPilaProductoDTO;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
 
 
 	@Transactional(readOnly = true)
@@ -441,11 +476,11 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 					if (booVariable.booleanValue()) {
 						tempWhere = (tempWhere.length() == 0)
 								? ("(model." + variable + " " + comparator + " \'" + value + "\' )")
-								: (tempWhere + " AND (model." + variable + " " + comparator + " \'" + value + "\' )");
+										: (tempWhere + " AND (model." + variable + " " + comparator + " \'" + value + "\' )");
 					} else {
 						tempWhere = (tempWhere.length() == 0)
 								? ("(model." + variable + " " + comparator + " " + value + " )")
-								: (tempWhere + " AND (model." + variable + " " + comparator + " " + value + " )");
+										: (tempWhere + " AND (model." + variable + " " + comparator + " " + value + " )");
 					}
 				}
 
@@ -466,8 +501,8 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 					tempWhere = (tempWhere.length() == 0)
 							? ("(" + value + " " + comparator1 + " " + variable + " and " + variable + " " + comparator2
 									+ " " + value2 + " )")
-							: (tempWhere + " AND (" + value + " " + comparator1 + " " + variable + " and " + variable
-									+ " " + comparator2 + " " + value2 + " )");
+									: (tempWhere + " AND (" + value + " " + comparator1 + " " + variable + " and " + variable
+											+ " " + comparator2 + " " + value2 + " )");
 				}
 
 				j = j + 4;
@@ -496,8 +531,8 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 
 					tempWhere = (tempWhere.length() == 0)
 							? ("(model." + variable + " between \'" + value + "\' and \'" + value2 + "\')")
-							: (tempWhere + " AND (model." + variable + " between \'" + value + "\' and \'" + value2
-									+ "\')");
+									: (tempWhere + " AND (model." + variable + " between \'" + value + "\' and \'" + value2
+											+ "\')");
 				}
 
 				k = k + 2;
@@ -520,7 +555,7 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 		return list;
 	}
 
-	
 
-	
+
+
 }
