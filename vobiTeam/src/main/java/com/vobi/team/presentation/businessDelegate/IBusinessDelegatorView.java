@@ -491,4 +491,8 @@ public interface IBusinessDelegatorView {
     
     public List<VtPilaProductoDTO> getDataVtPilaProductoNombreProyecto(String nombre) 
     		throws Exception;
+    
+    public List<VtPilaProductoDTO> getDataVtPilaProductoNombreProyectoI(String nombre) throws Exception;
+    public List<VtSprintDTO> getDataVtSprintFiltro(Long codigoFiltro) throws Exception;
+    public List<VtSprintDTO> getDataVtSprintFiltroI(Long codigoFiltro) throws Exception;
 }

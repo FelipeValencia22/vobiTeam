@@ -7,7 +7,6 @@ import com.vobi.team.presentation.businessDelegate.*;
 import com.vobi.team.utilities.*;
 
 import com.vobi.team.exceptions.ZMessManager;
-import com.vobi.team.modelo.VtSprint;
 
 import org.primefaces.component.calendar.*;
 import org.primefaces.component.commandbutton.CommandButton;
@@ -71,7 +70,10 @@ public class VtSprintView implements Serializable {
 	private CommandButton btnLimpiarS;
 	private CommandButton btnGuardar;
 	private CommandButton btnLimpiar;
+	private CommandButton btnFiltrar;
 	private List<VtSprintDTO> data;
+	private List<VtSprintDTO> dataFiltro;
+	private List<VtSprintDTO> dataFiltroI;
 	private VtSprintDTO selectedVtSprint;
 	private VtSprint entity;
 	private boolean showDialog;
@@ -118,7 +120,9 @@ public class VtSprintView implements Serializable {
 				List<VtPilaProducto> listaPilasProducto=businessDelegatorView.getVtPilaProducto();
 				esPilaProductoItems=new ArrayList<SelectItem>();
 				for (VtPilaProducto vtPilaProducto:listaPilasProducto) {
-					esPilaProductoItems.add(new SelectItem(vtPilaProducto.getPilaCodigo(),vtPilaProducto.getNombre()));
+					if(vtPilaProducto.getActivo().equalsIgnoreCase("S")){
+						esPilaProductoItems.add(new SelectItem(vtPilaProducto.getPilaCodigo(),vtPilaProducto.getNombre()));
+					}
 				}
 			}
 
@@ -130,6 +134,14 @@ public class VtSprintView implements Serializable {
 
 	public void setEsPilaProductoItems(List<SelectItem> esPilaProductoItems) {
 		this.esPilaProductoItems = esPilaProductoItems;
+	}
+
+	public CommandButton getBtnFiltrar() {
+		return btnFiltrar;
+	}
+
+	public void setBtnFiltrar(CommandButton btnFiltrar) {
+		this.btnFiltrar = btnFiltrar;
 	}
 
 	public InputText getTxtNombre() {
@@ -220,6 +232,22 @@ public class VtSprintView implements Serializable {
 		this.data = vtSprintDTO;
 	}
 
+	public List<VtSprintDTO> getDataFiltro() {
+		return dataFiltro;
+	}
+
+	public void setDataFiltro(List<VtSprintDTO> dataFiltro) {
+		this.dataFiltro = dataFiltro;
+	}
+
+	public List<VtSprintDTO> getDataFiltroI() {
+		return dataFiltroI;
+	}
+
+	public void setDataFiltroI(List<VtSprintDTO> dataFiltroI) {
+		this.dataFiltroI = dataFiltroI;
+	}
+
 	public VtSprintDTO getSelectedVtSprint() {
 		return selectedVtSprint;
 	}
@@ -259,7 +287,7 @@ public class VtSprintView implements Serializable {
 	public void setShowDialog(boolean showDialog) {
 		this.showDialog = showDialog;
 	}
-	
+
 	public CommandButton getBtnCrear() {
 		return btnCrear;
 	}
@@ -267,7 +295,7 @@ public class VtSprintView implements Serializable {
 	public void setBtnCrear(CommandButton btnCrear) {
 		this.btnCrear = btnCrear;
 	}
-	
+
 	public CommandButton getBtnGuardar() {
 		return btnGuardar;
 	}
@@ -309,7 +337,7 @@ public class VtSprintView implements Serializable {
 	}
 
 	public List<SelectItem> getLosProyectosItems() {
-		
+
 		try{
 			if(losProyectosItems==null){
 				List<VtProyecto> listaProyectos=businessDelegatorView.getVtProyecto();
@@ -322,7 +350,7 @@ public class VtSprintView implements Serializable {
 		}catch(Exception e) {
 			log.error(e.getMessage());
 		}
-		
+
 		return losProyectosItems;
 	}
 
@@ -354,12 +382,12 @@ public class VtSprintView implements Serializable {
 			vtSprint.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
 			vtSprint.setNombre(txtNombre.getValue().toString().trim());
 			vtSprint.setObjetivo(txtObjetivo.getValue().toString().trim());
-			
+
 
 
 			businessDelegatorView.saveVtSprint(vtSprint);
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint se creó con exito"));
-
+			action_clear();
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
@@ -402,31 +430,31 @@ public class VtSprintView implements Serializable {
 		log.info("Limpiado correctamente");
 		return "";
 	}
-	
+
 	public String action_save() {
-        try {
-            if ((selectedVtSprint == null) && (entity == null)) {
-                
-            } else {
-                action_modify();
-            }
+		try {
+			if ((selectedVtSprint == null) && (entity == null)) {
 
-            data = null;
-        } catch (Exception e) {
-            FacesUtils.addErrorMessage(e.getMessage());
-        }
+			} else {
+				action_modify();
+			}
 
-        return "";
-    }
-	
+			data = null;
+		} catch (Exception e) {
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
+
 	public String action_modify() {
-        try {
-            if (entity == null) {
-                Long spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
-                entity = businessDelegatorView.getVtSprint(spriCodigo);
-            }
+		try {
+			if (entity == null) {
+				Long spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
+				entity = businessDelegatorView.getVtSprint(spriCodigo);
+			}
 
-            String activo = somActivoCambio.getValue().toString().trim();
+			String activo = somActivoCambio.getValue().toString().trim();
 			if (activo.equalsIgnoreCase("Si")) {
 				entity.setActivo("S");
 			} else {
@@ -438,27 +466,51 @@ public class VtSprintView implements Serializable {
 				}
 			}
 			
-			String pilaproducto= somPilaProductoCambio.getValue().toString().trim();
+			//TODO: Corregir
 			
-			
-            entity.setFechaFin(FacesUtils.checkDate(txtFechaFin));
-            entity.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
-            entity.setNombre(FacesUtils.checkString(txtNombre));
-            entity.setObjetivo(FacesUtils.checkString(txtObjetivo));
-            businessDelegatorView.updateVtSprint(entity);
-            FacesUtils.addInfoMessage("El Sprint ha sido modificado con exito");
-        } catch (Exception e) {
-            data = null;
-            FacesUtils.addErrorMessage(e.getMessage());
-        }
 
-        return "";
-    }
-	
+			entity.setFechaFin(FacesUtils.checkDate(txtFechaFin));
+			entity.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
+			entity.setNombre(FacesUtils.checkString(txtNombre));
+			entity.setObjetivo(FacesUtils.checkString(txtObjetivo));
+			Date fechaModificacion = new Date();
+			entity.setFechaModificacion(fechaModificacion);
+			
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			
+			businessDelegatorView.updateVtSprint(entity);
+			String sprint=somPilaProducto.getValue().toString().trim();
+			Long sprintCodigo=Long.valueOf(sprint);
+			VtSprint vtSprint=businessDelegatorView.getVtSprint(sprintCodigo);
+			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(vtSprint.getSpriCodigo());
+			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(vtSprint.getSpriCodigo());
+			FacesUtils.addInfoMessage("El Sprint ha sido modificado con exito");
+		} catch (Exception e) {
+			data = null;
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
+
 	public String action_closeDialog() {
 		setShowDialog(false);
 		action_clear();
 
+		return "";
+	}
+	
+	public String filtrar(){
+		try {
+			String pila=somPilaProducto.getValue().toString().trim();
+			Long pilaCodigo=Long.valueOf(pila);
+			VtPilaProducto vtPilaProducto=businessDelegatorView.getVtPilaProducto(pilaCodigo);
+			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(vtPilaProducto.getPilaCodigo());
+			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(vtPilaProducto.getPilaCodigo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "";
 	}
 

@@ -1052,5 +1052,20 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 		return vtUsuarioLogic.findUsuarioByLogin(login);
 	}
 
+	@Override
+	public List<VtPilaProductoDTO> getDataVtPilaProductoNombreProyectoI(String nombre) throws Exception {
+		return vtPilaProductoLogic.getDataVtPilaProductoNombreProyectoI(nombre);
+	}
+
+	@Override
+	public List<VtSprintDTO> getDataVtSprintFiltro(Long codigoFiltro) throws Exception {
+		return vtSprintLogic.getDataVtSprintFiltro(codigoFiltro);
+	}
+
+	@Override
+	public List<VtSprintDTO> getDataVtSprintFiltroI(Long codigoFiltro) throws Exception {
+		return vtSprintLogic.getDataVtSprintFiltroI(codigoFiltro);
+	}
+
 	
 }

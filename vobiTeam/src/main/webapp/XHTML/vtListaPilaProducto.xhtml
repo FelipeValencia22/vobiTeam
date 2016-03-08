@@ -27,78 +27,136 @@
 
 			<p:growl id="growl" />
 			<p:panel id="pnlPilaProducto">
-				<h2>Crear ProductBacklog</h2>
+				<h2>Listar pilas de producto</h2>
 				<h:panelGrid columns="1">
 
+					<h3>Proyecto</h3>
 					<p:selectOneMenu id="somProyectos"
-						binding="#{vtPilaProductoView.somProyectos}" onchange="submit()"
-						valueChangeListener="#{vtPilaProductoView.localeChanged}">
+						binding="#{vtPilaProductoView.somProyectos}">
 						<f:selectItem itemValue="-1" itemLabel="Proyecto" />
-						<f:selectItems value="#{vtPilaProductoView.losProyectosItems}" />
+						<f:selectItems
+							value="#{vtPilaProductoView.losProyectosItemsLista}" />
 					</p:selectOneMenu>
 					<br></br>
 
 					<p:commandButton id="btnFiltrar" value="Filtrar"
 						binding="#{vtPilaProductoView.btnFiltrar}"
 						action="#{vtPilaProductoView.filtrar}"
-						update="@([id$=dataTableLista]" />
+						update="@([id$=dataTableListaA],@([id$=dataTableListaI]" />
 				</h:panelGrid>
 			</p:panel>
 
-			<p:panel id="panelDataTableVtPilaProducto"
-				header="VtPilaProductoData">
+			<p:accordionPanel id="pnVtPilaProducto" multiple="true">
 				<p:growl id="men" />
-				<p:dataTable id="dataTableLista"
-					value="#{vtPilaProductoView.dataFiltro}" var="vtPilaProducto"
-					paginator="true" rows="5">
 
-					<p:column filterBy="#{vtPilaProducto.pilaCodigo}"
-						sortBy="#{vtPilaProducto.pilaCodigo}">
-						<f:facet name="header">
-							<h:outputText value="pilaCodigo" />
-						</f:facet>
-						<h:outputText value="#{vtPilaProducto.pilaCodigo}" />
-					</p:column>
+				<p:tab title="Pilas de producto activas">
 
-					<p:column filterBy="#{vtPilaProducto.activo}"
-						sortBy="#{vtPilaProducto.activo}">
-						<f:facet name="header">
-							<h:outputText value="Activo" />
-						</f:facet>
-						<h:outputText value="#{vtPilaProducto.activo}" />
-					</p:column>
+					<p:panel id="panelDataTableVtPilaProducto">
+						<p:dataTable id="dataTableListaA"
+							value="#{vtPilaProductoView.dataFiltro}" var="vtPilaProducto"
+							paginator="true" rows="5">
 
-					<p:column filterBy="#{vtPilaProducto.descripcion}"
-						sortBy="#{vtPilaProducto.descripcion}">
-						<f:facet name="header">
-							<h:outputText value="Descripcion" />
-						</f:facet>
-						<h:outputText value="#{vtPilaProducto.descripcion}" />
-					</p:column>
+							<p:column filterBy="#{vtPilaProducto.pilaCodigo}"
+								sortBy="#{vtPilaProducto.pilaCodigo}">
+								<f:facet name="header">
+									<h:outputText value="Código" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.pilaCodigo}" />
+							</p:column>
 
-					<p:column filterBy="#{vtPilaProducto.nombre}"
-						sortBy="#{vtPilaProducto.nombre}">
-						<f:facet name="header">
-							<h:outputText value="Nombre" />
-						</f:facet>
-						<h:outputText value="#{vtPilaProducto.nombre}" />
-					</p:column>
+							<p:column filterBy="#{vtPilaProducto.activo}"
+								sortBy="#{vtPilaProducto.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.activo}" />
+							</p:column>
 
+							<p:column filterBy="#{vtPilaProducto.nombre}"
+								sortBy="#{vtPilaProducto.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.nombre}" />
+							</p:column>
 
+							<p:column filterBy="#{vtPilaProducto.descripcion}"
+								sortBy="#{vtPilaProducto.descripcion}">
+								<f:facet name="header">
+									<h:outputText value="Descripción" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.descripcion}" />
+							</p:column>
 
+							<p:column headerText="Options">
 
-					<p:column headerText="Options">
+								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									update=":dialogVtPilaProducto"
+									actionListener="#{vtPilaProductoView.action_edit}">
+									<f:attribute name="selectedVtPilaProducto"
+										value="#{vtPilaProducto}" />
+								</p:commandButton>
 
-						<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-							update=":dialogVtPilaProducto"
-							actionListener="#{vtPilaProductoView.action_edit}">
-							<f:attribute name="selectedVtPilaProducto"
-								value="#{vtPilaProducto}" />
-						</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</p:tab>
+				
+				
+				<p:tab title="Pilas de producto inactivas">
 
-					</p:column>
-				</p:dataTable>
-			</p:panel>
+					<p:panel id="panelDataTableVtPilaProductoI">
+						<p:dataTable id="dataTableListaI"
+							value="#{vtPilaProductoView.dataFiltroI}" var="vtPilaProducto" 
+							paginator="true" rows="5">
+
+							<p:column filterBy="#{vtPilaProducto.pilaCodigo}"
+								sortBy="#{vtPilaProducto.pilaCodigo}">
+								<f:facet name="header">
+									<h:outputText value="Código" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.pilaCodigo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtPilaProducto.activo}"
+								sortBy="#{vtPilaProducto.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.activo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtPilaProducto.nombre}"
+								sortBy="#{vtPilaProducto.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtPilaProducto.descripcion}"
+								sortBy="#{vtPilaProducto.descripcion}">
+								<f:facet name="header">
+									<h:outputText value="Descripción" />
+								</f:facet>
+								<h:outputText value="#{vtPilaProducto.descripcion}" />
+							</p:column>
+
+							<p:column headerText="Options">
+
+								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									update=":dialogVtPilaProducto"
+									actionListener="#{vtPilaProductoView.action_edit}">
+									<f:attribute name="selectedVtPilaProducto"
+										value="#{vtPilaProducto}" />
+								</p:commandButton>
+
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</p:tab>
+				
+			</p:accordionPanel>
 
 		</h:form>
 
@@ -108,19 +166,20 @@
 			modal="true" width="500">
 			<h:form id="formDialog">
 				<p:messages id="msg" />
-				<p:panel id="panelVtPilaProducto" header="VtPilaProducto">
+				<p:panel id="panelVtPilaProducto"
+					header="Modificar pila de producto">
 					<h:panelGrid columns="2" id="panelGrid">
 
 						<h:outputText id="msgActivo" value=" Activo" />
 						<p:selectOneMenu id="somActivoCambio"
-							binding="#{vtPilaProductoView.somActivoCambio}"> 
+							binding="#{vtPilaProductoView.somActivoCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Activo" />
 							<f:selectItems value="#{vtPilaProductoView.esActivoItems}" />
 						</p:selectOneMenu>
-						
+
 						<h:outputText id="msgProyecto" value="Proyecto" />
 						<p:selectOneMenu id="somProyectoCambio"
-							binding="#{vtPilaProductoView.somProyectoCambio}">    
+							binding="#{vtPilaProductoView.somProyectoCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Proyectos" />
 							<f:selectItems value="#{vtPilaProductoView.losProyectosItems}" />
 						</p:selectOneMenu>
@@ -128,21 +187,21 @@
 						<h:outputText id="msgNombre" value=" Nombre" />
 						<p:inputText id="txtNombre" disabled="true"
 							binding="#{vtPilaProductoView.txtNombre}" />
-						
+
 						<h:outputText id="msgDescripcion" value=" Descripcion" />
 						<p:inputTextarea id="txtDescripcion" disabled="true"
 							binding="#{vtPilaProductoView.txtDescripcion}" />
-													
+
 					</h:panelGrid>
 				</p:panel>
 				<p:panel id="panelBotones">
 					<div align="center">
 						<p:commandButton id="btnGuardar"
-							binding="#{vtPilaProductoView.btnGuardar}" value="Save"
+							binding="#{vtPilaProductoView.btnGuardar}" value="Guardar"
 							action="#{vtPilaProductoView.action_save()}"
-							update=":dialogVtPilaProducto :frm:panelDataTableVtPilaProducto" />
-						
-						<p:commandButton id="btnExit" value="Exit" 
+							update=":dialogVtPilaProducto :frm:pnVtPilaProducto" />
+
+						<p:commandButton id="btnExit" value="Salir"
 							action="#{vtPilaProductoView.action_closeDialog()}"
 							update=":dialogVtPilaProducto" />
 					</div>

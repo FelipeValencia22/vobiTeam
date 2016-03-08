@@ -26,97 +26,222 @@
 
 
 		<h:form id="frm">
-			<p:growl id="msg" />
-			<br></br>
-			<p:panel id="panelDataTableVtSprint">
-				<h2>Lista de Sprints</h2>
-				<p:growl id="men" />
-				<p:dataTable value="#{vtSprintView.data}" var="vtSprint"
-					paginator="true" rows="5">
-					<p:column filterBy="#{vtSprint.spriCodigo}"
-						sortBy="#{vtSprint.spriCodigo}">
-						<f:facet name="header">
-							<h:outputText value="Código" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.spriCodigo}" />
-					</p:column>
 
-					<p:column filterBy="#{vtSprint.activo}" sortBy="#{vtSprint.activo}">
-						<f:facet name="header">
-							<h:outputText value="Activo" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.activo}" />
-					</p:column>
+			<p:growl id="growl" />
+			<p:panel id="pnlListaSprint">
+				<h2>Listar Sprints</h2>
+				<h:panelGrid columns="1">
 
+					<h3>Pila de producto</h3>
+					<p:selectOneMenu id="somPilaProducto"
+						binding="#{vtSprintView.somPilaProducto}">
+						<f:selectItem itemValue="-1" itemLabel="Nombre de la Pila" />
+						<f:selectItems value="#{vtSprintView.esPilaProductoItems}" />
+					</p:selectOneMenu>
+					<br></br>
 
-					<p:column filterBy="#{vtSprint.fechaInicio}"
-						sortBy="#{vtSprint.fechaInicio}">
-						<f:facet name="header">
-							<h:outputText value="Fecha inicio" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.fechaInicio}" />
-					</p:column>
-
-					<p:column filterBy="#{vtSprint.fechaFin}"
-						sortBy="#{vtSprint.fechaFin}">
-						<f:facet name="header">
-							<h:outputText value="Fecha fin" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.fechaFin}" />
-					</p:column>
-
-
-
-					<p:column filterBy="#{vtSprint.nombre}" sortBy="#{vtSprint.nombre}">
-						<f:facet name="header">
-							<h:outputText value="Nombre" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.nombre}" />
-					</p:column>
-
-					<p:column filterBy="#{vtSprint.objetivo}"
-						sortBy="#{vtSprint.objetivo}">
-						<f:facet name="header">
-							<h:outputText value="Objetivo" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.objetivo}" />
-					</p:column>
-
-
-					<p:column filterBy="#{vtSprint.pilaCodigo_VtPilaProducto}"
-						sortBy="#{vtSprint.pilaCodigo_VtPilaProducto}">
-						<f:facet name="header">
-							<h:outputText value="Código Pila de producto" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.pilaCodigo_VtPilaProducto}" />
-					</p:column>
-					
-					<p:column filterBy="#{vtSprint.nombrePilaProducto}"
-						sortBy="#{vtSprint.nombrePilaProducto}">
-						<f:facet name="header">
-							<h:outputText value="Nombre de producto" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.nombrePilaProducto}" />
-					</p:column>
-
-					<p:column filterBy="#{vtSprint.nombreProyecto}"
-						sortBy="#{vtSprint.nombreProyecto}">
-						<f:facet name="header">
-							<h:outputText value="Nombre proyecto" />
-						</f:facet>
-						<h:outputText value="#{vtSprint.nombreProyecto}" />
-					</p:column>
-
-					<p:column headerText="Modificar">
-						<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-							update=":dialogVtSprint"
-							actionListener="#{vtSprintView.modificar}">
-							<f:attribute name="selectedVtSprint" value="#{vtSprint}" />
-						</p:commandButton>
-
-					</p:column>
-				</p:dataTable>
+					<p:commandButton id="btnFiltrar" value="Filtrar"
+						binding="#{vtSprintView.btnFiltrar}"
+						action="#{vtSprintView.filtrar}"
+						update="@([id$=dataTableListaA],@([id$=dataTableListaI]" />
+				</h:panelGrid>
 			</p:panel>
+
+			<p:accordionPanel id="pnVtPilaProducto" multiple="true">
+				<p:growl id="men" />
+
+				<p:tab title="Sprint activo">
+
+					<p:panel id="panelDataTableVtSprintA">
+
+						<p:dataTable value="#{vtSprintView.dataFiltro}" var="vtSprint"
+							paginator="true" rows="5">
+							<p:column filterBy="#{vtSprint.spriCodigo}"
+								sortBy="#{vtSprint.spriCodigo}">
+								<f:facet name="header">
+									<h:outputText value="Código" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.spriCodigo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.activo}"
+								sortBy="#{vtSprint.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.activo}" />
+							</p:column>
+
+
+							<p:column filterBy="#{vtSprint.fechaInicio}"
+								sortBy="#{vtSprint.fechaInicio}">
+								<f:facet name="header">
+									<h:outputText value="Fecha inicio" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.fechaInicio}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.fechaFin}"
+								sortBy="#{vtSprint.fechaFin}">
+								<f:facet name="header">
+									<h:outputText value="Fecha fin" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.fechaFin}" />
+							</p:column>
+
+
+
+							<p:column filterBy="#{vtSprint.nombre}"
+								sortBy="#{vtSprint.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.objetivo}"
+								sortBy="#{vtSprint.objetivo}">
+								<f:facet name="header">
+									<h:outputText value="Objetivo" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.objetivo}" />
+							</p:column>
+
+
+							<p:column filterBy="#{vtSprint.pilaCodigo_VtPilaProducto}"
+								sortBy="#{vtSprint.pilaCodigo_VtPilaProducto}">
+								<f:facet name="header">
+									<h:outputText value="Código Pila de producto" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.pilaCodigo_VtPilaProducto}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.nombrePilaProducto}"
+								sortBy="#{vtSprint.nombrePilaProducto}">
+								<f:facet name="header">
+									<h:outputText value="Nombre de producto" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.nombrePilaProducto}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.nombreProyecto}"
+								sortBy="#{vtSprint.nombreProyecto}">
+								<f:facet name="header">
+									<h:outputText value="Nombre proyecto" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.nombreProyecto}" />
+							</p:column>
+
+							<p:column headerText="Modificar">
+								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									update=":dialogVtSprint"
+									actionListener="#{vtSprintView.modificar}">
+									<f:attribute name="selectedVtSprint" value="#{vtSprint}" />
+								</p:commandButton>
+
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+
+				</p:tab>
+
+
+				<p:tab title="Pilas de producto inactivas">
+
+					<p:panel id="panelDataTableVtSprintI">
+
+						<p:dataTable value="#{vtSprintView.dataFiltroI}" var="vtSprint"
+							paginator="true" rows="5">
+							<p:column filterBy="#{vtSprint.spriCodigo}"
+								sortBy="#{vtSprint.spriCodigo}">
+								<f:facet name="header">
+									<h:outputText value="Código" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.spriCodigo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.activo}"
+								sortBy="#{vtSprint.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.activo}" />
+							</p:column>
+
+
+							<p:column filterBy="#{vtSprint.fechaInicio}"
+								sortBy="#{vtSprint.fechaInicio}">
+								<f:facet name="header">
+									<h:outputText value="Fecha inicio" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.fechaInicio}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.fechaFin}"
+								sortBy="#{vtSprint.fechaFin}">
+								<f:facet name="header">
+									<h:outputText value="Fecha fin" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.fechaFin}" />
+							</p:column>
+
+
+
+							<p:column filterBy="#{vtSprint.nombre}"
+								sortBy="#{vtSprint.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.objetivo}"
+								sortBy="#{vtSprint.objetivo}">
+								<f:facet name="header">
+									<h:outputText value="Objetivo" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.objetivo}" />
+							</p:column>
+
+
+							<p:column filterBy="#{vtSprint.pilaCodigo_VtPilaProducto}"
+								sortBy="#{vtSprint.pilaCodigo_VtPilaProducto}">
+								<f:facet name="header">
+									<h:outputText value="Código Pila de producto" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.pilaCodigo_VtPilaProducto}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.nombrePilaProducto}"
+								sortBy="#{vtSprint.nombrePilaProducto}">
+								<f:facet name="header">
+									<h:outputText value="Nombre de producto" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.nombrePilaProducto}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.nombreProyecto}"
+								sortBy="#{vtSprint.nombreProyecto}">
+								<f:facet name="header">
+									<h:outputText value="Nombre proyecto" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.nombreProyecto}" />
+							</p:column>
+
+							<p:column headerText="Modificar">
+								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									update=":dialogVtSprint"
+									actionListener="#{vtSprintView.modificar}">
+									<f:attribute name="selectedVtSprint" value="#{vtSprint}" />
+								</p:commandButton>
+
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+
+				</p:tab>
+
+			</p:accordionPanel>
 		</h:form>
 
 		<p:dialog id="dialogVtSprint" appendTo="@(body)" draggable="true"
@@ -126,24 +251,24 @@
 				<p:messages id="msg" />
 				<p:panel id="panelVtSprint" header="Sprint">
 					<h:panelGrid columns="2" id="panelGrid">
-					
-					<h:outputText id="msgActivo" value=" Activo" />
+
+						<h:outputText id="msgActivo" value=" Activo" />
 						<p:selectOneMenu id="somActivoCambio"
-							binding="#{vtSprintView.somActivoCambio}"> 
+							binding="#{vtSprintView.somActivoCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Activo" />
 							<f:selectItems value="#{vtSprintView.esActivoItems}" />
 						</p:selectOneMenu>
-						
+
 						<h:outputText id="msgPilaProducto" value="Pila producto" />
 						<p:selectOneMenu id="somPilaProductoCambio"
-							binding="#{vtSprintView.somPilaProductoCambio}"> 
+							binding="#{vtSprintView.somPilaProductoCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Pila producto" />
 							<f:selectItems value="#{vtSprintView.esPilaProductoItems}" />
 						</p:selectOneMenu>
-						
+
 						<h:outputText id="msgProyecto" value="Proyecto" />
 						<p:selectOneMenu id="somProyectoCambio"
-							binding="#{vtSprintView.somProyectoCambio}"> 
+							binding="#{vtSprintView.somProyectoCambio}">
 							<f:selectItem itemValue="-1" itemLabel="Proyectos" />
 							<f:selectItems value="#{vtSprintView.losProyectosItems}" />
 						</p:selectOneMenu>
@@ -151,7 +276,7 @@
 						<h:outputText id="msgNombre" value=" Nombre" />
 						<p:inputText id="txtNombre" disabled="true"
 							binding="#{vtSprintView.txtNombre}" />
-							
+
 						<h:outputText id="msgObjetivo" value=" Objetivo" />
 						<p:inputText id="txtObjetivo" disabled="true"
 							binding="#{vtSprintView.txtObjetivo}" />
@@ -162,29 +287,29 @@
 							<p:ajax event="dateSelect"
 								listener="#{vtSprintView.listener_txtFechaInicio}" />
 						</p:calendar>
-						
+
 						<h:outputText id="msgFechaFin" value=" FechaFin" />
 						<p:calendar showOn="button" navigator="true" locale="en"
 							binding="#{vtSprintView.txtFechaFin}">
 							<p:ajax event="dateSelect"
 								listener="#{vtSprintView.listener_txtFechaFin}" />
 						</p:calendar>
-						
-						
-						
+
+
+
 
 					</h:panelGrid>
-				</p:panel> 
-				<p:panel id="panelBotones"> 
+				</p:panel>
+				<p:panel id="panelBotones">
 					<div align="center">
 						<p:commandButton id="btnSave" binding="#{vtSprintView.btnGuardar}"
-							value="Save" action="#{vtSprintView.action_save()}"
-							update=":dialogVtSprint :frm:panelDataTableVtSprint" />
-							
-						<p:commandButton id="btnExit" value="Salir" 
+							value="Guardar" action="#{vtSprintView.action_save()}"
+							update=":dialogVtSprint :frm:pnVtPilaProducto" />
+
+						<p:commandButton id="btnExit" value="Salir"
 							action="#{vtSprintView.action_closeDialog()}"
 							update="dialogVtSprint" />
-						
+
 					</div>
 				</p:panel>
 			</h:form>

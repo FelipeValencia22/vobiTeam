@@ -334,11 +334,14 @@ public class VtEmpresaView implements Serializable{
 					}
 
 				}
+				
 				Date fechaModificacion= new Date();
 				entity.setFechaModificacion(fechaModificacion);
 				
 				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 				entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+				
+				entity.setNombre(FacesUtils.checkString(txtNombre));
 
 	            businessDelegatorView.updateVtEmpresa(entity);
 				FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modificó con exito"));

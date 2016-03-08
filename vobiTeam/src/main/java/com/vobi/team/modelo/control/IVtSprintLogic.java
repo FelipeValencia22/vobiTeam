@@ -53,4 +53,7 @@ public interface IVtSprintLogic {
     public Long findTotalNumberVtSprint() throws Exception;
 
     public List<VtSprintDTO> getDataVtSprint() throws Exception;
+    
+    public List<VtSprintDTO> getDataVtSprintFiltro(Long codigoFiltro) throws Exception;
+    public List<VtSprintDTO> getDataVtSprintFiltroI(Long codigoFiltro) throws Exception;
 }
