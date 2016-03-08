@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+
+	<ui:define name="content">
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog modal="true" widgetVar="statusDialog" header="Loading"
+			draggable="false" closable="false">
+			<p:graphicImage
+				value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajaxloadingbar.gif" />
+		</p:dialog>
+
+		<!-- Expired session -->
+		<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();"
+			timeout="#{session.maxInactiveInterval * 1000}" />
+		<p:dialog modal="true" widgetVar="sessionTimeOutDialog"
+			header="Expired session" draggable="false" closable="false">
+			<h:outputText value="The session is finished" />
+			<input id="confirmBackToLogin" type="button" value="Sign in"
+				onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />
+		</p:dialog>
+
+
+		<h:form id="formDialog">
+			<p:growl id="msg" />
+			<br></br>
+			<p:panel id="panelVtArtefacto">
+				<h2>Creación de un artefacto</h2>
+				<h:panelGrid columns="1" id="panelGrid">
+
+
+					<p:selectOneMenu id="somActivo" binding="#{vtArtefactoView.somActivo}">
+						<f:selectItem itemValue="-1" itemLabel="Activo" />
+						<f:selectItems value="#{vtArtefactoView.esActivoItems}" />
+					</p:selectOneMenu>
+
+
+					<p:inputText id="txtnombre" placeholder="Título"
+						binding="#{vtArtefactoView.txtnombre}" />
+
+
+					<p:inputTextarea id="txtAreaDescripcion" rows="10" cols="33"
+						placeholder="Descripci&#243;n"
+						binding="#{vtArtefactoView.txtdescripcion}" />
+						
+						
+					<p:selectOneMenu id="somPilaProducto"
+						binding="#{vtArtefactoView.somPilaProducto}">
+						<f:selectItem itemValue="-1" itemLabel="Pila de producto" />
+						<f:selectItems value="#{vtArtefactoView.esSprintItems}" />
+					</p:selectOneMenu>
+						
+					<p:selectOneMenu id="somSprints"
+						binding="#{vtArtefactoView.somSprints}">
+						<f:selectItem itemValue="-1" itemLabel="Sprint" />
+						<f:selectItems value="#{vtArtefactoView.esPilaProductoItems}" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="somTiposDeArtefactos"
+						binding="#{vtArtefactoView.somTiposDeArtefactos}">
+						<f:selectItem itemValue="-1" itemLabel="Tipo de artefacto" />
+						<f:selectItems value="#{vtArtefactoView.esTipoArtefactoItems}" />
+					</p:selectOneMenu>
+
+					
+					<p:selectOneMenu id="somPrioridades"
+						binding="#{vtArtefactoView.somPrioridades}">
+						<f:selectItem itemValue="-1" itemLabel="Prioridad" />
+						<f:selectItems value="#{vtArtefactoView.esPrioridadItems}" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="somEstados"
+						binding="#{vtArtefactoView.somEstados}">
+						<f:selectItem itemValue="-1" itemLabel="Estado" />
+						<f:selectItems value="#{vtArtefactoView.esEstadoItems}" />
+					</p:selectOneMenu>
+			
+					<p:inputText id="txtEsfuerzoEstimado" placeholder="Esfuerzo estimado"
+						binding="#{vtArtefactoView.txtEsfuerzoEstimado}" />
+
+
+				</h:panelGrid>
+
+				<p:commandButton id="btnCrearS" icon="ui-icon-plus"
+					binding="#{vtArtefactoView.btnCrearS}" title="crear"
+					action="#{vtArtefactoView.crearArtefacto}"
+					update="panelVtArtefacto,msg" />
+
+				<p:commandButton id="btnLimpiarS" icon="ui-icon-refresh"
+					binding="#{vtArtefactoView.btnLimpiarS}" title="Limpiar"
+					update="panelVtArtefacto" />
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
