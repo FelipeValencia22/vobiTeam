@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.component.calendar.Calendar;
@@ -30,6 +31,8 @@ import com.vobi.team.modelo.VtPrioridad;
 import com.vobi.team.modelo.VtSprint;
 import com.vobi.team.modelo.VtTipoArtefacto;
 import com.vobi.team.modelo.VtUsuario;
+import com.vobi.team.modelo.dto.VtArtefactoDTO;
+import com.vobi.team.modelo.dto.VtSprintDTO;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 import com.vobi.team.utilities.FacesUtils;
 
@@ -54,6 +57,12 @@ public class VtArtefactoView implements Serializable {
 	private List<SelectItem> esTipoArtefactoItems;
 	private List<SelectItem> esEstadoItems;
 	private List<SelectItem> esSprintItems;
+	private List<VtArtefactoDTO> data;
+	private List<VtArtefactoDTO> dataFiltro;
+	private List<VtArtefactoDTO> dataFiltroI;
+	private VtArtefactoDTO selectedVtArtefacto;
+	
+
 	private InputTextarea txtdescripcion;
 	private InputText txtnombre;
 	private InputText txtEsfuerzoEstimado;
@@ -64,6 +73,7 @@ public class VtArtefactoView implements Serializable {
 	private CommandButton btnLimpiarS;
 	private CommandButton btnGuardar;
 	private CommandButton btnLimpiar;
+	private CommandButton btnFiltrar;
 
 	private VtArtefacto entity;
 
@@ -73,9 +83,15 @@ public class VtArtefactoView implements Serializable {
 	public InputTextarea getTxtdescripcion() {
 		return txtdescripcion;
 	}
-
 	public SelectOneMenu getSomUsuariosArtefactos() {
 		return somUsuariosArtefactos;
+	}
+
+	public VtArtefactoDTO getSelectedVtArtefacto() {
+		return selectedVtArtefacto;
+	}
+	public void setSelectedVtArtefacto(VtArtefactoDTO selectedVtArtefacto) {
+		this.selectedVtArtefacto = selectedVtArtefacto;
 	}
 
 	public void setSomUsuariosArtefactos(SelectOneMenu somUsuariosArtefactos) {
@@ -88,6 +104,14 @@ public class VtArtefactoView implements Serializable {
 
 	public void setEsUsuarioArtefactoItems(List<SelectItem> esUsuarioArtefactoItems) {
 		this.esUsuarioArtefactoItems = esUsuarioArtefactoItems;
+	}
+
+	public CommandButton getBtnFiltrar() {
+		return btnFiltrar;
+	}
+
+	public void setBtnFiltrar(CommandButton btnFiltrar) {
+		this.btnFiltrar = btnFiltrar;
 	}
 
 	public InputText getTxtEsfuerzoEstimado() {
@@ -334,7 +358,7 @@ public class VtArtefactoView implements Serializable {
 	public void setBusinessDelegatorView(IBusinessDelegatorView businessDelegatorView) {
 		this.businessDelegatorView = businessDelegatorView;
 	}
-	
+
 	public SelectOneMenu getSomPilaProducto() {
 		return somPilaProducto;
 	}
@@ -344,17 +368,17 @@ public class VtArtefactoView implements Serializable {
 	}
 
 	public List<SelectItem> getEsPilaProductoItems() {
-		
-		try{
-			if(esPilaProductoItems==null){
-				List<VtPilaProducto> listaPilasProducto=businessDelegatorView.getVtPilaProducto();
-				esPilaProductoItems=new ArrayList<SelectItem>();
-				for (VtPilaProducto vtPilaProducto:listaPilasProducto) {
-					esPilaProductoItems.add(new SelectItem(vtPilaProducto.getPilaCodigo(),vtPilaProducto.getNombre()));
+
+		try {
+			if (esPilaProductoItems == null) {
+				List<VtPilaProducto> listaPilasProducto = businessDelegatorView.getVtPilaProducto();
+				esPilaProductoItems = new ArrayList<SelectItem>();
+				for (VtPilaProducto vtPilaProducto : listaPilasProducto) {
+					esPilaProductoItems.add(new SelectItem(vtPilaProducto.getPilaCodigo(), vtPilaProducto.getNombre()));
 				}
 			}
 
-		}catch(Exception e) {
+		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 		return esPilaProductoItems;
@@ -363,7 +387,6 @@ public class VtArtefactoView implements Serializable {
 	public void setEsPilaProductoItems(List<SelectItem> esPilaProductoItems) {
 		this.esPilaProductoItems = esPilaProductoItems;
 	}
-
 
 	public String crearArtefacto() {
 		log.info("Creando artefacto");
@@ -379,14 +402,14 @@ public class VtArtefactoView implements Serializable {
 
 			int esfuerzo = Integer.parseInt(txtEsfuerzoEstimado.getValue().toString().trim());
 			vtArtefacto.setEsfuerzoEstimado(esfuerzo);
-			
-			String  pilasProducto = somPilaProducto.getValue().toString().trim();
+
+			String pilasProducto = somPilaProducto.getValue().toString().trim();
 			Long idPilaProducto = Long.parseLong(pilasProducto);
 			VtPilaProducto vtPilaProducto = businessDelegatorView.getVtPilaProducto(idPilaProducto);
 			vtArtefacto.setVtPilaProducto(vtPilaProducto);
-			
+
 			String artefacto = somTiposDeArtefactos.getValue().toString().trim();
-			Long idTipoArtefacto= Long.parseLong(artefacto);
+			Long idTipoArtefacto = Long.parseLong(artefacto);
 			VtTipoArtefacto vtTipoArtefacto = businessDelegatorView.getVtTipoArtefacto(idTipoArtefacto);
 			vtArtefacto.setVtTipoArtefacto(vtTipoArtefacto);
 
@@ -395,11 +418,11 @@ public class VtArtefactoView implements Serializable {
 			VtEstado vtEstado = businessDelegatorView.getVtEstado(estadoArtefacto);
 			vtArtefacto.setVtEstado(vtEstado);
 
-			String spring  = somSprints.getValue().toString().toString();
+			String spring = somSprints.getValue().toString().toString();
 			Long idSpring = Long.parseLong(spring);
 			VtSprint vtSprint = businessDelegatorView.getVtSprint(idSpring);
 			vtArtefacto.setVtSprint(vtSprint);
-			
+
 			String tipoPri = somPrioridades.getValue().toString().trim();
 			Long tipoPrioridad = Long.parseLong(tipoPri);
 			VtPrioridad vtPrioridad = businessDelegatorView.getVtPrioridad(tipoPrioridad);
@@ -421,6 +444,68 @@ public class VtArtefactoView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
 		return "";
+	}
+
+	public String filtrar() {
+		try {
+			String sprint = somSprints.getValue().toString().trim();
+			Long spriCodigo = Long.valueOf(sprint);
+			VtSprint vtSprint = businessDelegatorView.getVtSprint(spriCodigo);
+			dataFiltro = businessDelegatorView.getDataVtArtefactoFiltro(vtSprint.getSpriCodigo());
+			dataFiltroI = businessDelegatorView.getDataVtArtefactoFiltroI(vtSprint.getSpriCodigo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	
+//	public String modificar(ActionEvent evt) {
+//		selectedVtArtefacto = (VtArtefactoDTO) (evt.getComponent().getAttributes()
+//				.get("selectedVtArtefacto"));
+//
+//		txtdescripcion.setValue(selectedVtArtefacto.getDescripcion());
+//		txtnombre.setValue(selectedVtArtefacto.getTitulo());
+//		txtEsfuerzoEstimado.setValue(selectedVtArtefacto.getEsfuerzoEstimado());
+//		som
+//	
+//		txtNombre.setDisabled(false);
+//		txtObjetivo.setValue(selectedVtSprint.getObjetivo());
+//		txtObjetivo.setDisabled(false);
+//		somPilaProductoCambio.setValue(selectedVtSprint.getPilaCodigo_VtPilaProducto());
+//		somPilaProductoCambio.setDisabled(false);
+//		btnGuardar.setDisabled(false);
+//		setShowDialog(true);
+//
+//		return "";
+//	}
+	
+	
+	
+	
+	
+	public List<VtArtefactoDTO> getData() {
+		return data;
+	}
+
+	public void setData(List<VtArtefactoDTO> data) {
+		this.data = data;
+	}
+
+	public List<VtArtefactoDTO> getDataFiltro() {
+		return dataFiltro;
+	}
+
+	public void setDataFiltro(List<VtArtefactoDTO> dataFiltro) {
+		this.dataFiltro = dataFiltro;
+	}
+
+	public List<VtArtefactoDTO> getDataFiltroI() {
+		return dataFiltroI;
+	}
+
+	public void setDataFiltroI(List<VtArtefactoDTO> dataFiltroI) {
+		this.dataFiltroI = dataFiltroI;
 	}
 
 }

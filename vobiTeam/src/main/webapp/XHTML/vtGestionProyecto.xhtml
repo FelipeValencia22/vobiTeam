@@ -17,9 +17,9 @@
 		<p:idleMonitor onactive="PF('sessionTimeOutDialog').show();"
 			timeout="#{session.maxInactiveInterval * 1000}" />
 		<p:dialog modal="true" widgetVar="sessionTimeOutDialog"
-			header="Expired session" draggable="false" closable="false">
-			<h:outputText value="The session is finished" />
-			<input id="confirmBackToLogin" type="button" value="Sign in"
+			header="La sesión ha expirado" draggable="false" closable="false">
+			<h:outputText value="La sesión esta terminada" />
+			<input id="confirmBackToLogin" type="button" value="Ingresar"
 				onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />
 		</p:dialog>
 

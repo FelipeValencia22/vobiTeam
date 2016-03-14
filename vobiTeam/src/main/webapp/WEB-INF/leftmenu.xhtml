@@ -21,19 +21,19 @@
 
 		<h:form id="menuform">
 			<ps:menu id="sm_leftmenu">
-			
-			
+
+
 
 				<p:submenu id="sm_Empresa" label="Empresa" icon="icon-truck">
 					<p:menuitem id="sm_vtEmpresa" value="Gesti&#243;n de empresas"
 						icon="icon-columns" outcome="/XHTML/vtGestionEmpresa.xhtml" />
 				</p:submenu>
-				
+
 				<p:submenu id="sm_Usuario" label="Usuario" icon="icon-users">
 					<p:menuitem id="sm_VtUsuario" value="Gesti&#243;n de usuarios"
 						icon="icon-columns" outcome="/XHTML/vtGestionUsuarios.xhtml" />
 				</p:submenu>
-				
+
 				<p:submenu id="sm_Proyecto" label="Proyecto" icon="icon-file-code">
 					<p:menuitem id="sm_VtProyecto" value="Gesti&#243;n de proyectos"
 						icon="icon-columns" outcome="/XHTML/vtGestionProyecto.xhtml" />
@@ -56,8 +56,26 @@
 					<p:menuitem id="sm_VtListSprint" value="Lista filtrada"
 						icon="icon-columns" outcome="/XHTML/vtListaSprint.xhtml" />
 				</p:submenu>
-				
-				
+
+
+				<p:submenu id="sm_Artefacto" label="Artefactos"
+					icon="icon-file-code">
+					<p:menuitem id="sm_VtArtefacto" value="Gesti&#243;n de Artefactos"
+						icon="icon-columns" outcome="/XHTML/vtArtefacto.xhtml" />
+					<p:menuitem id="sm_VtListArtefacto" value="Lista filtrada"
+						icon="icon-columns" outcome="/XHTML/vtListarArtefactos.xhtml" />
+
+				</p:submenu>
+
+
+
+				<p:submenu id="sm_Rol" label="Roles"
+					icon="icon-file-code">
+					<p:menuitem id="sm_VtRol" value="Gesti&#243;n de Rol"
+						icon="icon-columns" outcome="/XHTML/vtGestionarRoles.xhtml" />
+				</p:submenu>
+
+
 
 
 			</ps:menu>

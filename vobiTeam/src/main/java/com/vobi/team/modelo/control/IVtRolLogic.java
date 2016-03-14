@@ -53,4 +53,6 @@ public interface IVtRolLogic {
     public Long findTotalNumberVtRol() throws Exception;
 
     public List<VtRolDTO> getDataVtRol() throws Exception;
+    
+    public List<VtRolDTO> getDataVtRolInactivo() throws Exception;
 }

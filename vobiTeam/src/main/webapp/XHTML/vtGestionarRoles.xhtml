@@ -29,34 +29,33 @@
 
 			<p:growl id="growl" sticky="true" />
 			<br></br>
-			<p:panel id="pnlEmpresa">
-				<h2>Crear empresa</h2>
+			<p:panel id="pnlRol">
+				<h2>Gestionar Rol</h2>
 				<h:panelGrid columns="1">
 
-					<p:inputText id="txtIDCrear"
-						placeholder="Identificaci&#243;n o NIT"
-						binding="#{vtEmpresaView.txtIDCrear}">
-						<p:ajax listener="#{vtEmpresaView.txtIdListener}" update="frm" />
-					</p:inputText>
+					
+					
+					<p:selectOneMenu id="somActivo"
+						binding="#{vtRolView.somActivo}">
+						<f:selectItem itemValue="-1" itemLabel="Activo" />
+						<f:selectItems value="#{vtRolView.esActivoItems}" />
+					</p:selectOneMenu>
+					
 
 					<p:inputText id="txtNombreCrear" placeholder="Nombre"
-						binding="#{vtEmpresaView.txtNombreCrear}" />
+						binding="#{vtRolView.txtNombre}" />
 				</h:panelGrid>
 				<br></br>
 
 				<p:commandButton id="btnCrear" icon="ui-icon-plus"
-					title="Crear empresa" binding="#{vtEmpresaView.btnCrear}"
-					action="#{vtEmpresaView.crearEmpresa}"
-					update="pnlEmpresa,growl, @([id$=dataTableVtEmpresaA]" disabled="true"/>
-
-				<p:commandButton id="btnModificar" icon="ui-icon-disk"
-					title="Modificar empresa" binding="#{vtEmpresaView.btnModificar}"
-					action="#{vtEmpresaView.modificarEmpresa}" update="pnlEmpresa"
-					disabled="true" />
-
-				<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"
-					title="Limpiar" binding="#{vtEmpresaView.btnLimpiar}"
-					action="#{vtEmpresaView.limpiar}" update="pnlEmpresa" />
+					title="Crear rol" binding="#{vtRolView.btnCrear}"
+					action="#{vtRolView.crearRol}"
+					update="pnlRol,growl"/>
+					
+					
+					<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"
+					title="Limpiar" binding="#{vtRolView.btnLimpiar}"
+					action="#{vtRolView.limpiar}" update="pnlRol,growl" />
 
 			</p:panel>
 	
@@ -67,42 +66,35 @@
 			multiple="true">
 			<p:growl id="men" />
 
-			<p:tab title="Empresas activas ">
+			<p:tab title="Roles activos ">
 				<p:panel id="dataTableVtEmpresaA">
 
-					<p:dataTable value="#{vtEmpresaView.data}" var="vtEmpresa"
+					<p:dataTable value="#{vtRolView.data}" var="vtRol"
 						paginator="true" rows="5">
 
-						<p:column filterBy="#{vtEmpresa.emprCodigo}"
-							sortBy="#{vtEmpresa.emprCodigo}">
+						<p:column filterBy="#{vtRol.rolCodigo}"
+							sortBy="#{vtRol.rolCodigo}">
 							<f:facet name="header">
-								<h:outputText value="Código empresa" />
+								<h:outputText value="Código Rol" />
 							</f:facet>
-							<h:outputText value="#{vtEmpresa.emprCodigo}" />
+							<h:outputText value="#{vtRol.rolCodigo}" />
 						</p:column>
 
-						<p:column filterBy="#{vtEmpresa.identificacion}"
-							sortBy="#{vtEmpresa.identificacion}">
-							<f:facet name="header">
-								<h:outputText value="ID Empresa" />
-							</f:facet>
-							<h:outputText value="#{vtEmpresa.identificacion}" />
-						</p:column>
 
-						<p:column filterBy="#{vtEmpresa.activo}"
-							sortBy="#{vtEmpresa.activo}">
+						<p:column filterBy="#{vtRol.activo}"
+							sortBy="#{vtRol.activo}">
 							<f:facet name="header">
 								<h:outputText value="Activa" />
 							</f:facet>
-							<h:outputText value="#{vtEmpresa.activo}" />
+							<h:outputText value="#{vtRol.activo}" />
 						</p:column>
 
-						<p:column filterBy="#{vtEmpresa.nombre}"
-							sortBy="#{vtEmpresa.nombre}">
+						<p:column filterBy="#{vtRol.rolNombre}"
+							sortBy="#{vtRol.rolNombre}">
 							<f:facet name="header">
-								<h:outputText value="Nombre empresa" />
+								<h:outputText value="Nombre rol" />
 							</f:facet>
-							<h:outputText value="#{vtEmpresa.nombre}" />
+							<h:outputText value="#{vtRol.rolNombre}" />
 						</p:column>
 
 
@@ -121,42 +113,35 @@
 
 			<br></br>
 
-			<p:tab title="Empresas inactivas ">
+			<p:tab title="Roles Inactivos ">
 				<p:panel id="dataTableVtEmpresaI">
 
-					<p:dataTable value="#{vtEmpresaView.dataI}" var="vtEmpresa"
+					<p:dataTable value="#{vtRolView.dataI}" var="vtRol"
 						paginator="true" rows="5">
 
-						<p:column filterBy="#{vtEmpresa.emprCodigo}"
-							sortBy="#{vtEmpresa.emprCodigo}">
+						<p:column filterBy="#{vtRol.rolCodigo}"
+							sortBy="#{vtRol.rolCodigo}">
 							<f:facet name="header">
-								<h:outputText value="Código empresa" />
+								<h:outputText value="Código Rol" />
 							</f:facet>
-							<h:outputText value="#{vtEmpresa.emprCodigo}" />
+							<h:outputText value="#{vtRol.rolCodigo}" />
 						</p:column>
 
-						<p:column filterBy="#{vtEmpresa.identificacion}"
-							sortBy="#{vtEmpresa.identificacion}">
-							<f:facet name="header">
-								<h:outputText value="ID Empresa" />
-							</f:facet>
-							<h:outputText value="#{vtEmpresa.identificacion}" />
-						</p:column>
 
-						<p:column filterBy="#{vtEmpresa.activo}"
-							sortBy="#{vtEmpresa.activo}">
+						<p:column filterBy="#{vtRol.activo}"
+							sortBy="#{vtRol.activo}">
 							<f:facet name="header">
 								<h:outputText value="Activa" />
 							</f:facet>
-							<h:outputText value="#{vtEmpresa.activo}" />
+							<h:outputText value="#{vtRol.activo}" />
 						</p:column>
 
-						<p:column filterBy="#{vtEmpresa.nombre}"
-							sortBy="#{vtEmpresa.nombre}">
+						<p:column filterBy="#{vtRol.rolNombre}"
+							sortBy="#{vtRol.rolNombre}">
 							<f:facet name="header">
-								<h:outputText value="Nombre empresa" />
+								<h:outputText value="Nombre rol" />
 							</f:facet>
-							<h:outputText value="#{vtEmpresa.nombre}" />
+							<h:outputText value="#{vtRol.rolNombre}" />
 						</p:column>
 
 

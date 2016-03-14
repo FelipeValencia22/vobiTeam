@@ -2,6 +2,7 @@ package com.vobi.team.modelo.control;
 
 import com.vobi.team.modelo.VtArtefacto;
 import com.vobi.team.modelo.dto.VtArtefactoDTO;
+import com.vobi.team.modelo.dto.VtSprintDTO;
 
 import java.math.BigDecimal;
 
@@ -54,4 +55,9 @@ public interface IVtArtefactoLogic {
     public Long findTotalNumberVtArtefacto() throws Exception;
 
     public List<VtArtefactoDTO> getDataVtArtefacto() throws Exception;
+    
+    public List<VtArtefactoDTO> getDataVtArtefactoFiltro(Long codigoFiltro) throws Exception;
+    
+    
+    public List<VtArtefactoDTO> getDataVtArtefactoFiltroI(Long codigoFiltro) throws Exception;
 }

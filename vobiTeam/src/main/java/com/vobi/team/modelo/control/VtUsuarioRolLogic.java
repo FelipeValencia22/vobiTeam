@@ -102,9 +102,9 @@ public class VtUsuarioRolLogic implements IVtUsuarioRolLogic {
                     "fechaCreacion");
             }
 
-            if (entity.getUsroCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("usroCodigo");
-            }
+//            if (entity.getUsroCodigo() == null) {
+//                throw new ZMessManager().new EmptyFieldException("usroCodigo");
+//            }
 
             if (entity.getUsuCreador() == null) {
                 throw new ZMessManager().new EmptyFieldException("usuCreador");
@@ -120,9 +120,9 @@ public class VtUsuarioRolLogic implements IVtUsuarioRolLogic {
                     "usuaCodigo_VtUsuario");
             }
 
-            if (getVtUsuarioRol(entity.getUsroCodigo()) != null) {
-                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
-            }
+//            if (getVtUsuarioRol(entity.getUsroCodigo()) != null) {
+//                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
+//            }
 
             vtUsuarioRolDAO.save(entity);
 

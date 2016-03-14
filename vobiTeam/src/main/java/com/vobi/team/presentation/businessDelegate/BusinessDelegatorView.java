@@ -1067,5 +1067,20 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 		return vtSprintLogic.getDataVtSprintFiltroI(codigoFiltro);
 	}
 
+	@Override
+	public List<VtArtefactoDTO> getDataVtArtefactoFiltro(Long codigoFiltro) throws Exception {
+		return vtArtefactoLogic.getDataVtArtefactoFiltro(codigoFiltro);
+	}
+
+	@Override
+	public List<VtArtefactoDTO> getDataVtArtefactoFiltroI(Long codigoFiltro) throws Exception {
+		return vtArtefactoLogic.getDataVtArtefactoFiltroI(codigoFiltro);
+	}
+
+	@Override
+	public List<VtRolDTO> getDataVtRolInactivo() throws Exception {		
+		return vtRolLogic.getDataVtRolInactivo();
+	}
+
 	
 }
