@@ -88,26 +88,37 @@
 								<h:outputText value="#{vtPilaProducto.descripcion}" />
 							</p:column>
 
-							<p:column headerText="Options">
-
-								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-									update=":dialogVtPilaProducto"
-									actionListener="#{vtPilaProductoView.action_edit}">
-									<f:attribute name="selectedVtPilaProducto"
-										value="#{vtPilaProducto}" />
-								</p:commandButton>
-
+							<p:column headerText="Modificar">
+								<div align="center">
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
+										update=":dialogVtPilaProducto"
+										actionListener="#{vtPilaProductoView.action_edit}">
+										<f:attribute name="selectedVtPilaProducto"
+											value="#{vtPilaProducto}" />
+									</p:commandButton>
+								</div>
 							</p:column>
+							
+							<p:column headerText="Cambiar estado">
+								<div align="center">
+									<p:commandButton id="btnEstado" icon="fa fa-retweet"
+										update=":frm:pnVtPilaProducto, :frm:growl"
+										actionListener="#{vtPilaProductoView.cambiarEstado}"> 
+										<f:attribute name="selectedVtPilaProducto" value="#{vtPilaProducto}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+							
 						</p:dataTable>
 					</p:panel>
 				</p:tab>
-				
-				
+
+
 				<p:tab title="Pilas de producto inactivas">
 
 					<p:panel id="panelDataTableVtPilaProductoI">
 						<p:dataTable id="dataTableListaI"
-							value="#{vtPilaProductoView.dataFiltroI}" var="vtPilaProducto" 
+							value="#{vtPilaProductoView.dataFiltroI}" var="vtPilaProducto"
 							paginator="true" rows="5">
 
 							<p:column filterBy="#{vtPilaProducto.pilaCodigo}"
@@ -142,20 +153,31 @@
 								<h:outputText value="#{vtPilaProducto.descripcion}" />
 							</p:column>
 
-							<p:column headerText="Options">
-
-								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-									update=":dialogVtPilaProducto"
-									actionListener="#{vtPilaProductoView.action_edit}">
-									<f:attribute name="selectedVtPilaProducto"
-										value="#{vtPilaProducto}" />
-								</p:commandButton>
-
+							<p:column headerText="Modificar">
+								<div align="center">
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
+										update=":dialogVtPilaProducto"
+										actionListener="#{vtPilaProductoView.action_edit}">
+										<f:attribute name="selectedVtPilaProducto"
+											value="#{vtPilaProducto}" />
+									</p:commandButton>
+								</div>
 							</p:column>
+							
+							<p:column headerText="Cambiar estado">
+								<div align="center">
+									<p:commandButton id="btnEstado" icon="fa fa-retweet"
+										update=":frm:pnVtPilaProducto, :frm:growl"
+										actionListener="#{vtPilaProductoView.cambiarEstado}"> 
+										<f:attribute name="selectedVtPilaProducto" value="#{vtPilaProducto}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+							
 						</p:dataTable>
 					</p:panel>
 				</p:tab>
-				
+
 			</p:accordionPanel>
 
 		</h:form>

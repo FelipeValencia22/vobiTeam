@@ -26,180 +26,220 @@
 		<h:form id="frm">
 
 			<p:growl id="growl" sticky="true" />
-			<br></br>
-			<p:panel id="pnlUsuariosCrear">
-				<div align="left">
-					<h2>Crear usuario</h2>
-					<h:panelGrid id="pnlGrid" columns="1">
 
-						<p:inputText id="txtEmailC" placeholder="Email"
-							binding="#{vtUsuarioView.txtLoginC}">
-							<p:ajax listener="#{vtUsuarioView.txtLoginListener}"
-								update="frm" />
-						</p:inputText>
-
-						<p:inputText id="txtNombreUC" placeholder="Nombre"
-							binding="#{vtUsuarioView.txtNombreC}" />
-
-						<p:password id="txtClave" placeholder="Contrase&#241;a"
-							binding="#{vtUsuarioView.txtClave}" />
-
-						<p:password id="txtClaveR" placeholder="Repetir contrase&#241;a"
-							binding="#{vtUsuarioView.txtClaveR}" />
-
-
-					</h:panelGrid>
-
-					<h:panelGrid columns="1">
-						<h2>Empresa</h2>
-						<p:selectOneMenu id="somEmpresas"
-							binding="#{vtUsuarioView.somEmpresas}">
-							<f:selectItem itemValue="-1" itemLabel="Seleccionar empresa" />
-							<f:selectItems value="#{vtUsuarioView.lasEmpresasItems}" />
-						</p:selectOneMenu>
-
-					</h:panelGrid>
-
+			<p:panel id="pnlUsuarios" header="USUARIOS">
+				<br></br>
+				<p:commandButton value="Crear Usuario" type="button"
+					onclick="PF('dlg').show();" />
+					<br></br>
 					<br></br>
 
-					<p:commandButton id="btnCrearU" icon="ui-icon-plus" title="Crear"
-						binding="#{vtUsuarioView.btnCrearU}" disabled="true"
-						action="#{vtUsuarioView.crearUsuario}"
-						update="pnlUsuariosCrear,growl, @([id$=dataTableVtUsuarioActivos])" />
+				<p:accordionPanel id="panelDataTableVtUsuario" header="Usuarios"
+					multiple="true">
+					<p:growl id="men" />
+
+					<p:tab title="Usuarios activos ">
+						<p:dataTable id="dataTableVtUsuarioActivos"
+							value="#{vtUsuarioView.data}" var="vtUsuario" paginator="true"
+							rows="10">
+
+							<p:column filterBy="#{vtUsuario.usuaCodigo}"
+								sortBy="#{vtUsuario.usuaCodigo}">
+								<f:facet name="header">
+									<h:outputText value="C&#243;digo Usuario" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.usuaCodigo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtUsuario.activo}"
+								sortBy="#{vtUsuario.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.activo}" />
+							</p:column>
 
 
-					<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"
-						title="Limpiar" action="#{vtUsuarioView.limpiar}"
-						update="pnlUsuariosCrear" />
-				</div>
+							<p:column filterBy="#{vtUsuario.login}"
+								sortBy="#{vtUsuario.login}">
+								<f:facet name="header">
+									<h:outputText value="Login" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.login}" />
+							</p:column>
+
+							<p:column filterBy="#{vtUsuario.nombre}"
+								sortBy="#{vtUsuario.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre usuario" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtUsuario.nombre_VtEmpresa}"
+								sortBy="#{vtUsuario.nombre_VtEmpresa}">
+								<f:facet name="header">
+									<h:outputText value="Nombre empresa" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.nombre_VtEmpresa}" />
+							</p:column>
+
+							<p:column headerText="Modificar">
+								<div align="center">
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
+										update=":dialogVtUsuario"
+										actionListener="#{vtUsuarioView.action_edit}">
+										<f:attribute name="selectedVtUsuario" value="#{vtUsuario}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+
+
+							<p:column headerText="Cambiar estado">
+								<div align="center">
+									<p:commandButton id="btnEstado" icon="fa fa-retweet"
+										update=":frm:panelDataTableVtUsuario, :frm:growl"
+										actionListener="#{vtUsuarioView.cambiarEstado}">
+										<f:attribute name="selectedVtUsuario" value="#{vtUsuario}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</p:tab>
+					<br></br>
+					<p:tab title="Usuarios inactivos ">
+						<p:dataTable id="dataTableVtUsuarioInactivos"
+							value="#{vtUsuarioView.dataI}" var="vtUsuario" paginator="true"
+							rows="10">
+
+							<p:column filterBy="#{vtUsuario.usuaCodigo}"
+								sortBy="#{vtUsuario.usuaCodigo}">
+								<f:facet name="header">
+									<h:outputText value="C&#243;digo Usuario" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.usuaCodigo}" />
+							</p:column>
+
+							<p:column filterBy="#{vtUsuario.activo}"
+								sortBy="#{vtUsuario.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.activo}" />
+							</p:column>
+
+
+							<p:column filterBy="#{vtUsuario.login}"
+								sortBy="#{vtUsuario.login}">
+								<f:facet name="header">
+									<h:outputText value="Login" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.login}" />
+							</p:column>
+
+							<p:column filterBy="#{vtUsuario.nombre}"
+								sortBy="#{vtUsuario.nombre}">
+								<f:facet name="header">
+									<h:outputText value="Nombre usuario" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtUsuario.nombre_VtEmpresa}"
+								sortBy="#{vtUsuario.nombre_VtEmpresa}">
+								<f:facet name="header">
+									<h:outputText value="Nombre empresa" />
+								</f:facet>
+								<h:outputText value="#{vtUsuario.nombre_VtEmpresa}" />
+							</p:column>
+
+							<p:column headerText="Modificar">
+								<div align="center">
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
+										update=":dialogVtUsuario"
+										actionListener="#{vtUsuarioView.action_edit}">
+										<f:attribute name="selectedVtUsuario" value="#{vtUsuario}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+
+
+							<p:column headerText="Cambiar estado">
+								<div align="center">
+									<p:commandButton id="btnEstado" icon="fa fa-retweet"
+										update=":frm:panelDataTableVtUsuario, :frm:growl"
+										actionListener="#{vtUsuarioView.cambiarEstado}">
+										<f:attribute name="selectedVtUsuario" value="#{vtUsuario}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+
+						</p:dataTable>
+					</p:tab>
+
+				</p:accordionPanel>
+
 			</p:panel>
 
 
-		<br></br>
-
-
-			<p:accordionPanel id="panelDataTableVtUsuario" header="Usuarios"
-				multiple="true">
-				<p:growl id="men" />
-
-				<p:tab title="Usuarios activos ">
-					<p:dataTable id="dataTableVtUsuarioActivos"
-						value="#{vtUsuarioView.data}" var="vtUsuario" paginator="true"
-						rows="10">
-
-						<p:column filterBy="#{vtUsuario.usuaCodigo}"
-							sortBy="#{vtUsuario.usuaCodigo}">
-							<f:facet name="header">
-								<h:outputText value="C&#243;digo Usuario" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.usuaCodigo}" />
-						</p:column>
-
-						<p:column filterBy="#{vtUsuario.activo}"
-							sortBy="#{vtUsuario.activo}">
-							<f:facet name="header">
-								<h:outputText value="Activo" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.activo}" />
-						</p:column>
-
-
-						<p:column filterBy="#{vtUsuario.login}"
-							sortBy="#{vtUsuario.login}">
-							<f:facet name="header">
-								<h:outputText value="Login" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.login}" />
-						</p:column>
-
-						<p:column filterBy="#{vtUsuario.nombre}"
-							sortBy="#{vtUsuario.nombre}">
-							<f:facet name="header">
-								<h:outputText value="Nombre usuario" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.nombre}" />
-						</p:column>
-
-						<p:column filterBy="#{vtUsuario.nombre_VtEmpresa}"
-							sortBy="#{vtUsuario.nombre_VtEmpresa}">
-							<f:facet name="header">
-								<h:outputText value="Nombre empresa" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.nombre_VtEmpresa}" />
-						</p:column>
-
-						<p:column headerText="Modificar">
-							<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-								update=":dialogVtUsuario"
-								actionListener="#{vtUsuarioView.action_edit}">
-								<f:attribute name="selectedVtUsuario" value="#{vtUsuario}" />
-							</p:commandButton>
-
-						</p:column>
-					</p:dataTable>
-				</p:tab>
-				<br></br>
-				<p:tab title="Usuarios inactivos ">
-					<p:dataTable id="dataTableVtUsuarioInactivos"
-						value="#{vtUsuarioView.dataI}" var="vtUsuario" paginator="true"
-						rows="10">
-
-						<p:column filterBy="#{vtUsuario.usuaCodigo}"
-							sortBy="#{vtUsuario.usuaCodigo}">
-							<f:facet name="header">
-								<h:outputText value="C&#243;digo Usuario" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.usuaCodigo}" />
-						</p:column>
-
-						<p:column filterBy="#{vtUsuario.activo}"
-							sortBy="#{vtUsuario.activo}">
-							<f:facet name="header">
-								<h:outputText value="Activo" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.activo}" />
-						</p:column>
-
-
-						<p:column filterBy="#{vtUsuario.login}"
-							sortBy="#{vtUsuario.login}">
-							<f:facet name="header">
-								<h:outputText value="Login" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.login}" />
-						</p:column>
-
-						<p:column filterBy="#{vtUsuario.nombre}"
-							sortBy="#{vtUsuario.nombre}">
-							<f:facet name="header">
-								<h:outputText value="Nombre usuario" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.nombre}" />
-						</p:column>
-
-						<p:column filterBy="#{vtUsuario.nombre_VtEmpresa}"
-							sortBy="#{vtUsuario.nombre_VtEmpresa}">
-							<f:facet name="header">
-								<h:outputText value="Nombre empresa" />
-							</f:facet>
-							<h:outputText value="#{vtUsuario.nombre_VtEmpresa}" />
-						</p:column>
-
-						<p:column headerText="Modificar">
-							<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-								update=":dialogVtUsuario"
-								actionListener="#{vtUsuarioView.action_edit}">
-								<f:attribute name="selectedVtUsuario" value="#{vtUsuario}" />
-							</p:commandButton>
-
-						</p:column>
-					</p:dataTable>
-				</p:tab>
-
-			</p:accordionPanel>
-
-
 		</h:form>
+
+
+
+		<p:dialog header="Crear usuario" appendTo="@(body)" draggable="true"
+			widgetVar="dlg" resizable="false" modal="true"
+			width="500">
+			<h:form id="formDialogCrear">
+				<p:messages id="msg" />
+				<p:panel id="pnlUsuariosCrear">
+					<div align="left">
+						<h:panelGrid id="pnlGrid" columns="1">
+
+							<p:inputText id="txtEmailC" placeholder="Email"
+								binding="#{vtUsuarioView.txtLoginC}">
+								<p:ajax listener="#{vtUsuarioView.txtLoginListener}"
+									update="formDialogCrear" />
+							</p:inputText>
+
+							<p:inputText id="txtNombreUC" placeholder="Nombre"
+								binding="#{vtUsuarioView.txtNombreC}" />
+
+							<p:password id="txtClave" placeholder="Contrase&#241;a"
+								binding="#{vtUsuarioView.txtClave}" />
+
+							<p:password id="txtClaveR" placeholder="Repetir contrase&#241;a"
+								binding="#{vtUsuarioView.txtClaveR}" />
+
+
+						</h:panelGrid>
+
+						<h:panelGrid columns="1">
+							<h2>Empresa</h2>
+							<p:selectOneMenu id="somEmpresas"
+								binding="#{vtUsuarioView.somEmpresas}">
+								<f:selectItem itemValue="-1" itemLabel="Seleccionar empresa" />
+								<f:selectItems value="#{vtUsuarioView.lasEmpresasItems}" />
+							</p:selectOneMenu>
+
+						</h:panelGrid>
+
+						<br></br>
+
+						<p:commandButton id="btnCrearU" icon="fa fa-save" title="Crear"
+							binding="#{vtUsuarioView.btnCrearU}" disabled="true"
+							action="#{vtUsuarioView.crearUsuario}"
+							update="@([id$=pnlUsuariosCrear]),@([id$=growl]), @([id$=dataTableVtUsuarioActivos])" />
+
+
+						<p:commandButton id="btnLimpiar" icon="fa fa-eraser"
+							title="Limpiar" action="#{vtUsuarioView.limpiar}"
+							update="pnlUsuariosCrear" />
+					</div>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+
 
 		<p:dialog id="dialogVtUsuario" appendTo="@(body)" draggable="true"
 			closable="false" visible="#{vtUsuarioView.showDialog}"

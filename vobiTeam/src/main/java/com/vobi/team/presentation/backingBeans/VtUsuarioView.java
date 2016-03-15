@@ -256,7 +256,7 @@ public class VtUsuarioView implements Serializable{
 				vtUsuario.setFechaCreacion(fechaCreacion);
 				vtUsuario.setLogin(Login);
 				vtUsuario.setNombre(txtNombreC.getValue().toString().trim());
-				
+
 				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 				vtUsuario.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 
@@ -306,6 +306,7 @@ public class VtUsuarioView implements Serializable{
 		VtUsuario vtUsuario= null;
 
 		String login= txtLoginC.getValue().toString().trim();
+		log.info(login);
 		vtUsuario=businessDelegatorView.consultarLogin(login);
 
 		if(vtUsuario==null){
@@ -492,13 +493,13 @@ public class VtUsuarioView implements Serializable{
 			}
 			Date fechaModificacion = new Date();
 			entity.setFechaModificacion(fechaModificacion);
-			
+
 			entity.setLogin(FacesUtils.checkString(txtLogin));
 			entity.setNombre(FacesUtils.checkString(txtNombre));
-			
+
 			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
-			
+
 			businessDelegatorView.updateVtUsuario(entity);
 			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
 			data = businessDelegatorView.getDataVtUsuario();
@@ -508,6 +509,45 @@ public class VtUsuarioView implements Serializable{
 			log.error(e.getMessage());
 			log.error(e.toString());
 			log.error(e.getLocalizedMessage());
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
+
+	public String cambiarEstado(ActionEvent evt){
+		log.info("Cambiando estado..");
+		selectedVtUsuario = (VtUsuarioDTO) (evt.getComponent().getAttributes()
+				.get("selectedVtUsuario"));	
+		
+		try {
+			if (entity == null) {
+				Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
+				entity = businessDelegatorView.getVtUsuario(usuaCodigo);
+			} 
+			
+			
+			String cambioActivo=entity.getActivo().toString().trim();
+			if (cambioActivo.equalsIgnoreCase("S")) {
+				entity.setActivo("N");
+			}else{
+				entity.setActivo("S");
+			}			
+			
+			Date fechaModificacion= new Date();
+			entity.setFechaModificacion(fechaModificacion);
+
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			
+			businessDelegatorView.updateVtUsuario(entity);
+			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
+			data = businessDelegatorView.getDataVtUsuario();
+			dataI = businessDelegatorView.getDataVtUsuarioInactivo();
+			
+			entity=null;
+			selectedVtUsuario=null;
+		}catch (Exception e) {
 			FacesUtils.addErrorMessage(e.getMessage());
 		}
 
@@ -528,7 +568,7 @@ public class VtUsuarioView implements Serializable{
 		if (somActivo != null) {
 			somActivo.setValue("-1");
 		}
-		
+
 		if (somEmpresasCambio != null) {
 			somEmpresasCambio.setValue("-1");
 		}
@@ -544,9 +584,11 @@ public class VtUsuarioView implements Serializable{
 		if (btnSave != null) {
 			btnSave.setDisabled(true);
 		}
-	
+
 		return "";
 	}
+
+
 
 
 

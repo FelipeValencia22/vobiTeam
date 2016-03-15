@@ -60,12 +60,12 @@
 
 				</h:panelGrid>
 
-				<p:commandButton id="btnCrear" icon="ui-icon-plus"
+				<p:commandButton id="btnCrear" icon="fa fa-save"
 					title="Crear proyecto" binding="#{vtProyectoView.btnCrear}"
 					disable="true" action="#{vtProyectoView.crearProyecto}"
 					update="pnlProyecto,growl, @([id$=panelDataTableVtProyecto], @([id$=panelDataTableVtProyectoI])" />
 
-				<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"
+				<p:commandButton id="btnLimpiar" icon="fa fa-eraser"
 					title="Limpiar " binding="#{vtProyectoView.btnLimpiar}"
 					action="#{vtProyectoView.limpiar}" update="pnlProyecto" />
 
@@ -74,12 +74,11 @@
 			<br> </br>
 
 
-			<p:accordionPanel id="accordionPanelVtProyecto"
-				multiple="true">
+			<p:accordionPanel id="accordionPanelVtProyecto" multiple="true">
 				<p:growl id="men" />
 
 				<p:tab title="Proyectos activos">
-					<p:panel id="panelDataTableVtProyecto" >
+					<p:panel id="panelDataTableVtProyecto">
 
 						<p:dataTable value="#{vtProyectoView.data}" var="vtProyecto"
 							paginator="true" rows="10">
@@ -137,21 +136,33 @@
 
 
 							<p:column headerText="Modificar">
-
-								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-									update=":dialogVtProyecto"
-									actionListener="#{vtProyectoView.action_edit}">
-									<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
-								</p:commandButton>
-
+								<div align="center">
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
+										update=":dialogVtProyecto"
+										actionListener="#{vtProyectoView.action_edit}">
+										<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
+									</p:commandButton>
+								</div>
 							</p:column>
+
+
+							<p:column headerText="Cambiar estado">
+								<div align="center">
+									<p:commandButton id="btnEstado" icon="fa fa-retweet"
+										update=":formDialog1:accordionPanelVtProyecto, :formDialog1:growl" 
+										actionListener="#{vtProyectoView.cambiarEstado}">
+										<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+
 						</p:dataTable>
 					</p:panel>
 				</p:tab>
-				
-				
+
+
 				<p:tab title="Proyectos inactivos">
-					<p:panel id="panelDataTableVtProyectoI" >
+					<p:panel id="panelDataTableVtProyectoI">
 
 						<p:dataTable value="#{vtProyectoView.dataI}" var="vtProyecto"
 							paginator="true" rows="10">
@@ -209,19 +220,30 @@
 
 
 							<p:column headerText="Modificar">
-
-								<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-									update=":dialogVtProyecto"
-									actionListener="#{vtProyectoView.action_edit}">
-									<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
-								</p:commandButton>
-
+								<div align="center">
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
+										update=":dialogVtProyecto"
+										actionListener="#{vtProyectoView.action_edit}">
+										<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
+									</p:commandButton>
+								</div>
 							</p:column>
+
+							<p:column headerText="Cambiar estado">
+								<div align="center">
+									<p:commandButton id="btnEstado" icon="fa fa-retweet"
+										update=":formDialog1:accordionPanelVtProyecto, :formDialog1:growl"
+										actionListener="#{vtProyectoView.cambiarEstado}">
+										<f:attribute name="selectedVtProyecto" value="#{vtProyecto}" />
+									</p:commandButton>
+								</div>
+							</p:column>
+
 						</p:dataTable>
 					</p:panel>
 				</p:tab>
-				
-				</p:accordionPanel>
+
+			</p:accordionPanel>
 		</h:form>
 
 		<p:dialog id="dialogVtProyecto" appendTo="@(body)" draggable="true"

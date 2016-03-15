@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -411,7 +410,6 @@ public class VtPilaProductoView implements Serializable {
 		return "";
 	}
 
-
 	public String action_edit(ActionEvent evt) {
 		selectedVtPilaProducto = (VtPilaProductoDTO) (evt.getComponent()
 				.getAttributes()
@@ -433,7 +431,7 @@ public class VtPilaProductoView implements Serializable {
 		setProyectoSeleccionado(e.getNewValue().toString());
 		try {
 			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreProyecto(getProyectoSeleccionado());
-			
+
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -514,15 +512,15 @@ public class VtPilaProductoView implements Serializable {
 				VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(proyecto);
 				entity.setVtProyecto(vtProyecto);
 			}
-			
+
 			businessDelegatorView.updateVtPilaProducto(entity);
-			
+
 			String nombreProyecto=somProyectos.getValue().toString().trim();
 			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreProyecto(nombreProyecto);
 			dataFiltroI=businessDelegatorView.getDataVtPilaProductoNombreProyectoI(nombreProyecto);
-			
+
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La pila de producto se modificó con exito"));
-			
+
 		} catch (Exception e) {
 			data = null;
 			log.error(e.toString());
@@ -538,4 +536,49 @@ public class VtPilaProductoView implements Serializable {
 		return "";
 	}
 
+	public String cambiarEstado(ActionEvent evt){
+
+		selectedVtPilaProducto= (VtPilaProductoDTO)(evt.getComponent().getAttributes()
+				.get("selectedVtPilaProducto"));
+
+		try {
+			if (entity == null) {
+				Long pilaCodigo = new Long(selectedVtPilaProducto.getPilaCodigo());
+				entity = businessDelegatorView.getVtPilaProducto(pilaCodigo);
+			} 
+			
+			String cambioActivo=entity.getActivo().toString().trim();
+			if (cambioActivo.equalsIgnoreCase("S")) {
+				entity.setActivo("N");
+			}else{
+				entity.setActivo("S");
+			}			
+			
+			Date fechaModificacion= new Date();
+			entity.setFechaModificacion(fechaModificacion);
+
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			
+			businessDelegatorView.updateVtPilaProducto(entity);
+
+			String nombreProyecto=somProyectos.getValue().toString().trim();
+			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreProyecto(nombreProyecto);
+			dataFiltroI=businessDelegatorView.getDataVtPilaProductoNombreProyectoI(nombreProyecto);
+
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La pila de producto se modificó con exito"));
+			
+			selectedVtPilaProducto=null;
+			entity=null;
+			
+			
+			
+		}catch (Exception e) {
+			data = null;
+			log.error(e.toString());
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
 }

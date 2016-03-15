@@ -22,7 +22,9 @@
 		<h:form id="menuform">
 			<ps:menu id="sm_leftmenu">
 
-
+				<p:menuitem id="sm_dashboard" value="Dashboard"
+					icon="icon-home-outline" outcome="/XHTML/dashboard"
+					containerStyleClass="layout-menubar-active" />
 
 				<p:submenu id="sm_Empresa" label="Empresa" icon="icon-truck">
 					<p:menuitem id="sm_vtEmpresa" value="Gesti&#243;n de empresas"
@@ -69,8 +71,7 @@
 
 
 
-				<p:submenu id="sm_Rol" label="Roles"
-					icon="icon-file-code">
+				<p:submenu id="sm_Rol" label="Roles" icon="icon-file-code">
 					<p:menuitem id="sm_VtRol" value="Gesti&#243;n de Rol"
 						icon="icon-columns" outcome="/XHTML/vtGestionarRoles.xhtml" />
 				</p:submenu>

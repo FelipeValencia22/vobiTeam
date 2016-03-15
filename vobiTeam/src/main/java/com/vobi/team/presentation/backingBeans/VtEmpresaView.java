@@ -25,7 +25,6 @@ import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 import com.vobi.team.utilities.FacesUtils;
 
 import com.vobi.team.modelo.dto.VtEmpresaDTO;
-import com.vobi.team.modelo.dto.VtUsuarioDTO;
 
 @ManagedBean
 @ViewScoped
@@ -50,6 +49,7 @@ public class VtEmpresaView implements Serializable{
 	private List<VtEmpresaDTO> data;
 	private List<VtEmpresaDTO> dataI;
 	private VtEmpresaDTO selectedVtEmpresa;
+	private VtEmpresaDTO selectedVtEmpresaI;
 	private VtEmpresa entity;
 	private boolean showDialog;
 
@@ -115,47 +115,56 @@ public class VtEmpresaView implements Serializable{
 	public void setBtnLimpiar(CommandButton btnLimpiar) {
 		this.btnLimpiar = btnLimpiar;
 	}
-	
+
 	public List<VtEmpresaDTO> getDataI() {
-        try {
-            if (dataI == null) {
-            	dataI = businessDelegatorView.getDataVtEmpresaInactiva();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		try {
+			if (dataI == null) {
+				dataI = businessDelegatorView.getDataVtEmpresaInactiva();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        return dataI;
-    }
+		return dataI;
+	}
 
-    public void setDataI(List<VtEmpresaDTO> vtEmpresaDTO) {
-        this.dataI = vtEmpresaDTO;
-    }
-    
-    public List<VtEmpresaDTO> getData() {
-        try {
-            if (data == null) {
-                data = businessDelegatorView.getDataVtEmpresa();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	public void setDataI(List<VtEmpresaDTO> vtEmpresaDTO) {
+		this.dataI = vtEmpresaDTO;
+	}
 
-        return data;
-    }
+	public List<VtEmpresaDTO> getData() {
+		try {
+			if (data == null) {
+				data = businessDelegatorView.getDataVtEmpresa();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public void setData(List<VtEmpresaDTO> vtEmpresaDTO) {
-        this.data = vtEmpresaDTO;
-    }
-    
-    public VtEmpresaDTO getSelectedVtEmpresa() {
-        return selectedVtEmpresa;
-    }
+		return data;
+	}
 
-    public void setSelectedVtEmpresa(VtEmpresaDTO vtEmpresa) {
-        this.selectedVtEmpresa = vtEmpresa;
-    }	
-	
+	public void setData(List<VtEmpresaDTO> vtEmpresaDTO) {
+		this.data = vtEmpresaDTO;
+	}
+
+	public VtEmpresaDTO getSelectedVtEmpresa() {
+		return selectedVtEmpresa;
+	}
+
+
+	public void setSelectedVtEmpresa(VtEmpresaDTO vtEmpresa) {
+		this.selectedVtEmpresa = vtEmpresa;
+	}	
+
+	public VtEmpresaDTO getSelectedVtEmpresaI() {
+		return selectedVtEmpresaI;
+	}
+
+	public void setSelectedVtEmpresaI(VtEmpresaDTO selectedVtEmpresaI) {
+		this.selectedVtEmpresaI = selectedVtEmpresaI;
+	}
+
 	public CommandButton getBtnGuardar() {
 		return btnGuardar;
 	}
@@ -163,16 +172,16 @@ public class VtEmpresaView implements Serializable{
 	public void setBtnGuardar(CommandButton btnGuardar) {
 		this.btnGuardar = btnGuardar;
 	}
-	
-	public boolean isShowDialog() {
-        return showDialog;
-    }
 
-    public void setShowDialog(boolean showDialog) {
-        this.showDialog = showDialog;
-    }
-    
-    public SelectOneMenu getSomActivo() {
+	public boolean isShowDialog() {
+		return showDialog;
+	}
+
+	public void setShowDialog(boolean showDialog) {
+		this.showDialog = showDialog;
+	}
+
+	public SelectOneMenu getSomActivo() {
 		return somActivo;
 	}
 
@@ -195,7 +204,7 @@ public class VtEmpresaView implements Serializable{
 	public void setSomActivo(SelectOneMenu somActivo) {
 		this.somActivo = somActivo;
 	}
-	
+
 	public List<SelectItem> getEsActivoItems() {
 		if(esActivoItems==null){
 			esActivoItems=new ArrayList<SelectItem>();
@@ -212,7 +221,7 @@ public class VtEmpresaView implements Serializable{
 
 	public String crearEmpresa(){
 		log.info("Creando empresa");
-		
+
 		VtEmpresa vtEmpresa= new VtEmpresa();
 		vtEmpresa.setNombre(txtNombreCrear.getValue().toString().trim());
 		vtEmpresa.setIdentificacion(txtIDCrear.getValue().toString().trim());
@@ -221,7 +230,7 @@ public class VtEmpresaView implements Serializable{
 		vtEmpresa.setFechaCreacion(fechaCreacion);
 		VtUsuario vtUsuario =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 		vtEmpresa.setUsuCreador(vtUsuario.getUsuaCodigo());
-		
+
 		try {
 			businessDelegatorView.saveVtEmpresa(vtEmpresa);
 			limpiar();
@@ -232,133 +241,172 @@ public class VtEmpresaView implements Serializable{
 		}
 		return "";
 	}
-	
+
 	public String modificarEmpresa(){
 		log.info("Modificando empresa");
-		
+
 		VtEmpresa vtEmpresa = null;
 		String identificacion= txtId.getValue().toString().trim();
 		vtEmpresa=businessDelegatorView.consultarEmpresaPorId(identificacion);
-		
+
 		vtEmpresa.setIdentificacion(identificacion);
 		vtEmpresa.setNombre(txtNombre.getValue().toString().trim());
-		
+
 		try {
 			businessDelegatorView.updateVtEmpresa(vtEmpresa);
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modifico con exito"));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
-		
+
 		return "";
 	}
-	
+
 	public String limpiar(){
 		log.info("Limpiando campos de texto");
 		txtNombreCrear.resetValue();
 		txtIDCrear.resetValue();
 
 		btnCrear.setDisabled(true);
-		btnModificar.setDisabled(true);
 		return "";
 	}
-	
-	
+
 	public void txtIdListener(){
 		log.info("Se ejecuto el listener");
-		
+
 		VtEmpresa vtEmpresa= null;
-		
+
 		String codigo= txtIDCrear.getValue().toString().trim();
 		vtEmpresa=businessDelegatorView.consultarEmpresaPorId(codigo);
 
-		
+
 		if(vtEmpresa==null){
 			txtNombreCrear.resetValue();
-			
+
 			btnCrear.setDisabled(false);
-			btnModificar.setDisabled(true);
 		}else{
-			
+
 			txtNombreCrear.setValue(vtEmpresa.getNombre());
-			
+
 			btnCrear.setDisabled(true);
-			btnModificar.setDisabled(false);
 		}
 	}
-	
+
 	public String action_edit(ActionEvent evt) {
-        selectedVtEmpresa = (VtEmpresaDTO) (evt.getComponent().getAttributes()
-                                               .get("selectedVtEmpresa"));
-       
-        txtNombre.setValue(selectedVtEmpresa.getNombre());
-        txtNombre.setDisabled(false);
-        btnGuardar.setDisabled(false);
-        setShowDialog(true);
+		selectedVtEmpresa = (VtEmpresaDTO) (evt.getComponent().getAttributes()
+				.get("selectedVtEmpresa"));
 
-        return "";
-    }
-	
+		txtNombre.setValue(selectedVtEmpresa.getNombre());
+		txtNombre.setDisabled(false);
+		btnGuardar.setDisabled(false);
+		setShowDialog(true);
+
+		return "";
+	}
+
 	public String action_save() {
-        try {
-            if ((selectedVtEmpresa == null) && (entity == null)) {
-            	
-            } else {
-                action_modify();
-            }
+		try {
+			if ((selectedVtEmpresa == null) && (entity == null)) {
 
-            data = null;
-        } catch (Exception e) {
-            FacesUtils.addErrorMessage(e.getMessage());
-        }
+			} else {
+				action_modify();
+			}
 
-        return "";
-    }
-	
-	 public String action_modify() {
-	        try {
-	            if (entity == null) {
-	                Long emprCodigo = new Long(selectedVtEmpresa.getEmprCodigo());
-	                entity = businessDelegatorView.getVtEmpresa(emprCodigo);
-	            }
+			data = null;
+		} catch (Exception e) {
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
 
-	            String activo = somActivo.getValue().toString().trim();
-				if (activo.equalsIgnoreCase("Si")) {
-					entity.setActivo("S");
-				} else {
-					if(activo.equals("-1")){
-						entity.setActivo(entity.getActivo());
-					}
-					else{
-						entity.setActivo("N");
-					}
+		return "";
+	}
 
+	public String action_modify() {
+		try {
+			if (entity == null) {
+				Long emprCodigo = new Long(selectedVtEmpresa.getEmprCodigo());
+				entity = businessDelegatorView.getVtEmpresa(emprCodigo);
+			}
+
+			String activo = somActivo.getValue().toString().trim();
+			if (activo.equalsIgnoreCase("Si")) {
+				entity.setActivo("S");
+			} else {
+				if(activo.equals("-1")){
+					entity.setActivo(entity.getActivo());
 				}
-				
-				Date fechaModificacion= new Date();
-				entity.setFechaModificacion(fechaModificacion);
-				
-				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
-				entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
-				
-				entity.setNombre(FacesUtils.checkString(txtNombre));
+				else{
+					entity.setActivo("N");
+				}
 
-	            businessDelegatorView.updateVtEmpresa(entity);
-				FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modificó con exito"));
-				data = businessDelegatorView.getDataVtEmpresa();
-				dataI = businessDelegatorView.getDataVtEmpresaInactiva();
-	        } catch (Exception e) {
-	            data = null;
-	            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
-	        }
+			}
 
-	        return "";
-	    }
-	 
-	 public String action_closeDialog() {
-	        setShowDialog(false);
-	        return "";
-	    }
+			Date fechaModificacion= new Date();
+			entity.setFechaModificacion(fechaModificacion);
 
-	
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+
+			entity.setNombre(FacesUtils.checkString(txtNombre));
+
+			businessDelegatorView.updateVtEmpresa(entity);
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modificó con exito"));
+			data = businessDelegatorView.getDataVtEmpresa();
+			dataI = businessDelegatorView.getDataVtEmpresaInactiva();
+			selectedVtEmpresa=null;
+			entity=null;
+		} catch (Exception e) {
+			data = null;
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
+		}
+
+		return "";
+	}
+
+	public String action_closeDialog() {
+		VtEmpresaDTO vtEmpresaC = null;
+		setSelectedVtEmpresa(vtEmpresaC);
+		setShowDialog(false);
+		return "";
+	}
+
+	public String cambiarEstado(ActionEvent evt){
+		log.info("Cambiando estado..");
+		selectedVtEmpresa = (VtEmpresaDTO) (evt.getComponent().getAttributes()
+				.get("selectedVtEmpresa"));
+		try {
+			
+			if (entity == null) {
+				Long emprCodigo = new Long(selectedVtEmpresa.getEmprCodigo());
+				entity = businessDelegatorView.getVtEmpresa(emprCodigo);
+			} 
+			
+			String cambioActivo=entity.getActivo().toString().trim();
+			if (cambioActivo.equalsIgnoreCase("S")) {
+				entity.setActivo("N");
+			}else{
+				entity.setActivo("S");
+			}			
+			
+			Date fechaModificacion= new Date();
+			entity.setFechaModificacion(fechaModificacion);
+
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			
+			businessDelegatorView.updateVtEmpresa(entity);
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modificó con exito"));
+			data = businessDelegatorView.getDataVtEmpresa();
+			dataI = businessDelegatorView.getDataVtEmpresaInactiva();
+			selectedVtEmpresa=null;
+			entity=null;
+			
+		}catch (Exception e) {
+			data = null;
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
+		}
+
+
+		return "";
+	}
+
 }
