@@ -49,7 +49,7 @@
 						binding="#{vtArtefactoView.txtdescripcion}" />
 
 
-					<p:selectOneMenu id="somPilaProducto"
+					<p:selectOneMenu id="somPilaProducto" 
 						binding="#{vtArtefactoView.somPilaProducto}" onchange="submit()"
 						valueChangeListener="#{vtArtefactoView.imprimirValue}">
 						<f:selectItem itemValue="-1" itemLabel="Pila de producto" />
@@ -95,6 +95,7 @@
 
 				<p:commandButton id="btnLimpiarS" icon="ui-icon-refresh"
 					binding="#{vtArtefactoView.btnLimpiarS}" title="Limpiar"
+					action="#{vtArtefactoView.limpiar}"
 					update="panelVtArtefacto" />
 			</p:panel>
 

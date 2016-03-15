@@ -61,6 +61,8 @@ public class VtArtefactoView implements Serializable {
 	private List<VtArtefactoDTO> data;
 	private List<VtArtefactoDTO> dataFiltro;
 	private List<VtArtefactoDTO> dataFiltroI;
+	private List<VtSprintDTO> dataSprint;
+
 	private VtArtefactoDTO selectedVtArtefacto;
 	
 
@@ -98,6 +100,13 @@ public class VtArtefactoView implements Serializable {
 	public void setSomUsuariosArtefactos(SelectOneMenu somUsuariosArtefactos) {
 		this.somUsuariosArtefactos = somUsuariosArtefactos;
 	}
+	public List<VtSprintDTO> getDataSprint() {
+		return dataSprint;
+	}
+	public void setDataSprint(List<VtSprintDTO> dataSprint) {
+		this.dataSprint = dataSprint;
+	}
+
 
 	public List<SelectItem> getEsUsuarioArtefactoItems() {
 		return esUsuarioArtefactoItems;
@@ -440,10 +449,24 @@ public class VtArtefactoView implements Serializable {
 			}
 
 			businessDelegatorView.saveVtArtefacto(vtArtefacto);
+			limpiar();
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El artefacto se creó con exito"));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
+		return "";
+	}
+	
+	public String limpiar(){
+		somActivo.setValue("-1");
+		txtdescripcion.resetValue();
+		txtEsfuerzoEstimado.resetValue();
+		txtnombre.resetValue();
+		somEstados.setValue("-1");
+		somPilaProducto.setValue("-1");
+		somPrioridades.setValue("-1");
+		somSprints.setValue("-1");
+		somTiposDeArtefactos.setValue("-1");
 		return "";
 	}
 
@@ -462,20 +485,20 @@ public class VtArtefactoView implements Serializable {
 
 	
 	public String imprimirValue(ValueChangeEvent vce){
-		log.info("Info:"+vce.getNewValue());
-		String spring = vce.getNewValue().toString();
-		Long idSpring = Long.valueOf(spring);
+	
 		
 		try {
-			if (esSprintItems == null) {
-				List<VtSprintDTO> listaSprints = businessDelegatorView.getDataVtSprintFiltro(idSpring);
-				esSprintItems = new ArrayList<SelectItem>();
+			log.info("Info:"+vce.getNewValue());
+			String pila = vce.getNewValue().toString();
+			Long idPila = Long.valueOf(pila);
 
-				for (VtSprintDTO vtSprint : listaSprints) {
-					esSprintItems.add(new SelectItem(vtSprint.getSpriCodigo(), vtSprint.getNombre()));
-				}
+			VtPilaProducto vtPilaProducto = businessDelegatorView.getVtPilaProducto(idPila);
+			dataSprint = businessDelegatorView.getDataVtSprintFiltro(vtPilaProducto.getPilaCodigo());
+			esSprintItems = new ArrayList<SelectItem>();
+			for (VtSprintDTO vtSprintDTO : dataSprint) {
+				esSprintItems.add(new SelectItem(vtSprintDTO.getSpriCodigo(), vtSprintDTO.getNombre()));
 			}
-
+			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}

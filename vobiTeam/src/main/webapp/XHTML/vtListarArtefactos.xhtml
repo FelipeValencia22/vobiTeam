@@ -73,7 +73,7 @@
 							</p:column> 
 
 							<p:column filterBy="#{vtArtefacto.titulo}"
-								sortBy="#{vtArtefactoView.titulo}">
+								sortBy="#{vtArtefacto.titulo}">
 								<f:facet name="header">
 									<h:outputText value="Titulo" />
 								</f:facet>
@@ -116,49 +116,49 @@
 
 						<p:dataTable value="#{vtArtefactoView.dataFiltroI}"
 							var="vtArtefacto" paginator="true" rows="5">
-							<p:column filterBy="#{vtArtefactoView.arteCodigo}"
-								sortBy="#{vtArtefactoView.arteCodigo}">
+							<p:column filterBy="#{vtArtefacto.arteCodigo}"
+								sortBy="#{vtArtefacto.arteCodigo}">
 								<f:facet name="header">
 									<h:outputText value="Código" />
 								</f:facet>
-								<h:outputText value="#{vtArtefactoView.arteCodigo}" />
+								<h:outputText value="#{vtArtefacto.arteCodigo}" />
 							</p:column>
 
-							<p:column filterBy="#{vtArtefactoView.activo}"
-								sortBy="#{vtArtefactoView.activo}">
+							<p:column filterBy="#{vtArtefacto.activo}"
+								sortBy="#{vtArtefacto.activo}">
 								<f:facet name="header">
 									<h:outputText value="Activo" />
 								</f:facet>
-								<h:outputText value="#{vtArtefactoView.activo}" />
+								<h:outputText value="#{vtArtefacto.activo}" />
 							</p:column>
 
 
 
 
 
-							<p:column filterBy="#{vtArtefactoView.titulo}"
-								sortBy="#{vtArtefactoView.titulo}">
+							<p:column filterBy="#{vtArtefacto.titulo}"
+								sortBy="#{vtArtefacto.titulo}">
 								<f:facet name="header">
 									<h:outputText value="Titulo" />
 								</f:facet>
-								<h:outputText value="#{vtArtefactoView.titulo}" />
+								<h:outputText value="#{vtArtefacto.titulo}" />
 							</p:column>
 
-							<p:column filterBy="#{vtArtefactoView.descripcion}"
-								sortBy="#{vtArtefactoView.descripcion}">
+							<p:column filterBy="#{vtArtefacto.descripcion}"
+								sortBy="#{vtArtefacto.descripcion}">
 								<f:facet name="header">
 									<h:outputText value="Descripción" />
 								</f:facet>
-								<h:outputText value="#{vtArtefactoView.descripcion}" />
+								<h:outputText value="#{vtArtefacto.descripcion}" />
 							</p:column>
 
 
-							<p:column filterBy="#{vtArtefacto.spriCodigo_VtArtefacto}"
-								sortBy="#{vtArtefacto.spriCodigo_VtArtefacto}">
+							<p:column filterBy="#{vtArtefacto.spriCodigo_VtSprint}"
+								sortBy="#{vtArtefacto.spriCodigo_VtSprint}">
 								<f:facet name="header">
 									<h:outputText value="Código del sprint" />
 								</f:facet>
-								<h:outputText value="#{vtArtefacto.spriCodigo_VtArtefacto}" />
+								<h:outputText value="#{vtArtefacto.spriCodigo_VtSprint}" />
 							</p:column>
 
 							<p:column headerText="Modificar">

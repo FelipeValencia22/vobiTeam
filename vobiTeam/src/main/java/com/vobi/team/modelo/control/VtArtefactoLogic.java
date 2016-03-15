@@ -120,7 +120,7 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 
 		try {
 
-			if (entity.getActivo() == null) {
+			if (entity.getActivo() == null || entity.getActivo().toString().trim().equalsIgnoreCase("") == true) {
 				throw new Exception("Defina si el artefacto esta activo o no");
 			}
 			if ((entity.getActivo() != null) && (Utilities.checkWordAndCheckWithlength(
@@ -128,18 +128,11 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 				throw new ZMessManager().new NotValidFormatException("activo");
 			}
 
-			if (entity.getActivo().toString().trim().equalsIgnoreCase("") == true) {
-				throw new Exception("Debe definir si el artefacto estara activo o inactivo");
+			if (entity.getTitulo() == null || entity.getTitulo().toString().trim().equalsIgnoreCase("") == true) {
+				throw new Exception("El título es obligatorio");
 			}
 
-
-			if (entity.getTitulo() == null) {
-				throw new Exception("El título no puede ser nulo");
-			}
-
-			if (entity.getTitulo().toString().trim().equalsIgnoreCase("") == true) {
-				throw new Exception("El título no puede ser vacio");
-			}
+			
 
 			if ((entity.getTitulo() != null)
 					&& (Utilities.checkWordAndCheckWithlength(entity.getTitulo(), 255) == false)) {
