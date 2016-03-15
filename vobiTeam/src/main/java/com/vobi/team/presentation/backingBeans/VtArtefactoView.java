@@ -470,9 +470,9 @@ public class VtArtefactoView implements Serializable {
 		return "";
 	}
 
-	public String filtrar() {
+	public String filtrar(ValueChangeEvent evt) {
 		try {
-			String sprint = somSprints.getValue().toString().trim();
+			String sprint = evt.getNewValue().toString();
 			Long spriCodigo = Long.valueOf(sprint);
 			VtSprint vtSprint = businessDelegatorView.getVtSprint(spriCodigo);
 			dataFiltro = businessDelegatorView.getDataVtArtefactoFiltro(vtSprint.getSpriCodigo());

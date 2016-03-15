@@ -123,10 +123,6 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 			if (entity.getActivo() == null || entity.getActivo().toString().trim().equalsIgnoreCase("") == true) {
 				throw new Exception("Defina si el artefacto esta activo o no");
 			}
-			if ((entity.getActivo() != null) && (Utilities.checkWordAndCheckWithlength(
-					entity.getEsfuerzoEstimado().toString().trim().trim().intern(), 1) == false)) {
-				throw new ZMessManager().new NotValidFormatException("activo");
-			}
 
 			if (entity.getTitulo() == null || entity.getTitulo().toString().trim().equalsIgnoreCase("") == true) {
 				throw new Exception("El título es obligatorio");
@@ -436,11 +432,12 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 			List<VtArtefactoDTO> vtArtefactoDTO = new ArrayList<VtArtefactoDTO>();
 
 			for (VtArtefacto vtArtefactoTmp : vtArtefacto) {
-				VtArtefactoDTO vtArtefactoDTO2 = new VtArtefactoDTO();
+				
 
 				if (vtArtefactoTmp.getActivo().equalsIgnoreCase("S")) {
 
 					if (vtArtefactoTmp.getVtSprint().getSpriCodigo() == codigoFiltro) {
+						VtArtefactoDTO vtArtefactoDTO2 = new VtArtefactoDTO();
 
 						vtArtefactoDTO2.setArteCodigo(vtArtefactoTmp.getArteCodigo());
 						vtArtefactoDTO2
@@ -498,11 +495,13 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 			List<VtArtefactoDTO> vtArtefactoDTO = new ArrayList<VtArtefactoDTO>();
 
 			for (VtArtefacto vtArtefactoTmp : vtArtefacto) {
-				VtArtefactoDTO vtArtefactoDTO2 = new VtArtefactoDTO();
+				
 
 				if (vtArtefactoTmp.getActivo().equalsIgnoreCase("N")) {
 
 					if (vtArtefactoTmp.getVtSprint().getSpriCodigo() == codigoFiltro) {
+						
+						VtArtefactoDTO vtArtefactoDTO2 = new VtArtefactoDTO();
 
 						vtArtefactoDTO2.setArteCodigo(vtArtefactoTmp.getArteCodigo());
 						vtArtefactoDTO2

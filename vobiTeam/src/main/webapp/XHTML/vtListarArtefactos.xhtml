@@ -28,22 +28,19 @@
 		<h:form id="frm">
 
 			<p:growl id="growl" />
-			<p:panel id="pnlListaSprint">
-				<h2>Listar Artefactos</h2>
+			<p:panel id="pnlListaSprint" header="LISTA ARTEFACTOS">
 				<h:panelGrid columns="1">
 
 					<h3>Sprint</h3>
 					<p:selectOneMenu id="somSprints"
-						binding="#{vtArtefactoView.somSprints}">
+						binding="#{vtArtefactoView.somSprints}"
+						valueChangeListener="#{vtArtefactoView.filtrar}"
+						onchange="submit()">
 						<f:selectItem itemValue="-1" itemLabel="Sprint" />
 						<f:selectItems value="#{vtArtefactoView.esSprintItems}" />
 					</p:selectOneMenu>
 					<br></br>
 
-					<p:commandButton id="btnFiltrar" value="Filtrar"
-						binding="#{vtArtefactoView.btnFiltrar}"
-						action="#{vtArtefactoView.filtrar}"
-						update="@([id$=dataTableListaA],@([id$=dataTableListaI]" />
 				</h:panelGrid>
 			</p:panel>
 
@@ -70,7 +67,7 @@
 									<h:outputText value="Activo" />
 								</f:facet>
 								<h:outputText value="#{vtArtefacto.activo}" />
-							</p:column> 
+							</p:column>
 
 							<p:column filterBy="#{vtArtefacto.titulo}"
 								sortBy="#{vtArtefacto.titulo}">
@@ -173,7 +170,7 @@
 					</p:panel>
 
 				</p:tab>
-				
+
 			</p:accordionPanel>
 		</h:form>
 
