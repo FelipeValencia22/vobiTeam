@@ -73,7 +73,7 @@ public class VtRolLogic implements IVtRolLogic {
 			if (entity.getActivo() == null) {
 				throw new ZMessManager().new EmptyFieldException("activo");
 			}
-			
+
 			if (entity.getActivo().toString().trim().equalsIgnoreCase("")) {
 				throw new ZMessManager().new EmptyFieldException("activo");
 			}
@@ -94,7 +94,7 @@ public class VtRolLogic implements IVtRolLogic {
 			if (entity.getRolNombre() == null) {
 				throw new ZMessManager().new EmptyFieldException("rolNombre");
 			}
-			
+
 			if (entity.getRolNombre().toString().trim().equalsIgnoreCase("")) {
 				throw new Exception("El nombre no puede ser vacio");
 			}
@@ -210,17 +210,18 @@ public class VtRolLogic implements IVtRolLogic {
 			List<VtRolDTO> vtRolDTO = new ArrayList<VtRolDTO>();
 
 			for (VtRol vtRolTmp : vtRol) {
-				VtRolDTO vtRolDTO2 = new VtRolDTO();
-				if (vtRolTmp.getActivo().toString().trim().equalsIgnoreCase("S")==true) 
-				vtRolDTO2.setRolCodigo(vtRolTmp.getRolCodigo());
-				vtRolDTO2.setActivo((vtRolTmp.getActivo() != null) ? vtRolTmp.getActivo() : null);
-				vtRolDTO2.setFechaCreacion(vtRolTmp.getFechaCreacion());
-				vtRolDTO2.setFechaModificacion(vtRolTmp.getFechaModificacion());
-				vtRolDTO2.setRolNombre((vtRolTmp.getRolNombre() != null) ? vtRolTmp.getRolNombre() : null);
-				vtRolDTO2.setUsuCreador((vtRolTmp.getUsuCreador() != null) ? vtRolTmp.getUsuCreador() : null);
-				vtRolDTO2.setUsuModificador(
-						(vtRolTmp.getUsuModificador() != null) ? vtRolTmp.getUsuModificador() : null);
-				vtRolDTO.add(vtRolDTO2);
+				if (vtRolTmp.getActivo().toString().trim().equalsIgnoreCase("S")){
+					VtRolDTO vtRolDTO2 = new VtRolDTO();
+					vtRolDTO2.setRolCodigo(vtRolTmp.getRolCodigo());
+					vtRolDTO2.setActivo((vtRolTmp.getActivo() != null) ? vtRolTmp.getActivo() : null);
+					vtRolDTO2.setFechaCreacion(vtRolTmp.getFechaCreacion());
+					vtRolDTO2.setFechaModificacion(vtRolTmp.getFechaModificacion());
+					vtRolDTO2.setRolNombre((vtRolTmp.getRolNombre() != null) ? vtRolTmp.getRolNombre() : null);
+					vtRolDTO2.setUsuCreador((vtRolTmp.getUsuCreador() != null) ? vtRolTmp.getUsuCreador() : null);
+					vtRolDTO2.setUsuModificador(
+							(vtRolTmp.getUsuModificador() != null) ? vtRolTmp.getUsuModificador() : null);
+					vtRolDTO.add(vtRolDTO2);
+				}
 			}
 
 			return vtRolDTO;
@@ -238,8 +239,8 @@ public class VtRolLogic implements IVtRolLogic {
 			List<VtRolDTO> vtRolDTO = new ArrayList<VtRolDTO>();
 
 			for (VtRol vtRolTmp : vtRol) {
-				VtRolDTO vtRolDTO2 = new VtRolDTO();
 				if (vtRolTmp.getActivo().toString().trim().equalsIgnoreCase("N")) {
+					VtRolDTO vtRolDTO2 = new VtRolDTO();
 					vtRolDTO2.setRolCodigo(vtRolTmp.getRolCodigo());
 					vtRolDTO2.setActivo((vtRolTmp.getActivo() != null) ? vtRolTmp.getActivo() : null);
 					vtRolDTO2.setFechaCreacion(vtRolTmp.getFechaCreacion());
@@ -383,11 +384,11 @@ public class VtRolLogic implements IVtRolLogic {
 					if (booVariable.booleanValue()) {
 						tempWhere = (tempWhere.length() == 0)
 								? ("(model." + variable + " " + comparator + " \'" + value + "\' )")
-								: (tempWhere + " AND (model." + variable + " " + comparator + " \'" + value + "\' )");
+										: (tempWhere + " AND (model." + variable + " " + comparator + " \'" + value + "\' )");
 					} else {
 						tempWhere = (tempWhere.length() == 0)
 								? ("(model." + variable + " " + comparator + " " + value + " )")
-								: (tempWhere + " AND (model." + variable + " " + comparator + " " + value + " )");
+										: (tempWhere + " AND (model." + variable + " " + comparator + " " + value + " )");
 					}
 				}
 
@@ -408,8 +409,8 @@ public class VtRolLogic implements IVtRolLogic {
 					tempWhere = (tempWhere.length() == 0)
 							? ("(" + value + " " + comparator1 + " " + variable + " and " + variable + " " + comparator2
 									+ " " + value2 + " )")
-							: (tempWhere + " AND (" + value + " " + comparator1 + " " + variable + " and " + variable
-									+ " " + comparator2 + " " + value2 + " )");
+									: (tempWhere + " AND (" + value + " " + comparator1 + " " + variable + " and " + variable
+											+ " " + comparator2 + " " + value2 + " )");
 				}
 
 				j = j + 4;
@@ -438,8 +439,8 @@ public class VtRolLogic implements IVtRolLogic {
 
 					tempWhere = (tempWhere.length() == 0)
 							? ("(model." + variable + " between \'" + value + "\' and \'" + value2 + "\')")
-							: (tempWhere + " AND (model." + variable + " between \'" + value + "\' and \'" + value2
-									+ "\')");
+									: (tempWhere + " AND (model." + variable + " between \'" + value + "\' and \'" + value2
+											+ "\')");
 				}
 
 				k = k + 2;

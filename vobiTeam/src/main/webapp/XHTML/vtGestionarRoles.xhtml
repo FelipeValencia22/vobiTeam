@@ -27,137 +27,95 @@
 
 		<h:form id="frm">
 
-			<p:growl id="growl" sticky="true" />
-			<br></br>
-			<p:panel id="pnlRol">
-				<h2>Gestionar Rol</h2>
-				<h:panelGrid columns="1">
+			<p:growl id="growl" />
+			
+			<p:panel id="pnlRol" header="ROLES">
 
-					
-					
-					<p:selectOneMenu id="somActivo"
-						binding="#{vtRolView.somActivo}">
-						<f:selectItem itemValue="-1" itemLabel="Activo" />
-						<f:selectItems value="#{vtRolView.esActivoItems}" />
-					</p:selectOneMenu>
-					
-
-					<p:inputText id="txtNombreCrear" placeholder="Nombre"
-						binding="#{vtRolView.txtNombre}" />
-				</h:panelGrid>
+				<br></br>
+				<p:commandButton value="Crear Rol" type="button"
+					onclick="PF('dlg').show();" />
+				<br></br>
 				<br></br>
 
-				<p:commandButton id="btnCrear" icon="ui-icon-plus"
-					title="Crear rol" binding="#{vtRolView.btnCrear}"
-					action="#{vtRolView.crearRol}"
-					update="pnlRol,growl"/>
-					
-					
-					<p:commandButton id="btnLimpiar" icon="ui-icon-refresh"
-					title="Limpiar" binding="#{vtRolView.btnLimpiar}"
-					action="#{vtRolView.limpiar}" update="pnlRol,growl" />
+				<p:accordionPanel id="panelDataTableVtEmpresa" header="Usuarios"
+					multiple="true">
+					<p:growl id="men" />
+
+					<p:tab title="Roles activos ">
+						<p:panel id="dataTableVtEmpresaA">
+
+							<p:dataTable value="#{vtRolView.data}" var="vtRol"
+								paginator="true" rows="5">
+
+								<p:column filterBy="#{vtRol.rolCodigo}"
+									sortBy="#{vtRol.rolCodigo}">
+									<f:facet name="header">
+										<h:outputText value="Código Rol" />
+									</f:facet>
+									<h:outputText value="#{vtRol.rolCodigo}" />
+								</p:column>
+
+
+								<p:column filterBy="#{vtRol.activo}" sortBy="#{vtRol.activo}">
+									<f:facet name="header">
+										<h:outputText value="Activo" />
+									</f:facet>
+									<h:outputText value="#{vtRol.activo}" />
+								</p:column>
+
+								<p:column filterBy="#{vtRol.rolNombre}"
+									sortBy="#{vtRol.rolNombre}">
+									<f:facet name="header">
+										<h:outputText value="Nombre rol" />
+									</f:facet>
+									<h:outputText value="#{vtRol.rolNombre}" />
+								</p:column>
+
+
+
+							</p:dataTable>
+						</p:panel>
+					</p:tab>
+
+					<br></br>
+
+					<p:tab title="Roles Inactivos ">
+						<p:panel id="dataTableVtEmpresaI">
+
+							<p:dataTable value="#{vtRolView.dataI}" var="vtRol"
+								paginator="true" rows="5">
+
+								<p:column filterBy="#{vtRol.rolCodigo}"
+									sortBy="#{vtRol.rolCodigo}">
+									<f:facet name="header">
+										<h:outputText value="Código Rol" />
+									</f:facet>
+									<h:outputText value="#{vtRol.rolCodigo}" />
+								</p:column>
+
+
+								<p:column filterBy="#{vtRol.activo}" sortBy="#{vtRol.activo}">
+									<f:facet name="header">
+										<h:outputText value="Activo" />
+									</f:facet>
+									<h:outputText value="#{vtRol.activo}" />
+								</p:column>
+
+								<p:column filterBy="#{vtRol.rolNombre}"
+									sortBy="#{vtRol.rolNombre}">
+									<f:facet name="header">
+										<h:outputText value="Nombre rol" />
+									</f:facet>
+									<h:outputText value="#{vtRol.rolNombre}" />
+								</p:column>
+
+							</p:dataTable>
+						</p:panel>
+					</p:tab>
+				</p:accordionPanel>
 
 			</p:panel>
-	
 
-		<br></br>
-		
-		<p:accordionPanel id="panelDataTableVtEmpresa" header="Usuarios"
-			multiple="true">
-			<p:growl id="men" />
-
-			<p:tab title="Roles activos ">
-				<p:panel id="dataTableVtEmpresaA">
-
-					<p:dataTable value="#{vtRolView.data}" var="vtRol"
-						paginator="true" rows="5">
-
-						<p:column filterBy="#{vtRol.rolCodigo}"
-							sortBy="#{vtRol.rolCodigo}">
-							<f:facet name="header">
-								<h:outputText value="Código Rol" />
-							</f:facet>
-							<h:outputText value="#{vtRol.rolCodigo}" />
-						</p:column>
-
-
-						<p:column filterBy="#{vtRol.activo}"
-							sortBy="#{vtRol.activo}">
-							<f:facet name="header">
-								<h:outputText value="Activa" />
-							</f:facet>
-							<h:outputText value="#{vtRol.activo}" />
-						</p:column>
-
-						<p:column filterBy="#{vtRol.rolNombre}"
-							sortBy="#{vtRol.rolNombre}">
-							<f:facet name="header">
-								<h:outputText value="Nombre rol" />
-							</f:facet>
-							<h:outputText value="#{vtRol.rolNombre}" />
-						</p:column>
-
-
-
-						<p:column headerText="Options">
-							<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-								update=":dialogVtEmpresa"
-								actionListener="#{vtEmpresaView.action_edit}">
-								<f:attribute name="selectedVtEmpresa" value="#{vtEmpresa}" />
-							</p:commandButton>
-
-						</p:column>
-					</p:dataTable>
-				</p:panel>
-			</p:tab>
-
-			<br></br>
-
-			<p:tab title="Roles Inactivos ">
-				<p:panel id="dataTableVtEmpresaI">
-
-					<p:dataTable value="#{vtRolView.dataI}" var="vtRol"
-						paginator="true" rows="5">
-
-						<p:column filterBy="#{vtRol.rolCodigo}"
-							sortBy="#{vtRol.rolCodigo}">
-							<f:facet name="header">
-								<h:outputText value="Código Rol" />
-							</f:facet>
-							<h:outputText value="#{vtRol.rolCodigo}" />
-						</p:column>
-
-
-						<p:column filterBy="#{vtRol.activo}"
-							sortBy="#{vtRol.activo}">
-							<f:facet name="header">
-								<h:outputText value="Activa" />
-							</f:facet>
-							<h:outputText value="#{vtRol.activo}" />
-						</p:column>
-
-						<p:column filterBy="#{vtRol.rolNombre}"
-							sortBy="#{vtRol.rolNombre}">
-							<f:facet name="header">
-								<h:outputText value="Nombre rol" />
-							</f:facet>
-							<h:outputText value="#{vtRol.rolNombre}" />
-						</p:column>
-
-
-
-						<p:column headerText="Options">
-							<p:commandButton id="btnEdit" icon="ui-icon-pencil"
-								update=":dialogVtEmpresa"
-								actionListener="#{vtEmpresaView.action_edit}">
-								<f:attribute name="selectedVtEmpresa" value="#{vtEmpresa}" />
-							</p:commandButton>
-
-						</p:column>
-					</p:dataTable>
-				</p:panel>
-			</p:tab>
-		</p:accordionPanel>
 		</h:form>
 
 		<p:dialog id="dialogVtEmpresa" appendTo="@(body)" draggable="true"
@@ -194,6 +152,40 @@
 				</p:panel>
 			</h:form>
 		</p:dialog>
+
+
+
+		<p:dialog header="Crear rol" appendTo="@(body)" draggable="true"
+			widgetVar="dlg" resizable="false" modal="true" width="500">
+			<h:form id="formDialogCrear">
+				<p:messages id="msg" />
+
+				<h:panelGrid columns="1">
+
+					<p:selectOneMenu id="somActivo" binding="#{vtRolView.somActivo}">
+						<f:selectItem itemValue="-1" itemLabel="Activo" />
+						<f:selectItems value="#{vtRolView.esActivoItems}" />
+					</p:selectOneMenu>
+
+					<p:inputText id="txtNombreCrear" placeholder="Nombre"
+						binding="#{vtRolView.txtNombre}" />
+				</h:panelGrid>
+				<br></br>
+
+				<p:commandButton id="btnCrear" icon="fa fa-save" title="Crear rol"
+					binding="#{vtRolView.btnCrear}" action="#{vtRolView.crearRol}"
+					update="formDialogCrear,@([id$=growl],@([id$=panelDataTableVtEmpresa]" />
+
+				<p:commandButton id="btnLimpiar" icon="fa fa-eraser"
+					title="Limpiar" binding="#{vtRolView.btnLimpiar}"
+					action="#{vtRolView.limpiar}"
+					update="formDialogCrear,@([id$=growl]" />
+
+			</h:form>
+		</p:dialog>
+
+
+
 
 
 	</ui:define>

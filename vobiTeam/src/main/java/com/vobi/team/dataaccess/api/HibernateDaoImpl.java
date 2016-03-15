@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
 import com.vobi.team.modelo.VtEmpresa;
+import com.vobi.team.modelo.VtRol;
 import com.vobi.team.modelo.VtUsuario;
 
 import java.io.Serializable;
@@ -653,5 +654,12 @@ public class HibernateDaoImpl<T, PK extends Serializable> implements Dao<T, PK> 
 		return (VtUsuario) sessionFactory.getCurrentSession().getNamedQuery("consultarUsuarioPorLogin")
 				.setString("login", login).uniqueResult();
 	}
+	
+	@Override
+	public VtRol consultarRolPorNombre(String rolNombre) {
+		return (VtRol) sessionFactory.getCurrentSession().getNamedQuery("consultarRolPorNombre")
+				.setString("rolNombre", rolNombre).uniqueResult() ;
+	}
+
 
 }

@@ -278,11 +278,8 @@ public class VtPilaProductoLogic implements IVtPilaProductoLogic {
 		List<VtPilaProducto> vtPilaProducto = vtPilaProductoDAO.findAll();
 
 		List<VtPilaProductoDTO> vtPilaProductoDTOEmpresa = new ArrayList<VtPilaProductoDTO>();
-		log.info("Iterando en la lista");
 		for (VtPilaProducto vtPilaProductoTmp : vtPilaProducto) {
-			log.info("Nombre empresa");
-			log.info(vtPilaProductoTmp.getVtProyecto().getVtEmpresa().getNombre());
-			log.info("");
+
 			if(vtPilaProductoTmp.getVtProyecto().getVtEmpresa().getIdentificacion().equalsIgnoreCase(empresa)){
 				log.info("Empresa encontrada");
 				VtPilaProductoDTO vtPilaProductoDTO2 = new VtPilaProductoDTO();

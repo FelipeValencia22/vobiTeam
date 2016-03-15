@@ -124,7 +124,7 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 				throw new Exception("Defina si el artefacto esta activo o no");
 			}
 			if ((entity.getActivo() != null) && (Utilities.checkWordAndCheckWithlength(
-					entity.getEsfuerzoEstimado().toString().trim().trim().intern(), 1) == true)) {
+					entity.getEsfuerzoEstimado().toString().trim().trim().intern(), 1) == false)) {
 				throw new ZMessManager().new NotValidFormatException("activo");
 			}
 

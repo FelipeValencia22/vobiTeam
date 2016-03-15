@@ -48,22 +48,35 @@ public class VtRolView implements Serializable {
 
 	private CommandButton btnCrearU;
 	private CommandButton btnCrear;
+	private CommandButton btnGuardar;
 	private CommandButton btnModificar;
 	private CommandButton btnBorrar;
 	private CommandButton btnLimpiar;
 	private List<VtRolDTO> data;
 	private List<VtRolDTO> dataI;
+	private VtRolDTO selectedVtRol;
+
+
+	private CommandButton btnSave;
+
+	private VtRol entity;
+
+	private VtUsuarioDTO selectedVtUsuario;
+
+	private boolean showDialog;
+
+	private InputText txtUsuaCodigo;
 
 	public List<VtRolDTO> getData() {
-		 try {
-	            if (data == null) {
-	            	data = businessDelegatorView.getDataVtRol();
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+		try {
+			if (data == null) {
+				data = businessDelegatorView.getDataVtRol();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	        return data;
+		return data;
 	}
 
 	public void setData(List<VtRolDTO> data) {
@@ -71,15 +84,31 @@ public class VtRolView implements Serializable {
 	}
 
 	public List<VtRolDTO> getDataI() {
-		 try {
-	            if (dataI == null) {
-	            	dataI = businessDelegatorView.getDataVtRolInactivo();
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+		try {
+			if (dataI == null) {
+				dataI = businessDelegatorView.getDataVtRolInactivo();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	        return dataI;
+		return dataI;
+	}
+
+	public CommandButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(CommandButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
+	}
+
+	public VtRolDTO getSelectedVtRol() {
+		return selectedVtRol;
+	}
+
+	public void setSelectedVtRol(VtRolDTO selectedVtRol) {
+		this.selectedVtRol = selectedVtRol;
 	}
 
 	public void setDataI(List<VtRolDTO> dataI) {
@@ -178,14 +207,24 @@ public class VtRolView implements Serializable {
 			VtUsuario vtUsuario = (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 			vtRol.setUsuCreador(vtUsuario.getUsuaCodigo());
 			String activo = somActivo.getValue().toString().trim();
+
 			if (activo.equalsIgnoreCase("Si")) {
 				vtRol.setActivo("S");
 			} else {
-				vtRol.setActivo("N");
+				if(activo.equals("-1")){
+					vtRol.setActivo("S");
+				}
+				else{
+					vtRol.setActivo("N");
+				}
 			}
+			
+			
 			businessDelegatorView.saveVtRol(vtRol);
-			limpiar();
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El rol se creó con exito"));
+			data = businessDelegatorView.getDataVtRol();
+			dataI = businessDelegatorView.getDataVtRolInactivo();
+			limpiar();
 
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
@@ -194,50 +233,130 @@ public class VtRolView implements Serializable {
 		return "";
 	}
 
-	 public String limpiar(){
-	 log.info("Limpiando campos de texto");	 
-	 txtNombre.resetValue();
-	 somActivo.setValue("-1");	
-	 btnCrear.setDisabled(false);
-	 return "";
-	 }
-	//
-	// public void txtLoginListener(){
-	// log.info("Se ejecuto el listener");
-	// VtUsuario vtUsuario= null;
-	//
-	// String login= txtLoginC.getValue().toString().trim();
-	// vtUsuario=businessDelegatorView.consultarLogin(login);
-	//
-	// if(vtUsuario==null){
-	// txtClave.resetValue();
-	// txtClaveR.resetValue();
-	// txtNombreC.resetValue();
-	// somEmpresas.setValue("-1");
-	//
-	// btnCrearU.setDisabled(false);
-	// }
-	//
-	// else{
-	// txtNombreC.setValue(vtUsuario.getNombre());
-	// somEmpresas.setValue(vtUsuario.getVtEmpresa().getEmprCodigo());
-	//
-	// btnCrearU.setDisabled(true);
-	// }
-	//
-	// }
-	//
-	//
-	/// Data Table
-	private CommandButton btnSave;
+	public String limpiar() {
+		log.info("Limpiando campos de texto");
+		txtNombre.resetValue();
+		somActivo.setValue("-1");
+		btnCrear.setDisabled(false);
+		return "";
+	}
 
-	private VtUsuario entity;
+	public String action_edit(ActionEvent evt) {
+		selectedVtRol = (VtRolDTO) (evt.getComponent().getAttributes().get("selectedVtRol"));
 
-	private VtUsuarioDTO selectedVtUsuario;
+		txtNombre.setValue(selectedVtRol.getRolNombre());
+		txtNombre.setDisabled(false);
+		btnGuardar.setDisabled(false);
+		setShowDialog(true);
 
-	private boolean showDialog;
+		return "";
+	}
 
-	private InputText txtUsuaCodigo;
+	public String action_modify() {
+		try {
+			if (entity == null) {
+				Long rolCodigo = new Long(selectedVtRol.getRolCodigo());
+				entity = businessDelegatorView.getVtRol(rolCodigo);
+			}
+
+			String activo = somActivo.getValue().toString().trim();
+			if (activo.equalsIgnoreCase("Si")) {
+				entity.setActivo("S");
+			} else {
+				if (activo.equals("-1")) {
+					entity.setActivo(entity.getActivo());
+				} else {
+					entity.setActivo("N");
+				}
+
+			}
+
+			Date fechaModificacion = new Date();
+			entity.setFechaModificacion(fechaModificacion);
+
+			VtUsuario vtUsuarioEnSession = (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+
+			entity.setRolNombre(FacesUtils.checkString(txtNombre));
+
+			businessDelegatorView.updateVtRol(entity);
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El rol se modificó con exito"));
+			data = businessDelegatorView.getDataVtRol();
+			dataI = businessDelegatorView.getDataVtRolInactivo();
+			selectedVtRol = null;
+			entity = null;
+		} catch (Exception e) {
+			data = null;
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
+		}
+
+		return "";
+	}
+	
+	
+	public String cambiarEstado(ActionEvent evt){
+		log.info("Cambiando estado..");
+		selectedVtRol = (VtRolDTO) (evt.getComponent().getAttributes()
+				.get("selectedVtRol"));
+		try {
+			
+			if (entity == null) {
+				Long rolCodigo = new Long(selectedVtRol.getRolCodigo());
+				entity = businessDelegatorView.getVtRol(rolCodigo);
+			} 
+			
+			String cambioActivo=entity.getActivo().toString().trim();
+			if (cambioActivo.equalsIgnoreCase("S")) {
+				entity.setActivo("N");
+			}else{
+				entity.setActivo("S");
+			}			
+			
+			Date fechaModificacion= new Date();
+			entity.setFechaModificacion(fechaModificacion);
+
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			
+			businessDelegatorView.updateVtRol(entity);
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La empresa se modificó con exito"));
+			data = businessDelegatorView.getDataVtRol();
+			dataI = businessDelegatorView.getDataVtRolInactivo();
+			selectedVtRol=null;
+			entity=null;
+			
+		}catch (Exception e) {
+			data = null;
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
+		}
+
+
+		return "";
+	}
+
+	public String action_save() {
+		try {
+			if ((selectedVtRol == null) && (entity == null)) {
+
+			} else {
+				action_modify();
+			}
+
+			data = null;
+		} catch (Exception e) {
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
+		return "";
+	}
+	
+	public String action_closeDialog() {
+		VtRolDTO vtRolC = null;
+		setSelectedVtRol(vtRolC);
+		setShowDialog(false);
+		return "";
+	}
+
 
 	public CommandButton getBtnSave() {
 		return btnSave;
@@ -247,11 +366,11 @@ public class VtRolView implements Serializable {
 		this.btnSave = btnSave;
 	}
 
-	public VtUsuario getEntity() {
+	public VtRol getEntity() {
 		return entity;
 	}
 
-	public void setEntity(VtUsuario entity) {
+	public void setEntity(VtRol entity) {
 		this.entity = entity;
 	}
 
