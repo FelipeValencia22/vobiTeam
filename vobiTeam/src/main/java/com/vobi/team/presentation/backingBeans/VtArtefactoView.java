@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.component.calendar.Calendar;
@@ -459,6 +460,28 @@ public class VtArtefactoView implements Serializable {
 		return "";
 	}
 
+	
+	public String imprimirValue(ValueChangeEvent vce){
+		log.info("Info:"+vce.getNewValue());
+		String spring = vce.getNewValue().toString();
+		Long idSpring = Long.valueOf(spring);
+		
+		try {
+			if (esSprintItems == null) {
+				List<VtSprintDTO> listaSprints = businessDelegatorView.getDataVtSprintFiltro(idSpring);
+				esSprintItems = new ArrayList<SelectItem>();
+
+				for (VtSprintDTO vtSprint : listaSprints) {
+					esSprintItems.add(new SelectItem(vtSprint.getSpriCodigo(), vtSprint.getNombre()));
+				}
+			}
+
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		
+		return "";
+	}
 	
 //	public String modificar(ActionEvent evt) {
 //		selectedVtArtefacto = (VtArtefactoDTO) (evt.getComponent().getAttributes()
