@@ -26,39 +26,23 @@
 					icon="icon-home-outline" outcome="/XHTML/dashboard"
 					containerStyleClass="layout-menubar-active" />
 
-					<p:menuitem id="sm_vtEmpresa" value="Empresas"
-						icon="fa fa-building-o" outcome="/XHTML/vtGestionEmpresa.xhtml" />
-	
+				<p:menuitem id="sm_vtEmpresa" value="Empresas"
+					icon="fa fa-building-o" outcome="/XHTML/vtGestionEmpresa.xhtml" />
 
-					<p:menuitem id="sm_VtUsuario" value="Usuarios"
-						icon="fa fa-users" outcome="/XHTML/vtGestionUsuarios.xhtml" />
+				<p:menuitem id="sm_VtUsuario" value="Usuarios" icon="fa fa-user"
+					outcome="/XHTML/vtGestionUsuarios.xhtml" />
 
+				<p:menuitem id="sm_VtProyecto" value="Proyectos"
+					icon="fa fa-folder-open" outcome="/XHTML/vtGestionProyecto.xhtml" />
 
-					<p:menuitem id="sm_VtProyecto" value="Proyectos"
-						icon="fa fa-folder-open" outcome="/XHTML/vtGestionProyecto.xhtml" />
+				<p:menuitem id="sm_VtCrearProductBacklog" value="Pila de producto"
+					icon="fa fa-server" outcome="/XHTML/vtGestionPilaProducto.xhtml" />
 
+				<p:menuitem id="sm_VtSprint" value="Sprint" icon="fa fa-calendar"
+					outcome="/XHTML/vtGestionSprint.xhtml" />
 
-				<p:submenu id="sm_ProductBacklog" label="Pila de producto"
-					icon="icon-menu-1">
-
-					<p:menuitem id="sm_VtCrearProductBacklog" value="Crear"
-						icon="icon-columns" outcome="/XHTML/vtGestionPilaProducto.xhtml" />
-
-					<p:menuitem id="sm_VtListaProductBacklogG" value="Lista filtrada"
-						icon="icon-columns" outcome="/XHTML/vtListaPilaProducto.xhtml" />
-
-				</p:submenu>
-
-				<p:submenu id="sm_Sprint" label="Sprint" icon="icon-file-code">
-					<p:menuitem id="sm_VtSprint" value="Gesti&#243;n de Sprints"
-						icon="icon-columns" outcome="/XHTML/vtSprint.xhtml" />
-					<p:menuitem id="sm_VtListSprint" value="Lista filtrada"
-						icon="icon-columns" outcome="/XHTML/vtListaSprint.xhtml" />
-				</p:submenu>
-
-
-				<p:submenu id="sm_Artefacto" label="Artefactos"
-					icon="icon-file-code">
+				<p:submenu id="sm_Artefacto" label=" Artefactos"
+					icon="fa fa-files-o">
 					<p:menuitem id="sm_VtArtefacto" value="Gesti&#243;n de Artefactos"
 						icon="icon-columns" outcome="/XHTML/vtArtefacto.xhtml" />
 					<p:menuitem id="sm_VtListArtefacto" value="Lista filtrada"
@@ -68,10 +52,10 @@
 
 
 
-				<p:submenu id="sm_Rol" label="Roles" icon="icon-file-code">
-					<p:menuitem id="sm_VtRol" value="Gesti&#243;n de Rol"
-						icon="icon-columns" outcome="/XHTML/vtGestionarRoles.xhtml" />
-				</p:submenu>
+
+				<p:menuitem id="sm_VtRol" value="Roles" icon="fa fa-users"
+					outcome="/XHTML/vtGestionarRoles.xhtml" />
+
 
 
 

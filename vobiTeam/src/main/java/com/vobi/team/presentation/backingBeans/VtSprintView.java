@@ -2,6 +2,7 @@ package com.vobi.team.presentation.backingBeans;
 
 import com.vobi.team.exceptions.*;
 import com.vobi.team.modelo.*;
+import com.vobi.team.modelo.dto.VtPilaProductoDTO;
 import com.vobi.team.modelo.dto.VtSprintDTO;
 import com.vobi.team.presentation.businessDelegate.*;
 import com.vobi.team.utilities.*;
@@ -36,6 +37,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 
@@ -52,6 +54,7 @@ public class VtSprintView implements Serializable {
 
 	private SelectOneMenu somActivo;
 	private SelectOneMenu somPilaProducto;
+	private SelectOneMenu somPilaProductoCrear;
 	private SelectOneMenu somActivoCambio;
 	private SelectOneMenu somPilaProductoCambio;
 	private SelectOneMenu somProyectoCambio;
@@ -59,7 +62,9 @@ public class VtSprintView implements Serializable {
 	private List<SelectItem> losProyectosItems;
 	private List<SelectItem> esPilaProductoItems;
 	private InputText txtNombre;
+	private InputText txtNombreCrear;
 	private InputText txtObjetivo;
+	private InputText txtObjetivoCrear;
 	private InputText txtSpriCodigo;
 	private InputText txtNombrePilaProducto;
 	private InputText txtCodigoPilaProducto;
@@ -77,12 +82,29 @@ public class VtSprintView implements Serializable {
 	private VtSprintDTO selectedVtSprint;
 	private VtSprint entity;
 	private boolean showDialog;
+	Long pilaCodigo=null;
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
 	private IBusinessDelegatorView businessDelegatorView;
 
 	public VtSprintView() {
 		super();
+	}
+
+	public InputText getTxtNombreCrear() {
+		return txtNombreCrear;
+	}
+
+	public void setTxtNombreCrear(InputText txtNombreCrear) {
+		this.txtNombreCrear = txtNombreCrear;
+	}
+
+	public InputText getTxtObjetivoCrear() {
+		return txtObjetivoCrear;
+	}
+
+	public void setTxtObjetivoCrear(InputText txtObjetivoCrear) {
+		this.txtObjetivoCrear = txtObjetivoCrear;
 	}
 
 	public SelectOneMenu getSomActivo() {
@@ -99,6 +121,14 @@ public class VtSprintView implements Serializable {
 
 	public void setSomPilaProducto(SelectOneMenu somPilaProducto) {
 		this.somPilaProducto = somPilaProducto;
+	}
+
+	public SelectOneMenu getSomPilaProductoCrear() {
+		return somPilaProductoCrear;
+	}
+
+	public void setSomPilaProductoCrear(SelectOneMenu somPilaProductoCrear) {
+		this.somPilaProductoCrear = somPilaProductoCrear;
 	}
 
 	public List<SelectItem> getEsActivoItems() {
@@ -371,23 +401,28 @@ public class VtSprintView implements Serializable {
 				vtSprint.setActivo("N");
 			}
 			VtPilaProducto vtPilaProducto;
-			String longPila=somPilaProducto.getValue().toString().trim();
+			String longPila=somPilaProductoCrear.getValue().toString().trim();
 			Long codigoPila= Long.valueOf(longPila);
 			vtPilaProducto=businessDelegatorView.getVtPilaProducto(codigoPila);
+
 			vtSprint.setVtPilaProducto(vtPilaProducto);
-			//vtSprint.setVtPilaProducto(vtPilaProducto);
+
 			Date fechaCreacion= new Date();
 			vtSprint.setFechaCreacion(fechaCreacion);
 			vtSprint.setFechaFin(FacesUtils.checkDate(txtFechaFin));
 			vtSprint.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
-			vtSprint.setNombre(txtNombre.getValue().toString().trim());
-			vtSprint.setObjetivo(txtObjetivo.getValue().toString().trim());
+
+			vtSprint.setNombre(txtNombreCrear.getValue().toString().trim());
+			vtSprint.setObjetivo(txtObjetivoCrear.getValue().toString().trim());
 
 
 
 			businessDelegatorView.saveVtSprint(vtSprint);
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint se creó con exito"));
-			action_clear();
+			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
+			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
+			limipiar();
+			vtSprint=null;
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
@@ -417,6 +452,18 @@ public class VtSprintView implements Serializable {
 		return "";
 	}
 
+	public String limipiar(){
+		log.info("Limpiando campos de texto..");
+
+		somPilaProductoCrear.setValue("-1");
+		somActivo.setValue("-1");
+		txtNombreCrear.resetValue();
+		txtObjetivoCrear.resetValue();
+		txtFechaFin.setValue(null);
+		txtFechaInicio.setValue(null);
+
+		return "";
+	}
 
 	public String action_clear(){
 		log.info("Limpiando pantalla..");
@@ -465,9 +512,9 @@ public class VtSprintView implements Serializable {
 					entity.setActivo("N");
 				}
 			}
-			
+
 			//TODO: Corregir
-			
+
 
 			entity.setFechaFin(FacesUtils.checkDate(txtFechaFin));
 			entity.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
@@ -475,10 +522,10 @@ public class VtSprintView implements Serializable {
 			entity.setObjetivo(FacesUtils.checkString(txtObjetivo));
 			Date fechaModificacion = new Date();
 			entity.setFechaModificacion(fechaModificacion);
-			
+
 			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
-			
+
 			businessDelegatorView.updateVtSprint(entity);
 			String sprint=somPilaProducto.getValue().toString().trim();
 			Long sprintCodigo=Long.valueOf(sprint);
@@ -500,17 +547,59 @@ public class VtSprintView implements Serializable {
 
 		return "";
 	}
-	
-	public String filtrar(){
+
+	public String filtrar(ValueChangeEvent evt){
 		try {
-			String pila=somPilaProducto.getValue().toString().trim();
-			Long pilaCodigo=Long.valueOf(pila);
-			VtPilaProducto vtPilaProducto=businessDelegatorView.getVtPilaProducto(pilaCodigo);
-			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(vtPilaProducto.getPilaCodigo());
-			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(vtPilaProducto.getPilaCodigo());
+			String pila=evt.getNewValue().toString();
+			pilaCodigo=Long.valueOf(pila);
+			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
+			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "";
+	}
+
+	public String cambiarEstado(ActionEvent evt){
+
+		selectedVtSprint = (VtSprintDTO) (evt.getComponent().getAttributes()
+				.get("selectedVtSprint"));
+
+		try {
+			if (entity == null) {
+				Long spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
+				entity = businessDelegatorView.getVtSprint(spriCodigo);
+			}
+
+			String cambioActivo=entity.getActivo().toString().trim();
+			if (cambioActivo.equalsIgnoreCase("S")) {
+				entity.setActivo("N");
+			}else{
+				entity.setActivo("S");
+			}			
+
+			Date fechaModificacion= new Date();
+			entity.setFechaModificacion(fechaModificacion);
+
+			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+
+			businessDelegatorView.updateVtSprint(entity);
+
+			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint de producto se modificó con exito"));
+			
+			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
+			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
+
+			selectedVtSprint=null;
+			entity=null;
+
+		}catch (Exception e) {
+			data = null;
+			log.error(e.toString());
+			FacesUtils.addErrorMessage(e.getMessage());
+		}
+
 		return "";
 	}
 

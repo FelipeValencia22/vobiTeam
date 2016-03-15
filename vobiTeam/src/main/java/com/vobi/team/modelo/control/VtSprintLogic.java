@@ -285,7 +285,7 @@ public class VtSprintLogic implements IVtSprintLogic {
 				if(vtSprintTmp.getActivo().equalsIgnoreCase("S")){
 
 					if(vtSprintTmp.getVtPilaProducto().getPilaCodigo()==codigoFiltro){
-
+						log.info("Nombre Sprint:"+vtSprintTmp.getNombre());
 						vtSprintDTO2.setSpriCodigo(vtSprintTmp.getSpriCodigo());
 
 						vtSprintDTO2.setActivo((vtSprintTmp.getActivo() != null)

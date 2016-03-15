@@ -210,13 +210,11 @@
 
 
 
-		<p:dialog id="dialogCrearProyecto" appendTo="@(body)" draggable="true"
-			closable="false" visible="#{vtProyectoView.showDialog}"
+		<p:dialog  header="Crear proyecto" id="dialogCrearProyecto" appendTo="@(body)" draggable="true"
+			visible="#{vtProyectoView.showDialog}" widgetVar="dlg"
 			resizable="false" modal="true" width="500">
 			<h:form id="formDialogCrearProyecto">
 				<p:messages id="msg" />
-
-				<p:panel id="pnlProyecto">
 
 					<h:panelGrid columns="1">
 
@@ -257,9 +255,8 @@
 
 					<p:commandButton id="btnLimpiar" icon="fa fa-eraser"
 						title="Limpiar " binding="#{vtProyectoView.btnLimpiar}"
-						action="#{vtProyectoView.limpiar}" update="pnlProyecto" />
+						action="#{vtProyectoView.limpiar}" update="formDialogCrearProyecto" />
 
-				</p:panel>
 			</h:form>
 		</p:dialog>
 

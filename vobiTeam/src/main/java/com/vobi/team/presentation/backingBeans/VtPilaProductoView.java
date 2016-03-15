@@ -44,8 +44,10 @@ public class VtPilaProductoView implements Serializable {
 
 	private SelectOneMenu somEmpresas;
 	private SelectOneMenu somActivo;
+	private SelectOneMenu somActivoCrear;
 	private SelectOneMenu somActivoCambio;
 	private SelectOneMenu somProyectos;
+	private SelectOneMenu somProyectosCrear;
 	private SelectOneMenu somProyectoCambio;
 	private SelectOneMenu somSprints;
 
@@ -62,7 +64,9 @@ public class VtPilaProductoView implements Serializable {
 	String stringFiltrado;
 
 	private InputText txtNombre;
+	private InputText txtNombreCrear;
 	private InputTextarea txtDescripcion;
+	private InputTextarea txtDescripcionCrear;
 	private List<SelectItem> esActivoItems;
 	private List<SelectItem> losProyectosItems;
 	private List<SelectItem> losProyectosItemsLista;
@@ -101,6 +105,38 @@ public class VtPilaProductoView implements Serializable {
 
 	public void setTxtDescripcion(InputTextarea txtDescripcion) {
 		this.txtDescripcion = txtDescripcion;
+	}
+
+	public SelectOneMenu getSomActivoCrear() {
+		return somActivoCrear;
+	}
+
+	public void setSomActivoCrear(SelectOneMenu somActivoCrear) {
+		this.somActivoCrear = somActivoCrear;
+	}
+
+	public SelectOneMenu getSomProyectosCrear() {
+		return somProyectosCrear;
+	}
+
+	public void setSomProyectosCrear(SelectOneMenu somProyectosCrear) {
+		this.somProyectosCrear = somProyectosCrear;
+	}
+
+	public InputText getTxtNombreCrear() {
+		return txtNombreCrear;
+	}
+
+	public void setTxtNombreCrear(InputText txtNombreCrear) {
+		this.txtNombreCrear = txtNombreCrear;
+	}
+
+	public InputTextarea getTxtDescripcionCrear() {
+		return txtDescripcionCrear;
+	}
+
+	public void setTxtDescripcionCrear(InputTextarea txtDescripcionCrear) {
+		this.txtDescripcionCrear = txtDescripcionCrear;
 	}
 
 	public List<SelectItem> getEsActivoItems() {
@@ -368,45 +404,47 @@ public class VtPilaProductoView implements Serializable {
 		log.info("Creando la pila de producto");
 
 		VtPilaProducto vtPilaProducto = new VtPilaProducto();
-		vtPilaProducto.setNombre(txtNombre.getValue().toString().trim());
-		vtPilaProducto.setDescripcion(txtDescripcion.getValue().toString().trim());
+		vtPilaProducto.setNombre(txtNombreCrear.getValue().toString().trim());
+		vtPilaProducto.setDescripcion(txtDescripcionCrear.getValue().toString().trim());
 		Date fecha = new Date();
 		vtPilaProducto.setFechaCreacion(fecha);
 
-		String activo = somActivo.getValue().toString().trim();
+		String activo = somActivoCrear.getValue().toString().trim();
 		if (activo.equals("Si")) {
 			vtPilaProducto.setActivo("S");
 		} else {
 			vtPilaProducto.setActivo("N");
 		}
 
-		String proyectos = somProyectos.getValue().toString().trim();
+		String proyectos = somProyectosCrear.getValue().toString().trim();
 		Long proyecto = Long.parseLong(proyectos);
 		VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(proyecto);
 		vtPilaProducto.setVtProyecto(vtProyecto);
 
 		VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 		vtPilaProducto.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
+		
+		dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreProyecto(getProyectoSeleccionado());
 
 		try {
 			businessDelegatorView.saveVtPilaProducto(vtPilaProducto);
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("La pila de producto se creo con exito"));
 			limpiar();
+			vtPilaProducto=null;
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
 
-		return "";
+		return "/XHTML/vtGestionPilaProducto.xhtml";
 	}
 
 	public String limpiar() {
 		log.info("Limpiando campos de texto");
-		txtNombre.resetValue();
-		txtDescripcion.resetValue();
-		somActivo.setValue("-1");
-		somProyectos.setValue("-1");
+		txtNombreCrear.resetValue();
+		txtDescripcionCrear.resetValue();
+		somActivoCrear.setValue("-1");
+		somProyectosCrear.setValue("-1");
 
-		btnCrear.setDisabled(true);
 		return "";
 	}
 
@@ -437,9 +475,9 @@ public class VtPilaProductoView implements Serializable {
 		}
 	}
 
-	public String filtrar(){
+	public String filtrar(ValueChangeEvent evt){
 		try {
-			String nombreProyecto=somProyectos.getValue().toString().trim();
+			String nombreProyecto=evt.getNewValue().toString();
 			log.info("Proyecto:"+nombreProyecto);
 			dataFiltro=businessDelegatorView.getDataVtPilaProductoNombreProyecto(nombreProyecto);
 			dataFiltroI=businessDelegatorView.getDataVtPilaProductoNombreProyectoI(nombreProyecto);
