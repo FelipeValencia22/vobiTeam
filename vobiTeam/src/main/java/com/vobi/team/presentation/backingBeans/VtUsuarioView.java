@@ -262,8 +262,6 @@ public class VtUsuarioView implements Serializable{
 
 				String empresaS=somEmpresas.getValue().toString().trim();
 				if(empresaS.isEmpty() || empresaS.equals("-1")){
-					VtEmpresa vtEmpresaNA=businessDelegatorView.getVtEmpresa(142020L);
-					vtUsuario.setVtEmpresa(vtEmpresaNA);
 				}else{
 					Long empresa=Long.parseLong(empresaS);
 					VtEmpresa vtEmpresa=businessDelegatorView.getVtEmpresa(empresa);
@@ -475,35 +473,45 @@ public class VtUsuarioView implements Serializable{
 
 	public String action_modify() {
 		try {
-			if (entity == null) {
-				Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
-				entity = businessDelegatorView.getVtUsuario(usuaCodigo);
-			} 
-			String activo = somActivo.getValue().toString().trim();
-			if (activo.equalsIgnoreCase("Si")) {
-				entity.setActivo("S");
-			} else {
-				if(activo.equals("-1")){
-					entity.setActivo(entity.getActivo());
-				}
-				else{
-					entity.setActivo("N");
-				}
 
+			String claveR=txtClaveR.getValue().toString().trim();
+			String clave=txtClave.getValue().toString().trim(); 
+
+			if(clave.equals(claveR)){
+				if (entity == null) {
+					Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
+					entity = businessDelegatorView.getVtUsuario(usuaCodigo);
+				} 
+				String activo = somActivo.getValue().toString().trim();
+				if (activo.equalsIgnoreCase("Si")) {
+					entity.setActivo("S");
+				} else {
+					if(activo.equals("-1")){
+						entity.setActivo(entity.getActivo());
+					}
+					else{
+						entity.setActivo("N");
+					}
+
+				}
+				Date fechaModificacion = new Date();
+				entity.setFechaModificacion(fechaModificacion);
+
+				entity.setLogin(FacesUtils.checkString(txtLogin));
+				entity.setNombre(FacesUtils.checkString(txtNombre));
+
+				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+				entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+				
+				entity.setClave(claveR);
+
+				businessDelegatorView.updateVtUsuario(entity);
+				FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
+				data = businessDelegatorView.getDataVtUsuario();
+				dataI = businessDelegatorView.getDataVtUsuarioInactivo();
+			}else{
+				FacesContext.getCurrentInstance().addMessage("", new FacesMessage("Las contraseñas no coinciden"));
 			}
-			Date fechaModificacion = new Date();
-			entity.setFechaModificacion(fechaModificacion);
-
-			entity.setLogin(FacesUtils.checkString(txtLogin));
-			entity.setNombre(FacesUtils.checkString(txtNombre));
-
-			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
-			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
-
-			businessDelegatorView.updateVtUsuario(entity);
-			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
-			data = businessDelegatorView.getDataVtUsuario();
-			dataI = businessDelegatorView.getDataVtUsuarioInactivo();
 		} catch (Exception e) {
 			data = null;
 			log.error(e.getMessage());
@@ -512,6 +520,7 @@ public class VtUsuarioView implements Serializable{
 			FacesUtils.addErrorMessage(e.getMessage());
 		}
 
+
 		return "";
 	}
 
@@ -519,32 +528,32 @@ public class VtUsuarioView implements Serializable{
 		log.info("Cambiando estado..");
 		selectedVtUsuario = (VtUsuarioDTO) (evt.getComponent().getAttributes()
 				.get("selectedVtUsuario"));	
-		
+
 		try {
 			if (entity == null) {
 				Long usuaCodigo = new Long(selectedVtUsuario.getUsuaCodigo());
 				entity = businessDelegatorView.getVtUsuario(usuaCodigo);
 			} 
-			
-			
+
+
 			String cambioActivo=entity.getActivo().toString().trim();
 			if (cambioActivo.equalsIgnoreCase("S")) {
 				entity.setActivo("N");
 			}else{
 				entity.setActivo("S");
 			}			
-			
+
 			Date fechaModificacion= new Date();
 			entity.setFechaModificacion(fechaModificacion);
 
 			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
-			
+
 			businessDelegatorView.updateVtUsuario(entity);
 			FacesUtils.addInfoMessage("El usuario ha sido modificado con exito");
 			data = businessDelegatorView.getDataVtUsuario();
 			dataI = businessDelegatorView.getDataVtUsuarioInactivo();
-			
+
 			entity=null;
 			selectedVtUsuario=null;
 		}catch (Exception e) {

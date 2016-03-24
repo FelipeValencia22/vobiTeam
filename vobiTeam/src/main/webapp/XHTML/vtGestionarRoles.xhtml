@@ -39,7 +39,6 @@
 
 				<p:accordionPanel id="panelDataTableVtEmpresa" header="Usuarios"
 					multiple="true">
-					<p:growl id="men" />
 
 					<p:tab title="Roles activos ">
 						<p:panel id="dataTableVtEmpresaA">
@@ -55,14 +54,6 @@
 									<h:outputText value="#{vtRol.rolCodigo}" />
 								</p:column>
 
-
-								<p:column filterBy="#{vtRol.activo}" sortBy="#{vtRol.activo}">
-									<f:facet name="header">
-										<h:outputText value="Activo" />
-									</f:facet>
-									<h:outputText value="#{vtRol.activo}" />
-								</p:column>
-
 								<p:column filterBy="#{vtRol.rolNombre}"
 									sortBy="#{vtRol.rolNombre}">
 									<f:facet name="header">
@@ -70,14 +61,39 @@
 									</f:facet>
 									<h:outputText value="#{vtRol.rolNombre}" />
 								</p:column>
+								
+								<p:column filterBy="#{vtRol.activo}" sortBy="#{vtRol.activo}">
+									<f:facet name="header">
+										<h:outputText value="Activo" />
+									</f:facet>
+									<h:outputText value="#{vtRol.activo}" />
+								</p:column>
+								
+								<p:column headerText="Modificar">
+									<div align="center">
+										<p:commandButton id="btnEdit" icon="fa fa-edit"
+											update=":dialogVtEmpresa"
+											actionListener="#{vtRolView.action_edit}">
+											<f:attribute name="selectedVtEmpresa" value="#{vtEmpresa}" />
+										</p:commandButton>
+									</div>
+								</p:column>
 
-
+								<p:column headerText="Cambiar estado">
+									<div align="center">
+										<p:commandButton id="btnEstado" icon="fa fa-retweet"
+											update=":frm:panelDataTableVtEmpresa, :frm:growl"
+											actionListener="#{vtRolView.cambiarEstado}">
+											<f:attribute name="selectedVtEmpresa" value="#{vtEmpresa}" />
+										</p:commandButton>
+									</div>
+								</p:column>
 
 							</p:dataTable>
 						</p:panel>
 					</p:tab>
 
-					<br></br>
+					<br></br> 
 
 					<p:tab title="Roles Inactivos ">
 						<p:panel id="dataTableVtEmpresaI">
@@ -93,20 +109,39 @@
 									<h:outputText value="#{vtRol.rolCodigo}" />
 								</p:column>
 
-
-								<p:column filterBy="#{vtRol.activo}" sortBy="#{vtRol.activo}">
-									<f:facet name="header">
-										<h:outputText value="Activo" />
-									</f:facet>
-									<h:outputText value="#{vtRol.activo}" />
-								</p:column>
-
 								<p:column filterBy="#{vtRol.rolNombre}"
 									sortBy="#{vtRol.rolNombre}">
 									<f:facet name="header">
 										<h:outputText value="Nombre rol" />
 									</f:facet>
 									<h:outputText value="#{vtRol.rolNombre}" />
+								</p:column>
+								
+								<p:column filterBy="#{vtRol.activo}" sortBy="#{vtRol.activo}">
+									<f:facet name="header">
+										<h:outputText value="Activo" />
+									</f:facet>
+									<h:outputText value="#{vtRol.activo}" />
+								</p:column>
+								
+								<p:column headerText="Modificar">
+									<div align="center">
+										<p:commandButton id="btnEditI" icon="fa fa-edit"
+											update=":dialogVtEmpresa"
+											actionListener="#{vtRolView.action_edit}">
+											<f:attribute name="selectedVtEmpresa" value="#{vtEmpresa}" />
+										</p:commandButton>
+									</div>
+								</p:column>
+
+								<p:column headerText="Cambiar estado">
+									<div align="center">
+										<p:commandButton id="btnEstadoI" icon="fa fa-retweet"
+											update=":frm:panelDataTableVtEmpresa, :frm:growl"
+											actionListener="#{vtRolView.cambiarEstado}">
+											<f:attribute name="selectedVtEmpresa" value="#{vtEmpresa}" />
+										</p:commandButton>
+									</div>
 								</p:column>
 
 							</p:dataTable>
@@ -119,34 +154,32 @@
 		</h:form>
 
 		<p:dialog id="dialogVtEmpresa" appendTo="@(body)" draggable="true"
-			closable="false" visible="#{vtEmpresaView.showDialog}"
+			closable="false" visible="#{vtRolView.showDialog}"
 			resizable="false" modal="true" width="500">
 			<h:form id="formDialog">
 				<p:messages id="msg" />
 				<p:panel id="panelVtEmpresa" header="VtEmpresa">
-					<h:panelGrid columns="2" id="panelGrid">
+				
 
 						<h:outputText id="msgActivo" value=" Activo" />
 						<p:selectOneMenu id="somActivo"
-							binding="#{vtEmpresaView.somActivo}">
+							binding="#{vtRolView.somActivo}">
 							<f:selectItem itemValue="-1" itemLabel="Activo" />
-							<f:selectItems value="#{vtEmpresaView.esActivoItems}" />
+							<f:selectItems value="#{vtRolView.esActivoItems}" />
 						</p:selectOneMenu>
 
 						<h:outputText id="msgNombre" value=" Nombre" />
-						<p:inputText id="txtNombre" binding="#{vtEmpresaView.txtNombre}" />
-
-					</h:panelGrid>
+						<p:inputText id="txtNombre" binding="#{vtRolView.txtNombre}" />
 				</p:panel>
 				<p:panel id="panelBotones">
 					<div align="center">
 						<p:commandButton id="btnSave"
-							binding="#{vtEmpresaView.btnGuardar}" value="Guardar"
-							action="#{vtEmpresaView.action_save()}"
+							binding="#{vtRolView.btnGuardar}" value="Guardar"
+							action="#{vtRolView.action_save()}"
 							update=":dialogVtEmpresa :frm:panelDataTableVtEmpresa" />
 
 						<p:commandButton id="btnExit" value="Salir"
-							action="#{vtEmpresaView.action_closeDialog()}"
+							action="#{vtRolView.action_closeDialog()}"
 							update=":dialogVtEmpresa" />
 					</div>
 				</p:panel>

@@ -61,14 +61,6 @@
 									<h:outputText value="#{vtProyecto.nombre_VtEmpresa}" />
 								</p:column>
 
-								<p:column filterBy="#{vtProyecto.activo}"
-									sortBy="#{vtProyecto.activo}">
-									<f:facet name="header">
-										<h:outputText value="Activo" />
-									</f:facet>
-									<h:outputText value="#{vtProyecto.activo}" />
-								</p:column>
-
 								<p:column filterBy="#{vtProyecto.publico}"
 									sortBy="#{vtProyecto.publico}">
 									<f:facet name="header">
@@ -83,6 +75,14 @@
 										<h:outputText value="Nombre proyecto" />
 									</f:facet>
 									<h:outputText value="#{vtProyecto.nombre}" />
+								</p:column>
+								
+								<p:column filterBy="#{vtProyecto.activo}"
+									sortBy="#{vtProyecto.activo}">
+									<f:facet name="header">
+										<h:outputText value="Activo" />
+									</f:facet>
+									<h:outputText value="#{vtProyecto.activo}" />
 								</p:column>
 
 								<p:column filterBy="#{vtProyecto.descripcion}"
@@ -217,6 +217,7 @@
 				<p:messages id="msg" />
 
 					<h:panelGrid columns="1">
+	
 
 						<p:selectOneMenu id="somEmpresas"
 							binding="#{vtProyectoView.somEmpresas}">

@@ -67,17 +67,23 @@ public class VtPilaProductoView implements Serializable {
 	private InputText txtNombreCrear;
 	private InputTextarea txtDescripcion;
 	private InputTextarea txtDescripcionCrear;
+	
 	private List<SelectItem> esActivoItems;
 	private List<SelectItem> losProyectosItems;
 	private List<SelectItem> losProyectosItemsLista;
 	private List<SelectItem> lasEmpresasItems;
 	private List<SelectItem> losSprintsItems;
+	private List<SelectItem> lasEmpresasItemsFiltro;
+	private List<SelectItem> losProyectosFiltro;
+	
 
 	private List<VtPilaProductoDTO> data;
 	private List<VtPilaProductoDTO> dataFiltro;
 	private List<VtPilaProductoDTO> dataFiltroI;
+	
 	private VtPilaProducto entity;
 	private VtPilaProductoDTO selectedVtPilaProducto;
+	
 	private boolean showDialog;
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
@@ -117,6 +123,35 @@ public class VtPilaProductoView implements Serializable {
 
 	public SelectOneMenu getSomProyectosCrear() {
 		return somProyectosCrear;
+	}
+
+	public List<SelectItem> getLasEmpresasItemsFiltro() {
+		try {
+			if(lasEmpresasItemsFiltro==null){
+				List<VtEmpresa> listaEmpresas=businessDelegatorView.getVtEmpresa();
+				lasEmpresasItemsFiltro=new ArrayList<SelectItem>();
+				for (VtEmpresa vtEmpresa: listaEmpresas) {
+					if(vtEmpresa.getActivo().equalsIgnoreCase("S")){
+						lasEmpresasItemsFiltro.add(new SelectItem(vtEmpresa.getEmprCodigo(), vtEmpresa.getNombre()));
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return lasEmpresasItemsFiltro;
+	}
+
+	public void setLasEmpresasItemsFiltro(List<SelectItem> lasEmpresasItemsFiltro) {
+		this.lasEmpresasItemsFiltro = lasEmpresasItemsFiltro;
+	}
+
+	public List<SelectItem> getLosProyectosFiltro() {
+		return losProyectosFiltro;
+	}
+
+	public void setLosProyectosFiltro(List<SelectItem> losProyectosFiltro) {
+		this.losProyectosFiltro = losProyectosFiltro;
 	}
 
 	public void setSomProyectosCrear(SelectOneMenu somProyectosCrear) {
@@ -617,6 +652,37 @@ public class VtPilaProductoView implements Serializable {
 			FacesUtils.addErrorMessage(e.getMessage());
 		}
 
+		return "";
+	}
+
+	public String filtrarEmpresa(ValueChangeEvent evt){
+		try {
+			VtEmpresa vtEmpresa=null;
+			losProyectosFiltro=null;
+			String empresaS=somEmpresas.getValue().toString().trim();
+			if(empresaS.isEmpty() || empresaS.equals("-1")){
+			}else{
+				Long empresa=Long.parseLong(empresaS);
+				vtEmpresa=businessDelegatorView.getVtEmpresa(empresa);
+			}
+
+			try{
+				if(losProyectosFiltro==null){
+					List<VtProyecto> listaProyectos=businessDelegatorView.getVtProyecto();
+					losProyectosFiltro=new ArrayList<SelectItem>();
+					for (VtProyecto vtProyecto:listaProyectos) {
+						if(vtProyecto.getActivo().equalsIgnoreCase("S") && vtProyecto.getVtEmpresa().getEmprCodigo().equals(vtEmpresa.getEmprCodigo())){
+							losProyectosFiltro.add(new SelectItem(vtProyecto.getNombre()));
+						}
+					}
+				}
+
+			}catch(Exception e) {
+				log.error(e.getMessage());
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 		return "";
 	}
 }

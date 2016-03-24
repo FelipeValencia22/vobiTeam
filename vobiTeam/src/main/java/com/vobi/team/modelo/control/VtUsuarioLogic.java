@@ -141,6 +141,10 @@ public class VtUsuarioLogic implements IVtUsuarioLogic {
 			if(entity.getNombre().trim().equals("") || entity.getNombre().isEmpty()){
 				throw new Exception("El nombre es obligatorio");
 			}
+			
+			if(entity.getVtEmpresa().toString().equals(null) || entity.getVtEmpresa().toString().equals("") || entity.getVtEmpresa().toString().isEmpty() ){
+				throw new Exception("Seleccionar empresa");
+			}
 
 			vtUsuarioDAO.save(entity);
 

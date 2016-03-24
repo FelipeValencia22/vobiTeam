@@ -12,6 +12,7 @@ import com.vobi.team.exceptions.ZMessManager;
 import org.primefaces.component.calendar.*;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.RowEditEvent;
 
@@ -58,30 +59,43 @@ public class VtSprintView implements Serializable {
 	private SelectOneMenu somActivoCambio;
 	private SelectOneMenu somPilaProductoCambio;
 	private SelectOneMenu somProyectoCambio;
+	private SelectOneMenu somEmpresas;
+	private SelectOneMenu somProyectos;
+
 	private List<SelectItem> esActivoItems;
 	private List<SelectItem> losProyectosItems;
 	private List<SelectItem> esPilaProductoItems;
+	private List<SelectItem> lasEmpresasItems;
+	private List<SelectItem> losProyectosFiltro;
+	private List<SelectItem> lasPilasDeProductoFiltro;
+
 	private InputText txtNombre;
 	private InputText txtNombreCrear;
 	private InputText txtObjetivo;
-	private InputText txtObjetivoCrear;
+	private InputTextarea txtObjetivoCrear;
 	private InputText txtSpriCodigo;
 	private InputText txtNombrePilaProducto;
 	private InputText txtCodigoPilaProducto;
+
 	private Calendar txtFechaFin;
 	private Calendar txtFechaInicio;
+
 	private CommandButton btnCrearS;
 	private CommandButton btnCrear;
 	private CommandButton btnLimpiarS;
 	private CommandButton btnGuardar;
 	private CommandButton btnLimpiar;
 	private CommandButton btnFiltrar;
+
 	private List<VtSprintDTO> data;
 	private List<VtSprintDTO> dataFiltro;
 	private List<VtSprintDTO> dataFiltroI;
+
 	private VtSprintDTO selectedVtSprint;
 	private VtSprint entity;
+
 	private boolean showDialog;
+
 	Long pilaCodigo=null;
 
 	@ManagedProperty(value = "#{BusinessDelegatorView}")
@@ -99,12 +113,28 @@ public class VtSprintView implements Serializable {
 		this.txtNombreCrear = txtNombreCrear;
 	}
 
-	public InputText getTxtObjetivoCrear() {
+	public InputTextarea getTxtObjetivoCrear() {
 		return txtObjetivoCrear;
 	}
 
-	public void setTxtObjetivoCrear(InputText txtObjetivoCrear) {
+	public void setTxtObjetivoCrear(InputTextarea txtObjetivoCrear) {
 		this.txtObjetivoCrear = txtObjetivoCrear;
+	}
+
+	public SelectOneMenu getSomProyectos() {
+		return somProyectos;
+	}
+
+	public void setSomProyectos(SelectOneMenu somProyectos) {
+		this.somProyectos = somProyectos;
+	}
+
+	public SelectOneMenu getSomEmpresas() {
+		return somEmpresas;
+	}
+
+	public void setSomEmpresas(SelectOneMenu somEmpresas) {
+		this.somEmpresas = somEmpresas;
 	}
 
 	public SelectOneMenu getSomActivo() {
@@ -145,26 +175,64 @@ public class VtSprintView implements Serializable {
 	}
 
 	public List<SelectItem> getEsPilaProductoItems() {
+
 		try{
 			if(esPilaProductoItems==null){
-				List<VtPilaProducto> listaPilasProducto=businessDelegatorView.getVtPilaProducto();
+				List<VtProyecto> listaProyectos=businessDelegatorView.getVtProyecto();
 				esPilaProductoItems=new ArrayList<SelectItem>();
-				for (VtPilaProducto vtPilaProducto:listaPilasProducto) {
-					if(vtPilaProducto.getActivo().equalsIgnoreCase("S")){
-						esPilaProductoItems.add(new SelectItem(vtPilaProducto.getPilaCodigo(),vtPilaProducto.getNombre()));
-					}
+				for (VtProyecto vtProyecto:listaProyectos) {
+					esPilaProductoItems.add(new SelectItem(vtProyecto.getProyCodigo(), vtProyecto.getNombre()));
 				}
 			}
 
 		}catch(Exception e) {
 			log.error(e.getMessage());
 		}
+
 		return esPilaProductoItems;
+	}
+
+	public List<SelectItem> getLasPilasDeProductoFiltro() {
+		return lasPilasDeProductoFiltro;
+	}
+
+	public void setLasPilasDeProductoFiltro(List<SelectItem> lasPilasDeProductoFiltro) {
+		this.lasPilasDeProductoFiltro = lasPilasDeProductoFiltro;
+	}
+
+	public List<SelectItem> getLosProyectosFiltro() {
+		return losProyectosFiltro;
+	}
+
+	public void setLosProyectosFiltro(List<SelectItem> losProyectosFiltro) {
+		this.losProyectosFiltro = losProyectosFiltro;
 	}
 
 	public void setEsPilaProductoItems(List<SelectItem> esPilaProductoItems) {
 		this.esPilaProductoItems = esPilaProductoItems;
 	}
+
+	public List<SelectItem> getLasEmpresasItems() {
+		try {
+			if(lasEmpresasItems==null){
+				List<VtEmpresa> listaEmpresas=businessDelegatorView.getVtEmpresa();
+				lasEmpresasItems=new ArrayList<SelectItem>();
+				for (VtEmpresa vtEmpresa: listaEmpresas) {
+					if(vtEmpresa.getActivo().equalsIgnoreCase("S")){
+						lasEmpresasItems.add(new SelectItem(vtEmpresa.getEmprCodigo(), vtEmpresa.getNombre()));
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return lasEmpresasItems;
+	}
+
+	public void setLasEmpresasItems(List<SelectItem> lasEmpresasItems) {
+		this.lasEmpresasItems = lasEmpresasItems;
+	}
+
 
 	public CommandButton getBtnFiltrar() {
 		return btnFiltrar;
@@ -548,6 +616,77 @@ public class VtSprintView implements Serializable {
 		return "";
 	}
 
+	public String filtrarEmpresa(ValueChangeEvent evt){
+		try {
+			VtEmpresa vtEmpresa=null;
+			losProyectosFiltro=null;
+			String empresaS=somEmpresas.getValue().toString().trim();
+			if(empresaS.isEmpty() || empresaS.equals("-1")){
+			}else{
+				Long empresa=Long.parseLong(empresaS);
+				vtEmpresa=businessDelegatorView.getVtEmpresa(empresa);
+			}
+
+			try{
+				if(losProyectosFiltro==null){
+					List<VtProyecto> listaProyectos=businessDelegatorView.getVtProyecto();
+					losProyectosFiltro=new ArrayList<SelectItem>();
+					for (VtProyecto vtProyecto:listaProyectos) {
+						if(vtProyecto.getActivo().equalsIgnoreCase("S") && vtProyecto.getVtEmpresa().getEmprCodigo().equals(vtEmpresa.getEmprCodigo())){
+							losProyectosFiltro.add(new SelectItem(vtProyecto.getProyCodigo(), vtProyecto.getNombre()));
+						}
+					}
+				}
+
+			}catch(Exception e) {
+				log.error(e.getMessage());
+			}
+
+
+
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return "";
+	}
+
+	public String filtrarProyecto(ValueChangeEvent evt){
+		try {
+			VtProyecto vtProyecto=null;
+			lasPilasDeProductoFiltro=null;
+			String proyectoS=somProyectos.getValue().toString().trim();
+
+			if(proyectoS.isEmpty() || proyectoS.equals("-1")){
+			}else{
+				Long proyecto=Long.parseLong(proyectoS);
+				vtProyecto=businessDelegatorView.getVtProyecto(proyecto);
+			}
+			
+			try{
+				if(lasPilasDeProductoFiltro==null){
+					List<VtPilaProducto> listaPilasDeProducto=businessDelegatorView.getVtPilaProducto();
+					lasPilasDeProductoFiltro= new ArrayList<SelectItem>();
+					for (VtPilaProducto vtPilaProducto:listaPilasDeProducto){
+						if(vtPilaProducto.getActivo().equalsIgnoreCase("S") && vtPilaProducto.getVtProyecto().getProyCodigo().equals(vtProyecto.getProyCodigo())){
+							lasPilasDeProductoFiltro.add(new SelectItem(vtPilaProducto.getPilaCodigo(), vtPilaProducto.getNombre()));
+						}
+						
+					}
+				}
+				
+				
+			}catch(Exception e) {
+				log.error(e.getMessage());
+			}
+
+		} catch (Exception e) {
+			log.error(e.getMessage());
+
+		}
+
+		return "";
+	}
+
 	public String filtrar(ValueChangeEvent evt){
 		try {
 			String pila=evt.getNewValue().toString();
@@ -587,7 +726,7 @@ public class VtSprintView implements Serializable {
 			businessDelegatorView.updateVtSprint(entity);
 
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint de producto se modificó con exito"));
-			
+
 			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
 			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
 

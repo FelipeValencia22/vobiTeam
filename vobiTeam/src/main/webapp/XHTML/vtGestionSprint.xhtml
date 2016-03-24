@@ -4,7 +4,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-
 	<ui:define name="content">
 		<p:ajaxStatus onstart="PF('statusDialog').show()"
 			onsuccess="PF('statusDialog').hide()" />
@@ -24,35 +23,50 @@
 				onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.jsp';" />
 		</p:dialog>
 
-
-
 		<h:form id="frm">
-
-			<p:growl id="growl" />
+			
 			<p:panel id="pnlListaSprint" header="SPRINT">
-
 				<br></br>
+				<p:growl id="growl" />
 				<p:commandButton value="Crear Sprint" type="button"
 					onclick="PF('dlg').show();" />
-				<br></br>
-				<br></br>
+			</p:panel>
+			
+			<br></br>
 
-				<p:separator />
+			<p:panel id="outputLabelPilaProducto" header="Lista de Sprints">
 
 				<h:panelGrid columns="1">
 
-					<p:outputLabel id="outputLabelPilaProducto"
-						value="Listar pila de producto" />
+					<p:selectOneMenu id="somEmpresas"
+						binding="#{vtSprintView.somEmpresas}"
+						valueChangeListener="#{vtSprintView.filtrarEmpresa}"
+						onchange="submit()">
+						<f:selectItem itemValue="-1" itemLabel="Empresa" />
+						<f:selectItems value="#{vtSprintView.lasEmpresasItems}" />
+					</p:selectOneMenu>
+
+					<p:selectOneMenu id="somProyectos"
+						binding="#{vtSprintView.somProyectos}"
+						valueChangeListener="#{vtSprintView.filtrarProyecto}"
+						onchange="submit()">
+						<f:selectItem itemValue="-1" itemLabel="Proyecto" />
+						<f:selectItems value="#{vtSprintView.losProyectosFiltro}" />
+					</p:selectOneMenu>
+
 					<p:selectOneMenu id="somPilaProducto"
 						binding="#{vtSprintView.somPilaProducto}"
 						valueChangeListener="#{vtSprintView.filtrar}" onchange="submit()">
-						<f:selectItem itemValue="-1" itemLabel="Nombre de la Pila" />
-						<f:selectItems value="#{vtSprintView.esPilaProductoItems}" />
+						<f:selectItem itemValue="-1" itemLabel="Pila de Producto" />
+						<f:selectItems value="#{vtSprintView.lasPilasDeProductoFiltro}" />
 					</p:selectOneMenu>
 					<br></br>
 
 				</h:panelGrid>
+
 			</p:panel>
+			
+			<br></br>
 
 			<p:accordionPanel id="pnlVtSprint" multiple="true">
 				<p:growl id="men" />
@@ -71,15 +85,6 @@
 								<h:outputText value="#{vtSprint.spriCodigo}" />
 							</p:column>
 
-							<p:column filterBy="#{vtSprint.activo}"
-								sortBy="#{vtSprint.activo}">
-								<f:facet name="header">
-									<h:outputText value="Activo" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.activo}" />
-							</p:column>
-
-
 							<p:column filterBy="#{vtSprint.fechaInicio}"
 								sortBy="#{vtSprint.fechaInicio}">
 								<f:facet name="header">
@@ -96,14 +101,20 @@
 								<h:outputText value="#{vtSprint.fechaFin}" />
 							</p:column>
 
-
-
 							<p:column filterBy="#{vtSprint.nombre}"
 								sortBy="#{vtSprint.nombre}">
 								<f:facet name="header">
 									<h:outputText value="Nombre" />
 								</f:facet>
 								<h:outputText value="#{vtSprint.nombre}" />
+							</p:column>
+							
+							<p:column filterBy="#{vtSprint.activo}"
+								sortBy="#{vtSprint.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.activo}" />
 							</p:column>
 
 							<p:column filterBy="#{vtSprint.objetivo}"
@@ -112,31 +123,6 @@
 									<h:outputText value="Objetivo" />
 								</f:facet>
 								<h:outputText value="#{vtSprint.objetivo}" />
-							</p:column>
-
-
-							<p:column filterBy="#{vtSprint.pilaCodigo_VtPilaProducto}"
-								sortBy="#{vtSprint.pilaCodigo_VtPilaProducto}">
-								<f:facet name="header">
-									<h:outputText value="Código Pila de producto" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.pilaCodigo_VtPilaProducto}" />
-							</p:column>
-
-							<p:column filterBy="#{vtSprint.nombrePilaProducto}"
-								sortBy="#{vtSprint.nombrePilaProducto}">
-								<f:facet name="header">
-									<h:outputText value="Nombre de producto" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.nombrePilaProducto}" />
-							</p:column>
-
-							<p:column filterBy="#{vtSprint.nombreProyecto}"
-								sortBy="#{vtSprint.nombreProyecto}">
-								<f:facet name="header">
-									<h:outputText value="Nombre proyecto" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.nombreProyecto}" />
 							</p:column>
 
 							<p:column headerText="Modificar">
@@ -250,7 +236,7 @@
 
 							<p:column headerText="Modificar">
 								<div align="center">
-									<p:commandButton id="btnEdit" icon="ui-icon-pencil"
+									<p:commandButton id="btnEdit" icon="fa fa-edit"
 										update=":dialogVtSprint"
 										actionListener="#{vtSprintView.modificar}">
 										<f:attribute name="selectedVtSprint" value="#{vtSprint}" />
@@ -363,11 +349,11 @@
 					</p:selectOneMenu>
 
 
-					<p:inputText id="txtNombreCrear" placeholder="Nombre"
+					<p:inputText id="txtNombreCrear" placeholder="Nombre" 
 						binding="#{vtSprintView.txtNombreCrear}" />
 
 
-					<p:inputText id="txtObjetivoCrear" placeholder="Objetivo"
+					<p:inputTextarea id="txtObjetivoCrear" placeholder="Objetivo" rows="10" cols="33"
 						binding="#{vtSprintView.txtObjetivoCrear}" />
 
 					<h:outputText id="msgFechaInicio" value=" Fecha inicio" />

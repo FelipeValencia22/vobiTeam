@@ -63,20 +63,21 @@
 									<h:outputText value="#{vtEmpresa.identificacion}" />
 								</p:column>
 
-								<p:column filterBy="#{vtEmpresa.activo}"
-									sortBy="#{vtEmpresa.activo}">
-									<f:facet name="header">
-										<h:outputText value="Activa" />
-									</f:facet>
-									<h:outputText value="#{vtEmpresa.activo}" />
-								</p:column>
-
 								<p:column filterBy="#{vtEmpresa.nombre}"
 									sortBy="#{vtEmpresa.nombre}">
 									<f:facet name="header">
 										<h:outputText value="Nombre empresa" />
 									</f:facet>
 									<h:outputText value="#{vtEmpresa.nombre}" />
+								</p:column>
+								
+								
+								<p:column filterBy="#{vtEmpresa.activo}"
+									sortBy="#{vtEmpresa.activo}">
+									<f:facet name="header">
+										<h:outputText value="Activa" />
+									</f:facet>
+									<h:outputText value="#{vtEmpresa.activo}" />
 								</p:column>
 
 

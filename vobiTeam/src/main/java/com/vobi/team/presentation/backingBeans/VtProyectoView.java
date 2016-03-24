@@ -291,8 +291,6 @@ public class VtProyectoView implements Serializable{
 
 		String empresaS=somEmpresas.getValue().toString().trim();
 		if(empresaS.isEmpty() || empresaS.equals("-1")){
-			VtEmpresa vtEmpresaNA=businessDelegatorView.getVtEmpresa(142020L);
-			vtProyecto.setVtEmpresa(vtEmpresaNA);
 		}else{
 			Long empresa=Long.parseLong(empresaS);
 			VtEmpresa vtEmpresa=businessDelegatorView.getVtEmpresa(empresa);
