@@ -59,4 +59,6 @@ public interface IVtProyectoUsuarioLogic {
 
     public List<VtProyectoUsuarioDTO> getDataVtProyectoUsuario()
         throws Exception;
+    
+    public VtProyectoUsuario consultarProyectoUsuarioPorProyectoYPorUsuario(Long proyectoId, Long usuarioId);
 }

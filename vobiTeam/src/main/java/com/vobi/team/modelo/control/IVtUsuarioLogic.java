@@ -1,5 +1,6 @@
 package com.vobi.team.modelo.control;
 
+import com.vobi.team.modelo.VtProyecto;
 import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.modelo.dto.VtUsuarioDTO;
 
@@ -61,4 +62,8 @@ public interface IVtUsuarioLogic {
     public VtUsuario consultarUsuarioPorCodigo(Long usua_codigo);
     
     public VtUsuario findUsuarioByLogin(String login);
+    
+    public List<VtUsuario> obtenerUsuariosAsignados(VtProyecto vtproyecto) throws Exception;
+    
+    public List<VtUsuario> obtenerUsuariosNoAsignados(VtProyecto vtproyecto) throws Exception;
 }

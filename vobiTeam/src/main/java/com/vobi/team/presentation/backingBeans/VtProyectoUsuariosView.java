@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.picklist.PickList;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
+import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,23 +27,25 @@ import com.vobi.team.modelo.VtUsuario;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 import com.vobi.team.utilities.FacesUtils;
 
-@ManagedBean 
+@ManagedBean
 @ViewScoped
-public class VtProyectoUsuariosView implements Serializable{
+public class VtProyectoUsuariosView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = LoggerFactory.getLogger(VtProyectoUsuariosView.class);
 
-	private DualListModel<String> vtUsuario;
+	private DualListModel<VtUsuario> vtUsuario;
+
 	private SelectOneMenu somProyectos;
 	private List<SelectItem> losProyectosItems;
 	private CommandButton btnCrear;
 	private ValueChangeEvent somEmpresasEvent;
 	private String proyectoSeleccionado;
 
-	List<String> usuariosSource;
-	List<String> usuariosTarget;
+	List<VtUsuario> usuariosSource;
+
+	List<VtUsuario> usuariosTarget;
 
 	private boolean showDialog;
 
@@ -59,6 +62,14 @@ public class VtProyectoUsuariosView implements Serializable{
 
 	public CommandButton getBtnCrear() {
 		return btnCrear;
+	}
+
+	public DualListModel<VtUsuario> getVtUsuario() {
+		return vtUsuario;
+	}
+
+	public void setVtUsuario(DualListModel<VtUsuario> vtUsuario) {
+		this.vtUsuario = vtUsuario;
 	}
 
 	public void setBtnCrear(CommandButton btnCrear) {
@@ -81,82 +92,123 @@ public class VtProyectoUsuariosView implements Serializable{
 		this.proyectoSeleccionado = proyectoSeleccionado;
 	}
 
-	public List<String> getUsuariosSource() {
+	@PostConstruct
+	public void init() {
+		List<VtUsuario> usuariosSource = new ArrayList<VtUsuario>();
+		List<VtUsuario> usuariosTarget = new ArrayList<VtUsuario>();
+
+		vtUsuario = new DualListModel<>(usuariosSource, usuariosTarget);
+	}
+
+	public void asignarUsuarioAProyecto(VtUsuario vtUsuario, VtProyecto vtProyecto) {
+
+		try {
+			VtProyectoUsuario vtProyectoUsuario = businessDelegatorView.consultarProyectoUsuarioPorProyectoYPorUsuario(
+					vtProyecto.getProyCodigo(), vtUsuario.getUsuaCodigo());
+			VtUsuario vtUsuarioEnSession = (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			if (vtProyectoUsuario == null) {
+				VtProyectoUsuario proyectoUsuario = new VtProyectoUsuario();
+				proyectoUsuario.setActivo("S");
+				proyectoUsuario.setFechaCreacion(new Date());
+				proyectoUsuario.setFechaModificacion(new Date());
+				proyectoUsuario.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
+				proyectoUsuario.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+				proyectoUsuario.setVtProyecto(vtProyecto);
+				proyectoUsuario.setVtUsuario(vtUsuario);
+				businessDelegatorView.saveVtProyectoUsuario(proyectoUsuario);
+			} else {
+				vtProyectoUsuario.setActivo("S");
+				vtProyectoUsuario.setFechaModificacion(new Date());
+				vtProyectoUsuario.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+				businessDelegatorView.updateVtProyectoUsuario(vtProyectoUsuario);
+			
+			}
+		} catch (Exception e) {
+			
+			log.error(e.getMessage());
+		}
+	}
+
+	public void removerProyecto(VtUsuario vtUsuario, VtProyecto vtProyecto) {
+	
+		try {
+			VtProyectoUsuario vtProyectoUsuario = businessDelegatorView
+					.consultarProyectoUsuarioPorProyectoYPorUsuario(vtProyecto.getProyCodigo(), vtUsuario.getUsuaCodigo());
+			VtUsuario vtUsuarioEnSession = (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+			vtProyectoUsuario.setActivo("N");
+			vtProyectoUsuario.setFechaModificacion(new Date());
+			vtProyectoUsuario.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+			businessDelegatorView.updateVtProyectoUsuario(vtProyectoUsuario);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+	}
+
+	public void actualizarListaUsuarios() throws Exception {
+
+		try {
+		
+				Long idProyecto = Long.parseLong(somProyectos.getValue().toString().trim());
+				VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(idProyecto);
+
+				log.info("Codigo del proyecto" + vtProyecto.getProyCodigo());
+				usuariosSource = businessDelegatorView.obtenerUsuariosNoAsignados(vtProyecto);
+				usuariosTarget = businessDelegatorView.obtenerUsuariosAsignados(vtProyecto);
+				vtUsuario.setSource(usuariosSource);
+				vtUsuario.setTarget(usuariosTarget);
+			
+			
+	
+		
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+	}
+
+	public void onTransfer(TransferEvent event) throws Exception {
+		
+		try {
+			StringBuilder builder = new StringBuilder();
+			Long idProyecto = Long.parseLong(somProyectos.getValue().toString().trim());
+			VtProyecto vtProyecto = businessDelegatorView.getVtProyecto(idProyecto);
+
+			for (Object item : event.getItems()) {
+				VtUsuario vtUsuario = (VtUsuario) item;
+
+				builder.append(((VtUsuario) item).getNombre()).append("<br />");
+				if (event.isAdd()) {
+					asignarUsuarioAProyecto(vtUsuario, vtProyecto);
+				}
+				if (event.isRemove()) {
+					removerProyecto(vtUsuario, vtProyecto);
+				}
+			}
+			FacesUtils.addInfoMessage("Usuario(s) Asignado(s)");
+		} catch (Exception e) {
+			FacesUtils.addErrorMessage("No se pudo realizar la transferencia");
+		}
+		
+
+		
+
+	}
+
+	public List<VtUsuario> getUsuariosSource() {
 		return usuariosSource;
 	}
 
-	public void setUsuariosSource(List<String> usuariosSource) {
+	public void setUsuariosSource(List<VtUsuario> usuariosSource) {
 		this.usuariosSource = usuariosSource;
 	}
 
-	public List<String> getUsuariosTarget() {
+	public List<VtUsuario> getUsuariosTarget() {
 		return usuariosTarget;
 	}
 
-	public void setUsuariosTarget(List<String> usuariosTarget) {
+	public void setUsuariosTarget(List<VtUsuario> usuariosTarget) {
 		this.usuariosTarget = usuariosTarget;
-	}
-
-	@PostConstruct
-	public void init(){
-		//Usuarios disponibles
-		List<String> usuariosSource = new ArrayList<String>();
-		//Usuarios no disponibles
-		List<String> usuariosTarget = new ArrayList<String>();
-
-		usuariosSource.add("Seleccionar proyecto");
-		vtUsuario= new DualListModel<>(usuariosSource,usuariosTarget);
-	}
-
-	public String actionListarUsuarios() {
-		usuariosSource = new ArrayList<String>(); //Usuarios disponibles
-		usuariosTarget = new ArrayList<String>(); //Usuarios no disponibles
-
-		if(getProyectoSeleccionado().equals("-1")){
-			usuariosSource.add("Seleccionar proyecto");
-		}else{ 
-			try {
-				List<VtUsuario> listUsuariosSource = businessDelegatorView.getVtUsuario();
-				
-				List<VtProyectoUsuario> listaProyectoUsuarios= businessDelegatorView.getVtProyectoUsuario();
-				
-				for(VtProyectoUsuario vtProyectoUsuario: listaProyectoUsuarios){
-					
-					if(vtProyectoUsuario.getVtProyecto().getNombre().equals(getProyectoSeleccionado())){
-						for(VtUsuario vtUsuario: listUsuariosSource){
-							if(vtProyectoUsuario.getVtUsuario().getUsuaCodigo() == (vtUsuario.getUsuaCodigo())){
-								usuariosTarget.add("Nombre: "+vtUsuario.getNombre().toString()+", Login:"+ vtUsuario.getLogin()+"\n");
-							}else{
-								if(vtUsuario.getActivo().equalsIgnoreCase("S")){
-									usuariosSource.add("Nombre: "+vtUsuario.getNombre().toString()+", Login:"+ vtUsuario.getLogin()+"\n");	
-								}
-							}
-						}
-
-					}else{
-						for(VtUsuario vtUsuario: listUsuariosSource){
-							if(vtUsuario.getActivo().equalsIgnoreCase("S")){
-								usuariosSource.add("Nombre: "+vtUsuario.getNombre().toString()+", Login:"+ vtUsuario.getLogin()+"\n");	
-							}
-						}
-
-					}
-				}
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		vtUsuario = new DualListModel<String>(usuariosSource, usuariosTarget);
-
-		return "";
-	}
-
-	public DualListModel<String> getVtUsuario() {
-		return vtUsuario;
-	}
-
-	public void setVtUsuario(DualListModel<String> vtUsuario) {
-		this.vtUsuario = vtUsuario;
 	}
 
 	public SelectOneMenu getSomProyectos() {
@@ -166,14 +218,14 @@ public class VtProyectoUsuariosView implements Serializable{
 	public void setSomProyectos(SelectOneMenu somProyectos) {
 		this.somProyectos = somProyectos;
 	}
-
+ 
 	public List<SelectItem> getLosProyectosItems() {
 		try {
 			if (losProyectosItems == null) {
 				List<VtProyecto> listaProyectos = businessDelegatorView.getVtProyecto();
 				losProyectosItems = new ArrayList<SelectItem>();
 				for (VtProyecto vtProyecto : listaProyectos) {
-					losProyectosItems.add(new SelectItem(vtProyecto.getNombre()));
+					losProyectosItems.add(new SelectItem(vtProyecto.getProyCodigo(), vtProyecto.getNombre()));
 				}
 			}
 		} catch (Exception e) {
@@ -186,10 +238,11 @@ public class VtProyectoUsuariosView implements Serializable{
 		this.losProyectosItems = losProyectosItems;
 	}
 
-	public void localeChanged(ValueChangeEvent e){
+	public void localeChanged(ValueChangeEvent e) throws Exception {
 		setProyectoSeleccionado(e.getNewValue().toString());
-		actionListarUsuarios();
+		actualizarListaUsuarios();
 		setShowDialog(true);
+		
 	}
 
 	public boolean isShowDialog() {
@@ -200,90 +253,86 @@ public class VtProyectoUsuariosView implements Serializable{
 		this.showDialog = showDialog;
 	}
 
-	public String action_closeDialog() {
+	public String action_closeDialog() {		
 		setShowDialog(false);
-
+		somProyectos.setValue("-1");
 		return "";
 	}
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
 	public String action_Guardar() {
 
 		// Source
-		Object[] objectUsuariosSource= usuariosSource.toArray();
-		String[] stringUsuariosSource= new String[objectUsuariosSource.length];
+		Object[] objectUsuariosSource = usuariosSource.toArray();
+		String[] stringUsuariosSource = new String[objectUsuariosSource.length];
 
 		for (int i = 0; i < objectUsuariosSource.length; i++) {
-			stringUsuariosSource[i]=""+objectUsuariosSource[i];
+			stringUsuariosSource[i] = "" + objectUsuariosSource[i];
 		}
 
-		String[] loginSource= new String[stringUsuariosSource.length];
+		String[] loginSource = new String[stringUsuariosSource.length];
 
 		for (int i = 0; i < stringUsuariosSource.length; i++) {
 			String[] parts = stringUsuariosSource[i].split("Login:");
-			loginSource[i]=parts[1];
+			loginSource[i] = parts[1];
 		}
 
-		//Target
-		Object[] objectUsuariosTarget= usuariosTarget.toArray();
-		String[] stringUsuariosTarget= new String[objectUsuariosTarget.length];
+		// Target
+		Object[] objectUsuariosTarget = usuariosTarget.toArray();
+		String[] stringUsuariosTarget = new String[objectUsuariosTarget.length];
 
 		for (int i = 0; i < objectUsuariosTarget.length; i++) {
-			stringUsuariosTarget[i]=""+objectUsuariosTarget[i];
+			stringUsuariosTarget[i] = "" + objectUsuariosTarget[i];
 		}
 
-		String[] loginTarget= new String[stringUsuariosTarget.length];
+		String[] loginTarget = new String[stringUsuariosTarget.length];
 
 		for (int i = 0; i < stringUsuariosTarget.length; i++) {
 			String[] parts = stringUsuariosTarget[i].split("Login:");
-			loginTarget[i]=parts[1];
+			loginTarget[i] = parts[1];
 		}
 
 		try {
 			VtProyecto vtProyecto = null;
 			List<VtProyectoUsuario> listaProyectoUsuarios = businessDelegatorView.getVtProyectoUsuario();
-			for(VtProyectoUsuario vtProyectoUsuario: listaProyectoUsuarios){
-				if(vtProyectoUsuario.getVtProyecto().getNombre().equals(getProyectoSeleccionado())){
+			for (VtProyectoUsuario vtProyectoUsuario : listaProyectoUsuarios) {
+				if (vtProyectoUsuario.getVtProyecto().getNombre().equals(getProyectoSeleccionado())) {
 					vtProyecto = businessDelegatorView.getVtProyecto(vtProyectoUsuario.getVtProyecto().getProyCodigo());
 
-					
 					for (int i = 0; i < loginSource.length; i++) {
-						System.out.println("#"+i+": "+loginSource[i]);
+						System.out.println("#" + i + ": " + loginSource[i]);
 					}
-					
-					for(int i = 0;i < loginSource.length; i++){
-						if(vtProyectoUsuario.getVtUsuario().getLogin().equals(loginSource[i].toString())){
-						}else{
-							VtProyectoUsuario vtProyectoUsuarioCrear= new VtProyectoUsuario();
+
+					for (int i = 0; i < loginSource.length; i++) {
+						if (vtProyectoUsuario.getVtUsuario().getLogin().equals(loginSource[i].toString())) {
+						} else {
+							VtProyectoUsuario vtProyectoUsuarioCrear = new VtProyectoUsuario();
 							vtProyectoUsuarioCrear.setVtProyecto(vtProyecto);
 
-							Date fechaCreacion= new Date();
+							Date fechaCreacion = new Date();
 							vtProyectoUsuarioCrear.setFechaCreacion(fechaCreacion);
 
-							VtUsuario vtUsuarioCreador =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+							VtUsuario vtUsuarioCreador = (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 							vtProyectoUsuarioCrear.setUsuCreador(vtUsuarioCreador.getUsuaCodigo());
 
-							VtUsuario vtUsuarioBuscar=businessDelegatorView.findUsuarioByLogin(loginSource[i]);
+							VtUsuario vtUsuarioBuscar = businessDelegatorView.findUsuarioByLogin(loginSource[i]);
 							vtProyectoUsuarioCrear.setVtUsuario(vtUsuarioBuscar);
 
 							vtProyectoUsuarioCrear.setActivo("S");
 
 							businessDelegatorView.saveVtProyectoUsuario(vtProyectoUsuarioCrear);
-							FacesContext.getCurrentInstance().addMessage("", new FacesMessage("Se realizo la asignacion del desarrollador(es)"));
+							FacesContext.getCurrentInstance().addMessage("",
+									new FacesMessage("Se realizo la asignacion del desarrollador(es)"));
 						}
 					}
 
 				}
-
 
 			}
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("", new FacesMessage(e.getMessage()));
 		}
 
-
 		return "";
 	}
-
-
 
 }

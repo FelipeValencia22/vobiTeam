@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.vobi.team.modelo.VtEmpresa;
+import com.vobi.team.modelo.VtProyectoUsuario;
 import com.vobi.team.modelo.VtRol;
 import com.vobi.team.modelo.VtUsuario;
 
@@ -311,4 +312,9 @@ public interface Dao<T, PK extends Serializable> {
     public VtUsuario consultarUsuarioUnicoPorLogin(String login);
     
     public VtRol consultarRolPorNombre(String rolNombre);
+    
+    public List<VtProyectoUsuario> consultarProyectoUsuarioPorProyecto(Long proyectoCodigo);
+    
+    
+    
 }

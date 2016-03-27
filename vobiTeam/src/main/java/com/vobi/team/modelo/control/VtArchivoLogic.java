@@ -74,7 +74,7 @@ public class VtArchivoLogic implements IVtArchivoLogic {
 
         try {
             if (entity.getVtArtefacto() == null) {
-                throw new ZMessManager().new ForeignException("vtArtefacto");
+                throw new Exception("Tienes que crear primero el la información y luego subes el archivo");
             }
 
             if (entity.getActivo() == null) {
@@ -86,9 +86,9 @@ public class VtArchivoLogic implements IVtArchivoLogic {
                 throw new ZMessManager().new NotValidFormatException("activo");
             }
 
-            if (entity.getArchCodigo() == null) {
-                throw new ZMessManager().new EmptyFieldException("archCodigo");
-            }
+//            if (entity.getArchCodigo() == null) {
+//                throw new ZMessManager().new EmptyFieldException("archCodigo");
+//            }
 
             if (entity.getFechaCreacion() == null) {
                 throw new ZMessManager().new EmptyFieldException(
@@ -114,9 +114,9 @@ public class VtArchivoLogic implements IVtArchivoLogic {
                     "arteCodigo_VtArtefacto");
             }
 
-            if (getVtArchivo(entity.getArchCodigo()) != null) {
-                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
-            }
+//            if (getVtArchivo(entity.getArchCodigo()) != null) {
+//                throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
+//            }
 
             vtArchivoDAO.save(entity);
 

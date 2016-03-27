@@ -502,5 +502,7 @@ public interface IBusinessDelegatorView {
     
     public List<VtRolDTO> getDataVtRolInactivo() throws Exception;
     
-    
+    public List<VtUsuario> obtenerUsuariosAsignados(VtProyecto vtproyecto) throws Exception;
+    public List<VtUsuario> obtenerUsuariosNoAsignados(VtProyecto vtproyecto) throws Exception;
+    public VtProyectoUsuario consultarProyectoUsuarioPorProyectoYPorUsuario(Long proyectoId, Long usuarioId);
 }

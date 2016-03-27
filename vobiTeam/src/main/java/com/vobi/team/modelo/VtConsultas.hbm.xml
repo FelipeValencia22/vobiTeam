@@ -23,6 +23,20 @@
    ]]>
   </query>
   
+  <query name="consultarProyectoUsuarioPorProyecto">
+  <![CDATA[
+  Select proyUsu From VtProyectoUsuario proyUsu where proyUsu.vtProyecto.proyCodigo=:proyectoCodigo 
+
+   ]]>
+  </query>
+  
+    <query name="consultarProyectosUsuariosPorProyectoYUsuario">
+  <![CDATA[
+	Select proyUsuarios from VtProyectoUsuario proyUsuarios where proyUsuarios.vtProyecto.proyCodigo=:proyCodigo and proyUsuarios.vtUsuario.usuaCodigo=:usuaCodigo
+
+   ]]>
+  </query>
+  
 	
 	
 </hibernate-mapping>

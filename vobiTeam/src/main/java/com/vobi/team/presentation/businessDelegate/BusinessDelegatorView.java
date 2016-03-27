@@ -65,7 +65,7 @@ import com.vobi.team.modelo.dto.VtTipoArtefactoDTO;
 import com.vobi.team.modelo.dto.VtUsuarioArtefactoDTO;
 import com.vobi.team.modelo.dto.VtUsuarioDTO;
 import com.vobi.team.modelo.dto.VtUsuarioRolDTO;
-
+import com.vobi.team.presentation.backingBeans.VtProyectoUsuariosView;
 import com.vobi.team.presentation.businessDelegate.IBusinessDelegatorView;
 
 import org.slf4j.Logger;
@@ -1080,6 +1080,22 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 	@Override
 	public List<VtRolDTO> getDataVtRolInactivo() throws Exception {		
 		return vtRolLogic.getDataVtRolInactivo();
+	}
+
+	@Override
+	public List<VtUsuario> obtenerUsuariosAsignados(VtProyecto vtproyecto) throws Exception {	
+		return vtUsuarioLogic.obtenerUsuariosAsignados(vtproyecto);
+	}
+
+	@Override
+	public List<VtUsuario> obtenerUsuariosNoAsignados(VtProyecto vtproyecto) throws Exception {		
+		return vtUsuarioLogic.obtenerUsuariosNoAsignados(vtproyecto);
+	}
+
+	@Override
+	public VtProyectoUsuario consultarProyectoUsuarioPorProyectoYPorUsuario(Long proyectoId, Long usuarioId) {
+	
+		return vtProyectoUsuarioLogic.consultarProyectoUsuarioPorProyectoYPorUsuario(proyectoId, usuarioId);
 	}
 
 	

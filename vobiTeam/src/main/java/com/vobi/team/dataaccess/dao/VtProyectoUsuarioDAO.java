@@ -51,4 +51,15 @@ public class VtProyectoUsuarioDAO extends HibernateDaoImpl<VtProyectoUsuario, Lo
         ApplicationContext ctx) {
         return (IVtProyectoUsuarioDAO) ctx.getBean("VtProyectoUsuarioDAO");
     }
+
+	@Override
+	public VtProyectoUsuario consultarProyectoUsuarioPorProyectoYPorUsuario(Long proyectoId, Long usuarioId) {
+		Query query = getSession().getNamedQuery("consultarProyectosUsuariosPorProyectoYUsuario");
+		query.setParameter("proyCodigo", proyectoId);
+		query.setParameter("usuaCodigo", usuarioId);
+		VtProyectoUsuario proyectoUsuario = (VtProyectoUsuario) query.uniqueResult();
+		return proyectoUsuario;
+	}
+
+	
 }
