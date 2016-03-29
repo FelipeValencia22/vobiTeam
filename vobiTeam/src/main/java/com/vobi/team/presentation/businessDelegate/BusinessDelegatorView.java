@@ -168,6 +168,8 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
     private IVtUsuarioArtefactoLogic vtUsuarioArtefactoLogic;
     @Autowired
     private IVtUsuarioRolLogic vtUsuarioRolLogic;
+    @Autowired
+    private IVtSeguridadLogica vtSeguridadLogic;
 
     public List<VtArchivo> getVtArchivo() throws Exception {
         return vtArchivoLogic.getVtArchivo();
@@ -1096,6 +1098,11 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 	public VtProyectoUsuario consultarProyectoUsuarioPorProyectoYPorUsuario(Long proyectoId, Long usuarioId) {
 	
 		return vtProyectoUsuarioLogic.consultarProyectoUsuarioPorProyectoYPorUsuario(proyectoId, usuarioId);
+	}
+
+	@Override
+	public VtUsuario guardarUsuario(String login) throws Exception {
+		return vtSeguridadLogic.guardarUsuario(login);
 	}
 
 	

@@ -49,8 +49,8 @@ public class ZMessManager extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
 		public EmptyFieldException(String info) {
-			super("The value for the field: \"" + info
-					+ "\" can not be null or empty");
+			super("The valor para el campo: \"" + info
+					+ "\" no puede ser vacio");
 		}
 	}
 
@@ -58,8 +58,8 @@ public class ZMessManager extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
 		public NotValidFormatException(String info) {
-			super("The Format or length for the field: \"" + info
-					+ "\" is not valid");
+			super("El tamaño o el formato del activo: \"" + info
+					+ "\" es invalido");
 		}
 	}
 

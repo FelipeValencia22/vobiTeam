@@ -26,7 +26,7 @@
         <property name="activo" type="java.lang.String">
             <column name="activo" length="1" not-null="true" />
         </property>
-        <set name="vtUsuarioRols" table="vt_usuario_rol" inverse="true" lazy="true" fetch="select">
+        <set name="vtUsuarioRols" table="vt_usuario_rol" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="rol_codigo" not-null="true" />
             </key>

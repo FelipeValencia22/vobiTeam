@@ -4,6 +4,7 @@ import com.vobi.team.dataaccess.dao.*;
 import com.vobi.team.exceptions.*;
 import com.vobi.team.modelo.*;
 import com.vobi.team.modelo.dto.VtArtefactoDTO;
+import com.vobi.team.utilities.FacesUtils;
 import com.vobi.team.utilities.Utilities;
 
 import org.slf4j.Logger;
@@ -142,6 +143,10 @@ public class VtArtefactoLogic implements IVtArtefactoLogic {
 
 			if (entity.getDescripcion().toString().trim().equalsIgnoreCase("") == true) {
 				throw new Exception("Es importante la descricpión para este artefacto");
+			}
+			
+			if((entity.getEsfuerzoEstimado() == null)&& (FacesUtils.checkInteger(entity.getEsfuerzoEstimado())==null)){
+				throw new Exception("Es importante estimar el tiempo en horas para este artefacto");
 			}
 
 			if ((entity.getEsfuerzoEstimado() == null)

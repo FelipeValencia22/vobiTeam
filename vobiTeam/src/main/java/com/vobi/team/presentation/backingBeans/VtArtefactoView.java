@@ -1,5 +1,6 @@
 package com.vobi.team.presentation.backingBeans;
 
+import java.awt.Event;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,8 +87,11 @@ public class VtArtefactoView implements Serializable {
 	private List<VtSprintDTO> dataSprint;
 	private VtArtefactoDTO selectedVtArtefacto;
 	private InputTextarea txtdescripcion;
+	private InputTextarea txtdescripcionCambio;
 	private InputText txtnombre;
+	private InputText txtnombreCambio;
 	private InputText txtEsfuerzoEstimado;
+	private InputText txtEsfuerzoEstimadoCambio;
 	private Calendar txtFechaFin;
 	private Calendar txtFechaInicio;
 	private CommandButton btnCrearS;
@@ -127,6 +131,24 @@ public class VtArtefactoView implements Serializable {
 
 	public Long getSpriCodigo() {
 		return spriCodigo;
+	}
+	public InputTextarea getTxtdescripcionCambio() {
+		return txtdescripcionCambio;
+	}
+	public void setTxtdescripcionCambio(InputTextarea txtdescripcionCambio) {
+		this.txtdescripcionCambio = txtdescripcionCambio;
+	}
+	public InputText getTxtnombreCambio() {
+		return txtnombreCambio;
+	}
+	public void setTxtnombreCambio(InputText txtnombreCambio) {
+		this.txtnombreCambio = txtnombreCambio;
+	}
+	public InputText getTxtEsfuerzoEstimadoCambio() {
+		return txtEsfuerzoEstimadoCambio;
+	}
+	public void setTxtEsfuerzoEstimadoCambio(InputText txtEsfuerzoEstimadoCambio) {
+		this.txtEsfuerzoEstimadoCambio = txtEsfuerzoEstimadoCambio;
 	}
 	public void setSpriCodigo(Long spriCodigo) {
 		this.spriCodigo = spriCodigo;
@@ -596,10 +618,11 @@ public class VtArtefactoView implements Serializable {
 			entity.setTitulo(txtnombre.getValue().toString().trim());
 			Date fechaCreacion = new Date();
 			entity.setFechaCreacion(fechaCreacion);
-
 			int esfuerzo = Integer.parseInt(txtEsfuerzoEstimado.getValue().toString().trim());
+			if(txtEsfuerzoEstimado.getValue()==null || txtEsfuerzoEstimado.getValue().toString().trim().equals("null")){
+				throw new Exception("Los campos no deben ser nulos");
+			}
 			entity.setEsfuerzoEstimado(esfuerzo);
-
 			String pilasProducto = somPilaProductoCrear.getValue().toString().trim();
 			Long idPilaProducto = Long.parseLong(pilasProducto);
 			VtPilaProducto vtPilaProducto = businessDelegatorView.getVtPilaProducto(idPilaProducto);
@@ -665,9 +688,10 @@ public class VtArtefactoView implements Serializable {
 			vtArchivo.setArchivo(event.getFile().getContents());
 			vtArchivo.setVtArtefacto(entity);
 
+
+			businessDelegatorView.saveVtArchivo(vtArchivo);
 			FacesUtils.addInfoMessage("Ok",
 					"Fichero " + event.getFile().getFileName() + " subido correctamente.");
-			businessDelegatorView.saveVtArchivo(vtArchivo);
 
 		} catch (Exception e) {
 			FacesUtils.addInfoMessage(e.getMessage());
@@ -715,7 +739,6 @@ public class VtArtefactoView implements Serializable {
 
 	public String filtrar(ValueChangeEvent evt) {
 		try {
-
 			String sprint = evt.getNewValue().toString();
 			log.info("Código del sprint " + sprint);
 			spriCodigo = Long.valueOf(sprint);
@@ -852,11 +875,11 @@ public class VtArtefactoView implements Serializable {
 		return "";
 	}
 
-	public String imprimirValue(ValueChangeEvent vce) {
+	public String imprimirValue() {
 
 		try {
 			VtPilaProducto vtPilaProducto = null;
-			String pila = vce.getNewValue().toString();
+			String pila = somPilaProductoCrear.getValue().toString();
 			log.info("Información :" + pila);
 			if (pila.isEmpty() || pila.equals("-1")) {
 			} else {
@@ -900,22 +923,33 @@ public class VtArtefactoView implements Serializable {
 					entity.setActivo("N");
 				}
 			}
-			entity.setTitulo(FacesUtils.checkString(txtnombre));
-			entity.setDescripcion(FacesUtils.checkString(txtdescripcion));
+			txtdescripcion.setValue(txtdescripcion.getValue().toString().trim());
+			txtnombre.setValue(txtnombre.getValue().toString().trim());
+			somActivo.setValue(somActivo.getValue().toString().trim());
+			somEstados.setValue(somEstados.getValue().toString().trim());
+			somPilaProducto.setValue(somPilaProducto.getValue().toString().trim());
+			somPrioridades.setValue(somPrioridades.getValue().toString().trim());
+			entity.setTitulo(FacesUtils.checkString(txtnombreCambio));
+			entity.setDescripcion(FacesUtils.checkString(txtdescripcionCambio));
+			
+			String cambioEstado = txtEsfuerzoEstimadoCambio.getValue().toString().trim();
+			int cambioEst =Integer.parseInt(cambioEstado);			
+			entity.setEsfuerzoEstimado((cambioEst));
 			Date fechaModificacion = new Date();
 			entity.setFechaModificacion(fechaModificacion);
 
 			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
 			businessDelegatorView.updateVtArtefacto(entity);
-
+			FacesUtils.addInfoMessage("El Artefacto se ha sido modificado con exito");
+			
 			String artefacto = somSprints.getValue().toString().trim();
 			Long codigoArtefacto =Long.valueOf(artefacto);
 			VtArtefacto vtArtefacto = businessDelegatorView.getVtArtefacto(codigoArtefacto);
 			dataFiltro = businessDelegatorView.getDataVtArtefactoFiltro(vtArtefacto.getArteCodigo());
 			dataFiltroI = businessDelegatorView.getDataVtArtefactoFiltroI(vtArtefacto.getArteCodigo());
 
-			FacesUtils.addInfoMessage("El Artefacto se ha sido modificado con exito");
+		
 		} catch (Exception e) {
 			data = null;
 			FacesUtils.addErrorMessage(e.getMessage());

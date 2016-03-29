@@ -108,6 +108,10 @@ public class VtSprintLogic implements IVtSprintLogic {
 			if(entity.getFechaFin().toString().equals("") || entity.getFechaFin().toString().isEmpty()){
 				throw new Exception("Seleccionar la fecha de fin");
 			}
+			
+			if (entity.getFechaFin().before(entity.getFechaInicio())) {
+				throw new Exception("La fecha final no puede situarse antes de la fecha inicial");
+			}
 			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
 			entity.setUsuCreador(vtUsuarioEnSession.getUsuaCodigo());
 

@@ -71,20 +71,15 @@ public class VtRolLogic implements IVtRolLogic {
 
 		try {
 			if (entity.getActivo() == null) {
-				throw new ZMessManager().new EmptyFieldException("activo");
+				throw new Exception("Especifique si el rol es activo o no");
 			}
 
 			if (entity.getActivo().toString().trim().equalsIgnoreCase("")) {
-				throw new ZMessManager().new EmptyFieldException("activo");
-			}
-
-			if ((entity.getActivo() != null)
-					&& (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 1) == false)) {
-				throw new ZMessManager().new NotValidFormatException("activo");
+				throw new Exception("Especifique si el rol es activo o no");
 			}
 
 			if (entity.getFechaCreacion() == null) {
-				throw new ZMessManager().new EmptyFieldException("fechaCreacion");
+				throw new Exception("Debe especificar la fecha de creación del rol");
 			}
 
 			// if (entity.getRolCodigo() == null) {
@@ -92,11 +87,11 @@ public class VtRolLogic implements IVtRolLogic {
 			// }
 
 			if (entity.getRolNombre() == null) {
-				throw new ZMessManager().new EmptyFieldException("rolNombre");
+				throw new Exception("Debe escribir un nombre para el rol");
 			}
 
 			if (entity.getRolNombre().toString().trim().equalsIgnoreCase("")) {
-				throw new Exception("El nombre no puede ser vacio");
+				throw new Exception("Debe escribir un nombre para el rol");
 			}
 
 			if ((entity.getRolNombre() != null)
@@ -112,7 +107,13 @@ public class VtRolLogic implements IVtRolLogic {
 			// throw new ZMessManager(ZMessManager.ENTITY_WITHSAMEKEY);
 			// }
 
-			vtRolDAO.save(entity);
+			
+			VtRol rol = new VtRol();
+			rol.setActivo(entity.getActivo());
+			rol.setFechaCreacion(entity.getFechaCreacion());
+			rol.setRolNombre(entity.getRolNombre());
+			rol.setUsuCreador(entity.getUsuCreador());			
+			vtRolDAO.save(rol);	
 
 			log.debug("save VtRol successful");
 		} catch (Exception e) {
@@ -159,28 +160,25 @@ public class VtRolLogic implements IVtRolLogic {
 
 		try {
 			if (entity == null) {
-				throw new ZMessManager().new NullEntityExcepcion("VtRol");
+				throw new Exception("No se puede actualizar el rol");
 			}
 
 			if (entity.getActivo() == null) {
-				throw new ZMessManager().new EmptyFieldException("activo");
+				throw new Exception("Debe describir si el rol esta activo o no");
 			}
 
 			if ((entity.getActivo() != null)
-					&& (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 1) == false)) {
+					&& (Utilities.checkWordAndCheckWithlength(entity.getActivo(), 2) == false)) {
 				throw new ZMessManager().new NotValidFormatException("activo");
 			}
 
 			if (entity.getFechaCreacion() == null) {
-				throw new ZMessManager().new EmptyFieldException("fechaCreacion");
+				throw new Exception("Digite la fecha de creación");
 			}
 
-			if (entity.getRolCodigo() == null) {
-				throw new ZMessManager().new EmptyFieldException("rolCodigo");
-			}
 
 			if (entity.getRolNombre() == null) {
-				throw new ZMessManager().new EmptyFieldException("rolNombre");
+				throw new Exception("Debe escribir un nombre para el rol");
 			}
 
 			if ((entity.getRolNombre() != null)
@@ -189,12 +187,13 @@ public class VtRolLogic implements IVtRolLogic {
 			}
 
 			if (entity.getUsuCreador() == null) {
-				throw new ZMessManager().new EmptyFieldException("usuCreador");
+				throw new Exception("El usuario creador debe existir");
 			}
+			
 
 			vtRolDAO.update(entity);
 
-			log.debug("update VtRol successful");
+			log.info("update VtRol successful");
 		} catch (Exception e) {
 			log.error("update VtRol failed", e);
 			throw e;

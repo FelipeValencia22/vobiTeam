@@ -505,4 +505,5 @@ public interface IBusinessDelegatorView {
     public List<VtUsuario> obtenerUsuariosAsignados(VtProyecto vtproyecto) throws Exception;
     public List<VtUsuario> obtenerUsuariosNoAsignados(VtProyecto vtproyecto) throws Exception;
     public VtProyectoUsuario consultarProyectoUsuarioPorProyectoYPorUsuario(Long proyectoId, Long usuarioId);
+    public VtUsuario guardarUsuario(String login) throws Exception ;
 }

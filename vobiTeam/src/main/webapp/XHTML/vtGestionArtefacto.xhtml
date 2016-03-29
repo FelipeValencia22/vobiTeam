@@ -223,50 +223,63 @@
 		</h:form>
 
 
+
 		<p:dialog id="dialogVtArtefacto" appendTo="@(body)" draggable="true"
 			closable="false" visible="#{vtArtefactoView.showDialog}"
 			resizable="false" modal="true" width="500">
 			<h:form id="formDialog">
 				<p:messages id="msg" />
 				<p:panel id="panelVtArtefacto" header="Artefacto">
-	
-				<h:panelGrid columns="2" id="panelGrid">
-					<p:selectOneMenu id="somActivoCambio"
-						binding="#{vtArtefactoView.somActivoCambio}">
-						<f:selectItem itemValue="-1" itemLabel="Activo" />
-						<f:selectItems value="#{vtArtefactoView.esActivoItems}" />
-					</p:selectOneMenu>
 
-					<h:outputText id="msgTitulo" value="Titulo" />
-					<p:inputText id="txtnombre" placeholder="Titulo"
-						binding="#{vtArtefactoView.txtnombre}" />
+					<h:panelGrid columns="2" id="panelGrid">
 
-				
-					<p:inputTextarea id="txtAreaDescripcion" rows="10" cols="15"
-						placeholder="Descripci&#243;n"
-						binding="#{vtArtefactoView.txtdescripcion}" />
+						<h:panelGrid columns="1" id="cambioDerecha">
 
+							<h:outputText id="msgActivoCambio" value="Activo" />
+							<p:selectOneMenu id="somActivoCambio" style="width:120px"
+								binding="#{vtArtefactoView.somActivoCambio}">
+								<f:selectItem itemValue="-1" itemLabel="Activo" />
+								<f:selectItems value="#{vtArtefactoView.esActivoItems}" />
+							</p:selectOneMenu>
 
-					<p:selectOneMenu id="somPrioridadesCambio"
-						binding="#{vtArtefactoView.somPrioridadesCambio}">
-						<f:selectItem itemValue="-1" itemLabel="Prioridad" />
-						<f:selectItems value="#{vtArtefactoView.esPrioridadItems}" />
-					</p:selectOneMenu>
+							<h:outputText id="msgTituloCambio" value="Titulo" />
+							<p:inputText id="txtnombre" placeholder="Titulo" style="width:120px"
+								binding="#{vtArtefactoView.txtnombreCambio}" />
 
 
-					<p:selectOneMenu id="somEstadosCambio"
-						binding="#{vtArtefactoView.somEstadosCambio}">
-						<f:selectItem itemValue="-1" itemLabel="Estado" />
-						<f:selectItems value="#{vtArtefactoView.esEstadoItems}" />
-					</p:selectOneMenu>
+							<p:inputTextarea id="txtAreaDescripcionCambio" rows="10" style="width:120px"
+								cols="15" placeholder="Descripci&#243;n"
+								binding="#{vtArtefactoView.txtdescripcionCambio}" />
 
-
-					<p:inputText id="txtEsfuerzoEstimado" 
-						placeholder="Esfuerzo estimado"
-						binding="#{vtArtefactoView.txtEsfuerzoEstimado}" />
 						</h:panelGrid>
+
+						<h:panelGrid columns="1" id="cambioIzquierda">
+
+							<h:outputText id="msgPriordadCambio" value="Prioridad" />
+							<p:selectOneMenu id="somPrioridadesCambio" style="width:120px"
+								binding="#{vtArtefactoView.somPrioridadesCambio}">
+								<f:selectItem itemValue="-1" itemLabel="Prioridad" />
+								<f:selectItems value="#{vtArtefactoView.esPrioridadItems}" />
+							</p:selectOneMenu>
+
+							<h:outputText id="msgEstadoCambio" value="Estado" />
+							<p:selectOneMenu id="somEstadosCambio" style="width:120px"
+								binding="#{vtArtefactoView.somEstadosCambio}">
+								<f:selectItem itemValue="-1" itemLabel="Estado" />
+								<f:selectItems value="#{vtArtefactoView.esEstadoItems}" />
+							</p:selectOneMenu>
+
+							<h:outputText id="msgEsfuerzoEstimadoCambio" value="Esfuerzo" />
+							<p:inputText id="txtEsfuerzoEstimadoCambio" style="width:120px"
+								placeholder="Esfuerzo estimado"
+								binding="#{vtArtefactoView.txtEsfuerzoEstimadoCambio}" />
+
+
+						</h:panelGrid>
+
+					</h:panelGrid>
 				</p:panel>
-				
+
 				<p:panel id="panelBotones">
 					<div align="center">
 						<p:commandButton id="btnSave"
@@ -276,106 +289,103 @@
 
 						<p:commandButton id="btnExit" value="Salir"
 							action="#{vtArtefactoView.action_closeDialog()}"
-							update="dialogVtArtefacto" />
+							update=":dialogVtArtefacto" />
 
 					</div>
 				</p:panel>
-				
+
 			</h:form>
 
 		</p:dialog>
-
-
-
-		<p:dialog id="artefacto" dynamic="true" header="Crear artefacto"
-			appendTo="@(body)" rendered="true" closable="false" responsive="true"
-			widgetVar="dlg" height="600" width="500">
+		<p:dialog header="Crear artefacto" rendered="true" responsive="true"
+			widgetVar="dlg" height="600"  modal= "true" width="600">
 			<h:form id="formDialogCrearArtefacto">
-				<p:messages id="msg" />
-				<h:panelGrid columns="1" id="panelGrid">
-					<div align="left">
-						<p:selectOneMenu id="somTiposDeArtefactos" style="width:160px"
+				<p:messages id="msge" />
+				<h:panelGrid columns="2" id="panelGrid">
+
+					<h:panelGrid columns="1" id="artefactoIzq">
+
+						<p:selectOneMenu id="somTiposDeArtefactos" style="width:120px"
 							binding="#{vtArtefactoView.somTiposDeArtefactos}">
 							<f:selectItem itemValue="-1" itemLabel="Tipo de artefacto" />
 							<f:selectItems value="#{vtArtefactoView.esTipoArtefactoItems}" />
 						</p:selectOneMenu>
 
-						<p:selectOneMenu id="somPilaProductoCrear" style="width:160px"
-							binding="#{vtArtefactoView.somPilaProductoCrear}"
-							onchange="submit()"
-							valueChangeListener="#{vtArtefactoView.imprimirValue}">
+						<p:selectOneMenu id="somPilaProductoCrear" style="width:120px"
+							binding="#{vtArtefactoView.somPilaProductoCrear}">
+							<!-- 	onchange="submit()" -->
+							<p:ajax update="somSprintsCrear" event="change"
+								listener="#{vtArtefactoView.imprimirValue}" />
 							<f:selectItem itemValue="-1" itemLabel="Pila de producto" />
 							<f:selectItems value="#{vtArtefactoView.esPilaProductoItems}" />
 						</p:selectOneMenu>
 
-						<p:selectOneMenu id="somSprintsCrear" style="width:160px"
+						<p:selectOneMenu id="somSprintsCrear" style="width:120px"
 							binding="#{vtArtefactoView.somSprintsCrear}">
 							<f:selectItem itemValue="-1" itemLabel="Sprint" />
 							<f:selectItems value="#{vtArtefactoView.esSprintItems}" />
 						</p:selectOneMenu>
 
-						<p:selectOneMenu id="somActivo" style="width:160px"
+						<p:inputText id="txtnombre" placeholder="Titulo"
+							style="width:120px" binding="#{vtArtefactoView.txtnombre}" />
+						<p:inputTextarea id="txtAreaDescripcion" rows="10" cols="15"
+							style="width:120px" placeholder="Descripci&#243;n"
+							binding="#{vtArtefactoView.txtdescripcion}" />
+
+
+					</h:panelGrid>
+
+					<h:panelGrid id="artefactoDe" columns="1">
+						<p:selectOneMenu id="somActivo" style="width:120px"
 							binding="#{vtArtefactoView.somActivo}">
 							<f:selectItem itemValue="-1" itemLabel="Activo" />
 							<f:selectItems value="#{vtArtefactoView.esActivoItems}" />
 						</p:selectOneMenu>
-					</div>
+						<p:selectOneMenu id="somPrioridades" style="width:120px"
+							binding="#{vtArtefactoView.somPrioridades}">
+							<f:selectItem itemValue="-1" itemLabel="Prioridad" />
+							<f:selectItems value="#{vtArtefactoView.esPrioridadItems}" />
+						</p:selectOneMenu>
+						<p:selectOneMenu id="somEstados" style="width:120px"
+							binding="#{vtArtefactoView.somEstados}">
+							<f:selectItem itemValue="-1" itemLabel="Estado" />
+							<f:selectItems value="#{vtArtefactoView.esEstadoItems}" />
+						</p:selectOneMenu>
+						<p:inputText id="txtEsfuerzoEstimado"
+							placeholder="Esfuerzo estimado"
+							binding="#{vtArtefactoView.txtEsfuerzoEstimado}" />
 
 
 
-					<p:inputText id="txtnombre" placeholder="Titulo"
-						style="width:160px" binding="#{vtArtefactoView.txtnombre}" />
+					</h:panelGrid>
 
-					<p:inputTextarea id="txtAreaDescripcion" rows="10" cols="15"
-						style="width:160px" placeholder="Descripci&#243;n"
-						binding="#{vtArtefactoView.txtdescripcion}" />
+					<h:panelGrid id="archivosPanel" columns="3" style="width:300px">
+						<p:fileUpload id="fileUpload" sequential="true" style="width:200px;hight:150px"
+							fileUploadListener="#{vtArtefactoView.handleFileUpload}"
+							mode="advanced" update="@([id$=growl],panelGrid,msg"
+							multiple="true" label="Seleccionar"  cancelLabel="Cancelar"
+							uploadLabel="Subir archivo(s)" dragdropsupport="true"
+							sizeLimit="5000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+					</h:panelGrid>
 
-					<p:selectOneMenu id="somPrioridades" style="width:160px"
-						binding="#{vtArtefactoView.somPrioridades}">
-						<f:selectItem itemValue="-1" itemLabel="Prioridad" />
-						<f:selectItems value="#{vtArtefactoView.esPrioridadItems}" />
-					</p:selectOneMenu>
-
-					<p:selectOneMenu id="somEstados" style="width:160px"
-						binding="#{vtArtefactoView.somEstados}">
-						<f:selectItem itemValue="-1" itemLabel="Estado" />
-						<f:selectItems value="#{vtArtefactoView.esEstadoItems}" />
-					</p:selectOneMenu>
-
-					<p:inputText id="txtEsfuerzoEstimado"
-						placeholder="Esfuerzo estimado"
-						binding="#{vtArtefactoView.txtEsfuerzoEstimado}" />
-
-
-
-
-					<p:fileUpload id="fileUpload" sequential="true"
-						fileUploadListener="#{vtArtefactoView.handleFileUpload}"
-						mode="advanced"
-						update="@([id$=growl],formDialogCrearArtefacto,msg"
-						multiple="true" label="Seleccionar" cancelLabel="Cancelar"
-						uploadLabel="Subir archivo(s)" dragdropsupport="true"
-						sizeLimit="5000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
 				</h:panelGrid>
-
-
-
 				<div align="center">
 					<p:commandButton id="btnCrearS" icon="fa fa-save"
 						binding="#{vtArtefactoView.btnCrearS}" title="crear"
 						action="#{vtArtefactoView.crearArtefacto}"
-						update="@([id$=growl],formDialogCrearArtefacto,msg" />
+						update="@([id$=growl],panelGsrid,msge" />
 
 					<p:commandButton id="btnLimpiarS" icon="fa fa-eraser"
 						binding="#{vtArtefactoView.btnLimpiarS}" title="Limpiar"
-						action="#{vtArtefactoView.limpiar}" update="artefacto,msg" />
+						action="#{vtArtefactoView.limpiar}" update="panelGrid,msge" />
+
 				</div>
+
 
 
 			</h:form>
 		</p:dialog>
-
 
 
 	</ui:define>
