@@ -2,6 +2,7 @@ package com.vobi.team.presentation.backingBeans;
 
 import com.vobi.team.exceptions.*;
 import com.vobi.team.modelo.*;
+import com.vobi.team.modelo.dto.VtArtefactoDTO;
 import com.vobi.team.modelo.dto.VtPilaProductoDTO;
 import com.vobi.team.modelo.dto.VtSprintDTO;
 import com.vobi.team.presentation.businessDelegate.*;
@@ -71,7 +72,7 @@ public class VtSprintView implements Serializable {
 
 	private InputText txtNombre;
 	private InputText txtNombreCrear;
-	private InputText txtObjetivo;
+	private InputTextarea txtObjetivo;
 	private InputTextarea txtObjetivoCrear;
 	private InputText txtSpriCodigo;
 	private InputText txtNombrePilaProducto;
@@ -79,6 +80,8 @@ public class VtSprintView implements Serializable {
 
 	private Calendar txtFechaFin;
 	private Calendar txtFechaInicio;
+	private Calendar txtFechaFinM;
+	private Calendar txtFechaInicioM;
 
 	private CommandButton btnCrearS;
 	private CommandButton btnCrear;
@@ -90,6 +93,7 @@ public class VtSprintView implements Serializable {
 	private List<VtSprintDTO> data;
 	private List<VtSprintDTO> dataFiltro;
 	private List<VtSprintDTO> dataFiltroI;
+	private List<VtArtefactoDTO> dataActivo;
 
 	private VtSprintDTO selectedVtSprint;
 	private VtSprint entity;
@@ -147,6 +151,22 @@ public class VtSprintView implements Serializable {
 
 	public SelectOneMenu getSomPilaProducto() {
 		return somPilaProducto;
+	}
+
+	public Calendar getTxtFechaFinM() {
+		return txtFechaFinM;
+	}
+
+	public void setTxtFechaFinM(Calendar txtFechaFinM) {
+		this.txtFechaFinM = txtFechaFinM;
+	}
+
+	public Calendar getTxtFechaInicioM() {
+		return txtFechaInicioM;
+	}
+
+	public void setTxtFechaInicioM(Calendar txtFechaInicioM) {
+		this.txtFechaInicioM = txtFechaInicioM;
 	}
 
 	public void setSomPilaProducto(SelectOneMenu somPilaProducto) {
@@ -233,6 +253,13 @@ public class VtSprintView implements Serializable {
 		this.lasEmpresasItems = lasEmpresasItems;
 	}
 
+	public List<VtArtefactoDTO> getDataActivo() {
+		return dataActivo;
+	}
+
+	public void setDataActivo(List<VtArtefactoDTO> dataActivo) {
+		this.dataActivo = dataActivo;
+	}
 
 	public CommandButton getBtnFiltrar() {
 		return btnFiltrar;
@@ -250,11 +277,11 @@ public class VtSprintView implements Serializable {
 		this.txtNombre = txtNombre;
 	}
 
-	public InputText getTxtObjetivo() {
+	public InputTextarea getTxtObjetivo() {
 		return txtObjetivo;
 	}
 
-	public void setTxtObjetivo(InputText txtObjetivo) {
+	public void setTxtObjetivo(InputTextarea txtObjetivo) {
 		this.txtObjetivo = txtObjetivo;
 	}
 
@@ -292,6 +319,22 @@ public class VtSprintView implements Serializable {
 
 	public void listener_txtFechaInicio() {
 		Date inputDate = (Date) txtFechaInicio.getValue();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		FacesContext.getCurrentInstance()
+		.addMessage("",
+				new FacesMessage("Selected Date " + dateFormat.format(inputDate)));
+	}
+	
+	public void listener_txtFechaFinM() {
+		Date inputDate = (Date) txtFechaFinM.getValue();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		FacesContext.getCurrentInstance()
+		.addMessage("",
+				new FacesMessage("Selected Date " + dateFormat.format(inputDate)));
+	}
+
+	public void listener_txtFechaInicioM() {
+		Date inputDate = (Date) txtFechaInicioM.getValue();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		FacesContext.getCurrentInstance()
 		.addMessage("",
@@ -503,17 +546,15 @@ public class VtSprintView implements Serializable {
 		selectedVtSprint = (VtSprintDTO) (evt.getComponent().getAttributes()
 				.get("selectedVtSprint"));
 
-		txtFechaInicio.setValue(selectedVtSprint.getFechaInicio());
-		txtFechaInicio.setDisabled(false);
-		txtFechaFin.setValue(selectedVtSprint.getFechaFin());
-		txtFechaFin.setDisabled(false);
+		txtFechaInicioM.setValue(selectedVtSprint.getFechaInicio());
+		txtFechaInicioM.setDisabled(false);
+		txtFechaFinM.setValue(selectedVtSprint.getFechaFin());
+		txtFechaFinM.setDisabled(false);
 
 		txtNombre.setValue(selectedVtSprint.getNombre());
 		txtNombre.setDisabled(false);
 		txtObjetivo.setValue(selectedVtSprint.getObjetivo());
 		txtObjetivo.setDisabled(false);
-		somPilaProductoCambio.setValue(selectedVtSprint.getPilaCodigo_VtPilaProducto());
-		somPilaProductoCambio.setDisabled(false);
 		btnGuardar.setDisabled(false);
 		setShowDialog(true);
 
@@ -535,9 +576,6 @@ public class VtSprintView implements Serializable {
 
 	public String action_clear(){
 		log.info("Limpiando pantalla..");
-		somPilaProductoCambio.setValue("-1");
-		somActivoCambio.setValue("-1");
-		somProyectoCambio.setValue("-1");
 		txtNombre.resetValue();
 		txtObjetivo.resetValue();
 		txtFechaFin.setValue(null);
@@ -564,30 +602,17 @@ public class VtSprintView implements Serializable {
 
 	public String action_modify() {
 		try {
+			Long spriCodigo = null;
 			if (entity == null) {
-				Long spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
+				spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
 				entity = businessDelegatorView.getVtSprint(spriCodigo);
 			}
 
-			String activo = somActivoCambio.getValue().toString().trim();
-			if (activo.equalsIgnoreCase("Si")) {
-				entity.setActivo("S");
-			} else {
-				if(activo.equals("-1")){
-					entity.setActivo(entity.getActivo());
-				}
-				else{
-					entity.setActivo("N");
-				}
-			}
-
-			//TODO: Corregir
-
-
-			entity.setFechaFin(FacesUtils.checkDate(txtFechaFin));
-			entity.setFechaInicio(FacesUtils.checkDate(txtFechaInicio));
+			if(!txtFechaFinM.toString().isEmpty()) entity.setFechaFin(FacesUtils.checkDate(txtFechaFinM));
+			if(!txtFechaInicioM.toString().isEmpty()) entity.setFechaInicio(FacesUtils.checkDate(txtFechaInicioM));
 			entity.setNombre(FacesUtils.checkString(txtNombre));
 			entity.setObjetivo(FacesUtils.checkString(txtObjetivo));
+			entity.setActivo(entity.getActivo());
 			Date fechaModificacion = new Date();
 			entity.setFechaModificacion(fechaModificacion);
 
@@ -595,14 +620,23 @@ public class VtSprintView implements Serializable {
 			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
 
 			businessDelegatorView.updateVtSprint(entity);
-			String sprint=somPilaProducto.getValue().toString().trim();
-			Long sprintCodigo=Long.valueOf(sprint);
-			VtSprint vtSprint=businessDelegatorView.getVtSprint(sprintCodigo);
-			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(vtSprint.getSpriCodigo());
-			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(vtSprint.getSpriCodigo());
+			
+			String pila=somPilaProducto.getValue().toString().trim();
+			pilaCodigo=Long.valueOf(pila);
+			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
+			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
+			
 			FacesUtils.addInfoMessage("El Sprint ha sido modificado con exito");
-		} catch (Exception e) {
+
+
+		}catch (Exception e) {
+			System.out.println(e.toString());
+			System.out.println(e.getMessage());
+			System.out.println(e.getLocalizedMessage());
+			System.out.println(e.getCause());
+			e.printStackTrace();
 			data = null;
+			log.error(e.getMessage());
 			FacesUtils.addErrorMessage(e.getMessage());
 		}
 
@@ -661,7 +695,7 @@ public class VtSprintView implements Serializable {
 				Long proyecto=Long.parseLong(proyectoS);
 				vtProyecto=businessDelegatorView.getVtProyecto(proyecto);
 			}
-			
+
 			try{
 				if(lasPilasDeProductoFiltro==null){
 					List<VtPilaProducto> listaPilasDeProducto=businessDelegatorView.getVtPilaProducto();
@@ -670,11 +704,11 @@ public class VtSprintView implements Serializable {
 						if(vtPilaProducto.getActivo().equalsIgnoreCase("S") && vtPilaProducto.getVtProyecto().getProyCodigo().equals(vtProyecto.getProyCodigo())){
 							lasPilasDeProductoFiltro.add(new SelectItem(vtPilaProducto.getPilaCodigo(), vtPilaProducto.getNombre()));
 						}
-						
+
 					}
 				}
-				
-				
+
+
 			}catch(Exception e) {
 				log.error(e.getMessage());
 			}
@@ -705,34 +739,44 @@ public class VtSprintView implements Serializable {
 				.get("selectedVtSprint"));
 
 		try {
+			Long spriCodigo = null;
 			if (entity == null) {
-				Long spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
+				spriCodigo = new Long(selectedVtSprint.getSpriCodigo());
 				entity = businessDelegatorView.getVtSprint(spriCodigo);
 			}
 
-			String cambioActivo=entity.getActivo().toString().trim();
-			if (cambioActivo.equalsIgnoreCase("S")) {
-				entity.setActivo("N");
-			}else{
-				entity.setActivo("S");
-			}			
+			dataActivo=null;
+			dataActivo=businessDelegatorView.getDataVtArtefactoActivo(spriCodigo);
 
-			Date fechaModificacion= new Date();
-			entity.setFechaModificacion(fechaModificacion);
+			if(dataActivo==null){
 
-			VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
-			entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
+				String cambioActivo=entity.getActivo().toString().trim();
+				if (cambioActivo.equalsIgnoreCase("S")) {
+					entity.setActivo("N");
+				}else{
+					entity.setActivo("S");
+				}			
 
-			businessDelegatorView.updateVtSprint(entity);
+				Date fechaModificacion= new Date();
+				entity.setFechaModificacion(fechaModificacion);
 
-			FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint de producto se modificó con exito"));
+				VtUsuario vtUsuarioEnSession =  (VtUsuario) FacesUtils.getfromSession("vtUsuario");
+				entity.setUsuModificador(vtUsuarioEnSession.getUsuaCodigo());
 
-			dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
-			dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
+				businessDelegatorView.updateVtSprint(entity);
 
-			selectedVtSprint=null;
-			entity=null;
+				FacesContext.getCurrentInstance().addMessage("", new FacesMessage("El sprint de producto se modificó con exito"));
 
+				dataFiltro=businessDelegatorView.getDataVtSprintFiltro(pilaCodigo);
+				dataFiltroI=businessDelegatorView.getDataVtSprintFiltroI(pilaCodigo);
+
+				selectedVtSprint=null;
+				entity=null;
+
+			}
+			else{
+				FacesUtils.addInfoMessage("No se puede cambiar el estado porque tiene artefactos activos");
+			} 
 		}catch (Exception e) {
 			data = null;
 			log.error(e.toString());

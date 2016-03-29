@@ -24,14 +24,14 @@
 		</p:dialog>
 
 		<h:form id="frm">
-			
+			<p:growl id="growl" showDetail="true" />
+
 			<p:panel id="pnlListaSprint" header="SPRINT">
 				<br></br>
-				<p:growl id="growl" />
 				<p:commandButton value="Crear Sprint" type="button"
 					onclick="PF('dlg').show();" />
 			</p:panel>
-			
+
 			<br></br>
 
 			<p:panel id="outputLabelPilaProducto" header="Lista de Sprints">
@@ -65,11 +65,10 @@
 				</h:panelGrid>
 
 			</p:panel>
-			
+
 			<br></br>
 
 			<p:accordionPanel id="pnlVtSprint" multiple="true">
-				<p:growl id="men" />
 
 				<p:tab title="Sprint activo">
 
@@ -108,7 +107,7 @@
 								</f:facet>
 								<h:outputText value="#{vtSprint.nombre}" />
 							</p:column>
-							
+
 							<p:column filterBy="#{vtSprint.activo}"
 								sortBy="#{vtSprint.activo}">
 								<f:facet name="header">
@@ -145,7 +144,6 @@
 									</p:commandButton>
 								</div>
 							</p:column>
-
 						</p:dataTable>
 					</p:panel>
 
@@ -166,15 +164,6 @@
 								<h:outputText value="#{vtSprint.spriCodigo}" />
 							</p:column>
 
-							<p:column filterBy="#{vtSprint.activo}"
-								sortBy="#{vtSprint.activo}">
-								<f:facet name="header">
-									<h:outputText value="Activo" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.activo}" />
-							</p:column>
-
-
 							<p:column filterBy="#{vtSprint.fechaInicio}"
 								sortBy="#{vtSprint.fechaInicio}">
 								<f:facet name="header">
@@ -191,14 +180,20 @@
 								<h:outputText value="#{vtSprint.fechaFin}" />
 							</p:column>
 
-
-
 							<p:column filterBy="#{vtSprint.nombre}"
 								sortBy="#{vtSprint.nombre}">
 								<f:facet name="header">
 									<h:outputText value="Nombre" />
 								</f:facet>
 								<h:outputText value="#{vtSprint.nombre}" />
+							</p:column>
+
+							<p:column filterBy="#{vtSprint.activo}"
+								sortBy="#{vtSprint.activo}">
+								<f:facet name="header">
+									<h:outputText value="Activo" />
+								</f:facet>
+								<h:outputText value="#{vtSprint.activo}" />
 							</p:column>
 
 							<p:column filterBy="#{vtSprint.objetivo}"
@@ -210,29 +205,7 @@
 							</p:column>
 
 
-							<p:column filterBy="#{vtSprint.pilaCodigo_VtPilaProducto}"
-								sortBy="#{vtSprint.pilaCodigo_VtPilaProducto}">
-								<f:facet name="header">
-									<h:outputText value="Código Pila de producto" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.pilaCodigo_VtPilaProducto}" />
-							</p:column>
 
-							<p:column filterBy="#{vtSprint.nombrePilaProducto}"
-								sortBy="#{vtSprint.nombrePilaProducto}">
-								<f:facet name="header">
-									<h:outputText value="Nombre de producto" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.nombrePilaProducto}" />
-							</p:column>
-
-							<p:column filterBy="#{vtSprint.nombreProyecto}"
-								sortBy="#{vtSprint.nombreProyecto}">
-								<f:facet name="header">
-									<h:outputText value="Nombre proyecto" />
-								</f:facet>
-								<h:outputText value="#{vtSprint.nombreProyecto}" />
-							</p:column>
 
 							<p:column headerText="Modificar">
 								<div align="center">
@@ -270,47 +243,28 @@
 				<p:panel id="panelVtSprint" header="Sprint">
 					<h:panelGrid columns="2" id="panelGrid">
 
-						<h:outputText id="msgActivo" value=" Activo" />
-						<p:selectOneMenu id="somActivoCambio"
-							binding="#{vtSprintView.somActivoCambio}">
-							<f:selectItem itemValue="-1" itemLabel="Activo" />
-							<f:selectItems value="#{vtSprintView.esActivoItems}" />
-						</p:selectOneMenu>
-
-						<h:outputText id="msgPilaProducto" value="Pila producto" />
-						<p:selectOneMenu id="somPilaProductoCambio"
-							binding="#{vtSprintView.somPilaProductoCambio}">
-							<f:selectItem itemValue="-1" itemLabel="Pila producto" />
-							<f:selectItems value="#{vtSprintView.esPilaProductoItems}" />
-						</p:selectOneMenu>
-
-						<h:outputText id="msgProyecto" value="Proyecto" />
-						<p:selectOneMenu id="somProyectoCambio"
-							binding="#{vtSprintView.somProyectoCambio}">
-							<f:selectItem itemValue="-1" itemLabel="Proyectos" />
-							<f:selectItems value="#{vtSprintView.losProyectosItems}" />
-						</p:selectOneMenu>
+						
 
 						<h:outputText id="msgNombre" value=" Nombre" />
 						<p:inputText id="txtNombre" disabled="true"
 							binding="#{vtSprintView.txtNombre}" />
 
 						<h:outputText id="msgObjetivo" value=" Objetivo" />
-						<p:inputText id="txtObjetivo" disabled="true"
+						<p:inputTextarea id="txtObjetivo" disabled="true" rows="10" cols="33"
 							binding="#{vtSprintView.txtObjetivo}" />
 
-						<h:outputText id="msgFechaInicio" value=" FechaInicio" />
+						<h:outputText id="msgFechaInicioM" value=" FechaInicio" />
 						<p:calendar showOn="button" navigator="true" locale="en"
-							binding="#{vtSprintView.txtFechaInicio}">
+							binding="#{vtSprintView.txtFechaInicioM}">
 							<p:ajax event="dateSelect"
-								listener="#{vtSprintView.listener_txtFechaInicio}" />
+								listener="#{vtSprintView.listener_txtFechaInicioM}" />
 						</p:calendar>
 
-						<h:outputText id="msgFechaFin" value=" FechaFin" />
+						<h:outputText id="msgFechaFinM" value=" FechaFin" />
 						<p:calendar showOn="button" navigator="true" locale="en"
-							binding="#{vtSprintView.txtFechaFin}">
+							binding="#{vtSprintView.txtFechaFinM}">
 							<p:ajax event="dateSelect"
-								listener="#{vtSprintView.listener_txtFechaFin}" />
+								listener="#{vtSprintView.listener_txtFechaFinM}" />
 						</p:calendar>
 
 					</h:panelGrid>
@@ -349,12 +303,12 @@
 					</p:selectOneMenu>
 
 
-					<p:inputText id="txtNombreCrear" placeholder="Nombre" 
+					<p:inputText id="txtNombreCrear" placeholder="Nombre"
 						binding="#{vtSprintView.txtNombreCrear}" />
 
 
-					<p:inputTextarea id="txtObjetivoCrear" placeholder="Objetivo" rows="10" cols="33"
-						binding="#{vtSprintView.txtObjetivoCrear}" />
+					<p:inputTextarea id="txtObjetivoCrear" placeholder="Objetivo"
+						rows="10" cols="33" binding="#{vtSprintView.txtObjetivoCrear}" />
 
 					<h:outputText id="msgFechaInicio" value=" Fecha inicio" />
 					<p:calendar showOn="button" navigator="true" locale="en"

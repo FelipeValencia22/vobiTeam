@@ -498,6 +498,7 @@ public interface IBusinessDelegatorView {
     
     public List<VtArtefactoDTO> getDataVtArtefactoFiltro(Long codigoFiltro) throws Exception;
     public List<VtArtefactoDTO> getDataVtArtefactoFiltroI(Long codigoFiltro) throws Exception;
+    public List<VtArtefactoDTO> getDataVtArtefactoActivo(Long codigoFiltro) throws Exception;
     
     
     public List<VtRolDTO> getDataVtRolInactivo() throws Exception;

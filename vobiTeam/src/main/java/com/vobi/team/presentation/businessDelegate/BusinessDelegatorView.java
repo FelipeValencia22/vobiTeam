@@ -1073,6 +1073,11 @@ public class BusinessDelegatorView implements IBusinessDelegatorView {
 	public List<VtArtefactoDTO> getDataVtArtefactoFiltro(Long codigoFiltro) throws Exception {
 		return vtArtefactoLogic.getDataVtArtefactoFiltro(codigoFiltro);
 	}
+	
+	@Override
+	public List<VtArtefactoDTO> getDataVtArtefactoActivo(Long codigoFiltro) throws Exception {
+		return vtArtefactoLogic.getDataVtArtefactoActivo(codigoFiltro);
+	}
 
 	@Override
 	public List<VtArtefactoDTO> getDataVtArtefactoFiltroI(Long codigoFiltro) throws Exception {
