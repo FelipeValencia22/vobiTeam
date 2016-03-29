@@ -58,6 +58,6 @@ public interface IVtArtefactoLogic {
     
     public List<VtArtefactoDTO> getDataVtArtefactoFiltro(Long codigoFiltro) throws Exception;
     
-    
+    public List<VtArtefactoDTO> getDataVtArtefactoActivo(Long codigoFiltro) throws Exception;
     public List<VtArtefactoDTO> getDataVtArtefactoFiltroI(Long codigoFiltro) throws Exception;
 }
